@@ -42,7 +42,7 @@ from .workspace import (
     UserWorkspaceDashboardEndpoint,
     WorkspaceThemeViewSet,
 )
-from .state import StateViewSet, StateDeleteIssueCheckEndpoint
+from .state import StateViewSet
 from .shortcut import ShortCutViewSet
 from .view import IssueViewViewSet, ViewIssuesEndpoint, IssueViewFavoriteViewSet
 from .cycle import (
@@ -106,6 +106,7 @@ from .integration import (
     GithubCommentSyncViewSet,
     GithubRepositoriesEndpoint,
     BulkCreateGithubIssueSyncEndpoint,
+    SlackProjectSyncViewSet,
 )
 
 from .importer import (
@@ -133,8 +134,6 @@ from .search import GlobalSearchEndpoint, IssueSearchEndpoint
 from .gpt import GPTIntegrationEndpoint
 
 from .estimate import (
-    EstimateViewSet,
-    EstimatePointViewSet,
     ProjectEstimatePointEndpoint,
     BulkEstimatePointEndpoint,
 )

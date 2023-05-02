@@ -89,8 +89,8 @@ export const CYCLE_DRAFT_LIST = (projectId: string) =>
 export const CYCLE_COMPLETE_LIST = (projectId: string) =>
   `CYCLE_COMPLETE_LIST_${projectId.toUpperCase()}`;
 
-export const STATE_LIST = (projectId: string) => `STATE_LIST_${projectId.toUpperCase()}`;
-export const STATE_DETAIL = "STATE_DETAILS";
+export const STATES_LIST = (projectId: string) => `STATES_LIST_${projectId.toUpperCase()}`;
+export const STATE_DETAILS = "STATE_DETAILS";
 
 export const USER_ISSUE = (workspaceSlug: string) => `USER_ISSUE_${workspaceSlug.toUpperCase()}`;
 export const USER_ACTIVITY = "USER_ACTIVITY";
@@ -167,5 +167,3 @@ export const PAGE_BLOCK_DETAILS = (pageId: string) => `PAGE_BLOCK_DETAILS_${page
 export const ESTIMATES_LIST = (projectId: string) => `ESTIMATES_LIST_${projectId.toUpperCase()}`;
 export const ESTIMATE_DETAILS = (estimateId: string) =>
   `ESTIMATE_DETAILS_${estimateId.toUpperCase()}`;
-export const ESTIMATE_POINTS_LIST = (estimateId: string) =>
-  `ESTIMATES_POINTS_LIST_${estimateId.toUpperCase()}`;

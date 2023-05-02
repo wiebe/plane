@@ -135,31 +135,31 @@ export const CycleDetailsSidebar: React.FC<Props> = ({
       <div
         className={`fixed top-0 ${
           isOpen ? "right-0" : "-right-[24rem]"
-        } z-20 h-full w-[24rem] overflow-y-auto border-l border-brand-base bg-brand-surface-2 py-5 duration-300`}
+        } z-20 h-full w-[24rem] overflow-y-auto border-l border-brand-base bg-brand-sidebar py-5 duration-300`}
       >
         {cycle ? (
           <>
             <div className="flex flex-col items-start justify-center">
               <div className="flex gap-2.5 px-5 text-sm">
-                <div className="flex items-center ">
-                  <span
-                    className={`flex items-center rounded border-[0.5px] border-brand-base bg-brand-surface-1 px-2.5 py-1.5 text-center text-sm capitalize text-brand-muted-1 `}
-                  >
+                <div className="flex items-center">
+                  <span className="flex items-center rounded border-[0.5px] border-brand-base bg-brand-surface-1 px-2 py-1 text-center text-xs capitalize">
                     {capitalizeFirstLetter(cycleStatus)}
                   </span>
                 </div>
-                <div className="relative flex h-full w-52 items-center justify-center gap-2 text-sm text-brand-muted-1">
-                  <Popover className="flex h-full items-center  justify-center rounded-lg">
+                <div className="relative flex h-full w-52 items-center gap-2">
+                  <Popover className="flex h-full items-center justify-center rounded-lg">
                     {({ open }) => (
                       <>
                         <Popover.Button
                           disabled={isCompleted ?? false}
-                          className={`group flex h-full items-center gap-1 rounded border-[0.5px]  border-brand-base bg-brand-surface-1 px-2.5 py-1.5 text-brand-muted-1   ${
-                            open ? "bg-brand-surface-1" : ""
+                          className={`group flex h-full items-center gap-2 whitespace-nowrap rounded border-[0.5px] border-brand-base bg-brand-surface-1 px-2 py-1 text-xs ${
+                            cycle.start_date ? "" : "text-brand-secondary"
                           }`}
                         >
                           <CalendarDaysIcon className="h-3 w-3" />
-                          <span>{renderShortDate(new Date(`${cycle?.start_date}`))}</span>
+                          <span>
+                            {renderShortDate(new Date(`${cycle?.start_date}`), "Start date")}
+                          </span>
                         </Popover.Button>
 
                         <Transition
@@ -209,20 +209,20 @@ export const CycleDetailsSidebar: React.FC<Props> = ({
                     )}
                   </Popover>
                   <span>
-                    <ArrowLongRightIcon className="h-3 w-3" />
+                    <ArrowLongRightIcon className="h-3 w-3 text-brand-secondary" />
                   </span>
-                  <Popover className="flex h-full items-center  justify-center rounded-lg">
+                  <Popover className="flex h-full items-center justify-center rounded-lg">
                     {({ open }) => (
                       <>
                         <Popover.Button
                           disabled={isCompleted ?? false}
-                          className={`group flex items-center gap-1 rounded border-[0.5px] border-brand-base bg-brand-surface-1 px-2.5 py-1.5 text-brand-muted-1  ${
-                            open ? "bg-brand-surface-1" : ""
+                          className={`group flex items-center gap-2 whitespace-nowrap rounded border-[0.5px] border-brand-base bg-brand-surface-1 px-2 py-1 text-xs ${
+                            cycle.end_date ? "" : "text-brand-secondary"
                           }`}
                         >
-                          <CalendarDaysIcon className="h-3 w-3 " />
+                          <CalendarDaysIcon className="h-3 w-3" />
 
-                          <span>{renderShortDate(new Date(`${cycle?.end_date}`))}</span>
+                          <span>{renderShortDate(new Date(`${cycle?.end_date}`), "End date")}</span>
                         </Popover.Button>
 
                         <Transition
@@ -234,7 +234,7 @@ export const CycleDetailsSidebar: React.FC<Props> = ({
                           leaveFrom="opacity-100 translate-y-0"
                           leaveTo="opacity-0 translate-y-1"
                         >
-                          <Popover.Panel className="absolute top-10 -right-5 z-20  transform overflow-hidden">
+                          <Popover.Panel className="absolute top-10 -right-5 z-20 transform overflow-hidden">
                             <DatePicker
                               selected={
                                 watch("end_date") ? new Date(`${watch("end_date")}`) : new Date()
@@ -275,9 +275,9 @@ export const CycleDetailsSidebar: React.FC<Props> = ({
                 </div>
               </div>
 
-              <div className="flex flex-col gap-6 px-6 py-6 w-full">
-                <div className="flex flex-col items-start justify-start gap-2 w-full">
-                  <div className="flex items-start justify-between gap-2 w-full">
+              <div className="flex w-full flex-col gap-6 px-6 py-6">
+                <div className="flex w-full flex-col items-start justify-start gap-2">
+                  <div className="flex w-full items-start justify-between gap-2">
                     <h4 className="text-xl font-semibold text-brand-base">{cycle.name}</h4>
                     <CustomMenu width="lg" ellipsis>
                       {!isCompleted && (
@@ -297,15 +297,15 @@ export const CycleDetailsSidebar: React.FC<Props> = ({
                     </CustomMenu>
                   </div>
 
-                  <span className="whitespace-normal text-sm leading-5 text-brand-base">
+                  <span className="whitespace-normal text-sm leading-5 text-brand-secondary">
                     {cycle.description}
                   </span>
                 </div>
 
                 <div className="flex flex-col  gap-4  text-sm">
                   <div className="flex items-center justify-start gap-1">
-                    <div className="flex w-40 items-center justify-start gap-2">
-                      <UserCircleIcon className="h-5 w-5 text-gray-400" />
+                    <div className="flex w-40 items-center justify-start gap-2 text-brand-secondary">
+                      <UserCircleIcon className="h-5 w-5" />
                       <span>Lead</span>
                     </div>
 
@@ -323,17 +323,17 @@ export const CycleDetailsSidebar: React.FC<Props> = ({
                           {cycle.owned_by.first_name.charAt(0)}
                         </span>
                       )}
-                      <span className="text-brand-base">{cycle.owned_by.first_name}</span>
+                      <span className="text-brand-secondary">{cycle.owned_by.first_name}</span>
                     </div>
                   </div>
 
                   <div className="flex items-center justify-start gap-1">
-                    <div className="flex w-40 items-center justify-start gap-2">
-                      <ChartPieIcon className="h-5 w-5 text-gray-400" />
+                    <div className="flex w-40 items-center justify-start gap-2 text-brand-secondary">
+                      <ChartPieIcon className="h-5 w-5" />
                       <span>Progress</span>
                     </div>
 
-                    <div className="flex items-center gap-2.5 text-brand-muted-1">
+                    <div className="flex items-center gap-2.5 text-brand-secondary">
                       <span className="h-4 w-4">
                         <ProgressBar value={cycle.completed_issues} maxValue={cycle.total_issues} />
                       </span>

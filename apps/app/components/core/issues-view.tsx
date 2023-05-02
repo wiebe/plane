@@ -46,7 +46,7 @@ import {
   MODULE_DETAILS,
   MODULE_ISSUES_WITH_PARAMS,
   PROJECT_ISSUES_LIST_WITH_PARAMS,
-  STATE_LIST,
+  STATES_LIST,
 } from "constants/fetch-keys";
 // image
 
@@ -103,7 +103,7 @@ export const IssuesView: React.FC<Props> = ({
   } = useIssuesView();
 
   const { data: stateGroups } = useSWR(
-    workspaceSlug && projectId ? STATE_LIST(projectId as string) : null,
+    workspaceSlug && projectId ? STATES_LIST(projectId as string) : null,
     workspaceSlug
       ? () => stateService.getStates(workspaceSlug as string, projectId as string)
       : null
@@ -314,10 +314,26 @@ export const IssuesView: React.FC<Props> = ({
   );
 
   const removeIssueFromCycle = useCallback(
-    (bridgeId: string) => {
+    (bridgeId: string, issueId: string) => {
       if (!workspaceSlug || !projectId || !cycleId) return;
 
-      mutate(CYCLE_ISSUES_WITH_PARAMS(cycleId as string, params));
+      mutate(
+        CYCLE_ISSUES_WITH_PARAMS(cycleId as string, params),
+        (prevData: any) => {
+          if (!prevData) return prevData;
+          if (selectedGroup) {
+            const filteredData: any = {};
+            for (const key in prevData) {
+              filteredData[key] = prevData[key].filter((item: any) => item.id !== issueId);
+            }
+            return filteredData;
+          } else {
+            const filteredData = prevData.filter((i: any) => i.id !== issueId);
+            return filteredData;
+          }
+        },
+        false
+      );
 
       issuesService
         .removeIssueFromCycle(
@@ -326,6 +342,13 @@ export const IssuesView: React.FC<Props> = ({
           cycleId as string,
           bridgeId
         )
+        .then(() => {
+          setToastAlert({
+            title: "Success",
+            message: "Issue removed successfully.",
+            type: "success",
+          });
+        })
         .catch((e) => {
           console.log(e);
         });
@@ -334,10 +357,26 @@ export const IssuesView: React.FC<Props> = ({
   );
 
   const removeIssueFromModule = useCallback(
-    (bridgeId: string) => {
+    (bridgeId: string, issueId: string) => {
       if (!workspaceSlug || !projectId || !moduleId) return;
 
-      mutate(MODULE_ISSUES_WITH_PARAMS(moduleId as string, params));
+      mutate(
+        MODULE_ISSUES_WITH_PARAMS(moduleId as string, params),
+        (prevData: any) => {
+          if (!prevData) return prevData;
+          if (selectedGroup) {
+            const filteredData: any = {};
+            for (const key in prevData) {
+              filteredData[key] = prevData[key].filter((item: any) => item.id !== issueId);
+            }
+            return filteredData;
+          } else {
+            const filteredData = prevData.filter((item: any) => item.id !== issueId);
+            return filteredData;
+          }
+        },
+        false
+      );
 
       modulesService
         .removeIssueFromModule(
@@ -346,6 +385,13 @@ export const IssuesView: React.FC<Props> = ({
           moduleId as string,
           bridgeId
         )
+        .then(() => {
+          setToastAlert({
+            title: "Success",
+            message: "Issue removed successfully.",
+            type: "success",
+          });
+        })
         .catch((e) => {
           console.log(e);
         });
@@ -426,7 +472,7 @@ export const IssuesView: React.FC<Props> = ({
           )}
         </div>
         {areFiltersApplied && (
-          <div className={` ${issueView === "list" ? "mt-4" : "my-4"} border-t`} />
+          <div className={`${issueView === "list" ? "mt-4" : "my-4"} border-t border-brand-base`} />
         )}
       </>
 
