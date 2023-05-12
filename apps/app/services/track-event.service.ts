@@ -63,7 +63,18 @@ export type MiscellaneousEventType =
   | "TOGGLE_STATE_ON"
   | "TOGGLE_STATE_OFF";
 
-type IntegrationEventType = "ADD_WORKSPACE_INTEGRATION" | "REMOVE_WORKSPACE_INTEGRATION";
+type TProviders = "SLACK" | "GITHUB";
+
+type TProviderEvents = "INTEGRATION_CREATE" | "INTEGRATION_DELETE";
+
+type TFinalIntegrationEvents = `${TProviders}_${TProviderEvents}`;
+
+type IntegrationEventType =
+  | "ADD_WORKSPACE_INTEGRATION"
+  | "REMOVE_WORKSPACE_INTEGRATION"
+  | TFinalIntegrationEvents
+  | "SLACK_ADD_CHANNEL"
+  | "GITHUB_ADD_REPO";
 
 type GitHubSyncEventType = "GITHUB_REPO_SYNC";
 
@@ -84,6 +95,7 @@ type ImporterEventType =
   | "GITHUB_IMPORTER_DELETE"
   | "JIRA_IMPORTER_CREATE"
   | "JIRA_IMPORTER_DELETE";
+
 class TrackEventServices extends APIService {
   constructor() {
     super("/");
