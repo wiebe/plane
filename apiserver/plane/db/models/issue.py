@@ -41,6 +41,7 @@ class Issue(ProjectBaseModel):
     estimate_point = models.IntegerField(
         validators=[MinValueValidator(0), MaxValueValidator(7)], null=True, blank=True
     )
+    point = models.IntegerField(null=True)
     name = models.CharField(max_length=255, verbose_name="Issue Name")
     description = models.JSONField(blank=True, default=dict)
     description_html = models.TextField(blank=True, default="<p></p>")
