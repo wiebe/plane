@@ -18,6 +18,7 @@ export * from "./users";
 export * from "./views";
 export * from "./waitlist";
 export * from "./workspace";
+export * from "./view-props";
 
 export type NestedKeyOf<ObjectType extends object> = {
   [Key in keyof ObjectType & (string | number)]: ObjectType[Key] extends object
