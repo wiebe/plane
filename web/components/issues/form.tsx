@@ -22,6 +22,7 @@ import {
 } from "components/issues/select";
 import { CreateStateModal } from "components/states";
 import { CreateLabelModal } from "components/labels";
+import { ObjectsSelect } from "components/custom-attributes";
 // ui
 import { CustomMenu, Input, PrimaryButton, SecondaryButton, ToggleSwitch } from "components/ui";
 import { TipTapEditor } from "components/tiptap";
@@ -33,15 +34,8 @@ import type { ICurrentUserResponse, IIssue, ISearchIssueResponse } from "types";
 const defaultValues: Partial<IIssue> = {
   project: "",
   name: "",
-  description: {
-    type: "doc",
-    content: [
-      {
-        type: "paragraph",
-      },
-    ],
-  },
   description_html: "<p></p>",
+  entity: null,
   estimate_point: null,
   state: "",
   parent: null,
@@ -68,6 +62,7 @@ export interface IssueFormProps {
     | "project"
     | "name"
     | "description"
+    | "entity"
     | "state"
     | "priority"
     | "assignee"
@@ -249,25 +244,38 @@ export const IssueForm: FC<IssueFormProps> = ({
       )}
       <form onSubmit={handleSubmit(handleCreateUpdateIssue)}>
         <div className="space-y-5">
-          <div className="flex items-center gap-x-2">
-            {(fieldsToShow.includes("all") || fieldsToShow.includes("project")) && (
-              <Controller
-                control={control}
-                name="project"
-                render={({ field: { value, onChange } }) => (
-                  <IssueProjectSelect
-                    value={value}
-                    onChange={(val: string) => {
-                      onChange(val);
-                      setActiveProject(val);
-                    }}
-                  />
-                )}
-              />
-            )}
-            <h3 className="text-xl font-semibold leading-6 text-custom-text-100">
-              {status ? "Update" : "Create"} Issue
-            </h3>
+          <div className="flex items-center justify-between gap-2">
+            <div className="flex items-center gap-x-2">
+              {(fieldsToShow.includes("all") || fieldsToShow.includes("project")) && (
+                <Controller
+                  control={control}
+                  name="project"
+                  render={({ field: { value, onChange } }) => (
+                    <IssueProjectSelect
+                      value={value}
+                      onChange={(val: string) => {
+                        onChange(val);
+                        setActiveProject(val);
+                      }}
+                    />
+                  )}
+                />
+              )}
+              <h3 className="text-xl font-semibold leading-6 text-custom-text-100">
+                {status ? "Update" : "Create"} Issue
+              </h3>
+            </div>
+            <div className="flex-shrink-0">
+              {(fieldsToShow.includes("all") || fieldsToShow.includes("project")) && (
+                <Controller
+                  control={control}
+                  name="entity"
+                  render={({ field: { value, onChange } }) => (
+                    <ObjectsSelect onChange={onChange} projectId={projectId} value={value} />
+                  )}
+                />
+              )}
+            </div>
           </div>
           {watch("parent") &&
             (fieldsToShow.includes("all") || fieldsToShow.includes("parent")) &&
@@ -407,128 +415,133 @@ export const IssueForm: FC<IssueFormProps> = ({
                     )}
                   />
                 )}
-                {(fieldsToShow.includes("all") || fieldsToShow.includes("priority")) && (
-                  <Controller
-                    control={control}
-                    name="priority"
-                    render={({ field: { value, onChange } }) => (
-                      <IssuePrioritySelect value={value} onChange={onChange} />
-                    )}
-                  />
-                )}
-                {(fieldsToShow.includes("all") || fieldsToShow.includes("assignee")) && (
-                  <Controller
-                    control={control}
-                    name="assignees"
-                    render={({ field: { value, onChange } }) => (
-                      <IssueAssigneeSelect
-                        projectId={projectId}
-                        value={value}
-                        onChange={onChange}
+                {/* default object properties */}
+                {watch("entity") === null && (
+                  <>
+                    {(fieldsToShow.includes("all") || fieldsToShow.includes("priority")) && (
+                      <Controller
+                        control={control}
+                        name="priority"
+                        render={({ field: { value, onChange } }) => (
+                          <IssuePrioritySelect value={value} onChange={onChange} />
+                        )}
                       />
                     )}
-                  />
-                )}
-                {(fieldsToShow.includes("all") || fieldsToShow.includes("label")) && (
-                  <Controller
-                    control={control}
-                    name="labels"
-                    render={({ field: { value, onChange } }) => (
-                      <IssueLabelSelect
-                        setIsOpen={setLabelModal}
-                        value={value}
-                        onChange={onChange}
-                        projectId={projectId}
+                    {(fieldsToShow.includes("all") || fieldsToShow.includes("assignee")) && (
+                      <Controller
+                        control={control}
+                        name="assignees"
+                        render={({ field: { value, onChange } }) => (
+                          <IssueAssigneeSelect
+                            projectId={projectId}
+                            value={value}
+                            onChange={onChange}
+                          />
+                        )}
                       />
                     )}
-                  />
-                )}
-                {(fieldsToShow.includes("all") || fieldsToShow.includes("startDate")) && (
-                  <div>
-                    <Controller
-                      control={control}
-                      name="start_date"
-                      render={({ field: { value, onChange } }) => (
-                        <IssueDateSelect
-                          label="Start date"
-                          maxDate={maxDate ?? undefined}
-                          onChange={onChange}
-                          value={value}
+                    {(fieldsToShow.includes("all") || fieldsToShow.includes("label")) && (
+                      <Controller
+                        control={control}
+                        name="labels"
+                        render={({ field: { value, onChange } }) => (
+                          <IssueLabelSelect
+                            setIsOpen={setLabelModal}
+                            value={value}
+                            onChange={onChange}
+                            projectId={projectId}
+                          />
+                        )}
+                      />
+                    )}
+                    {(fieldsToShow.includes("all") || fieldsToShow.includes("startDate")) && (
+                      <div>
+                        <Controller
+                          control={control}
+                          name="start_date"
+                          render={({ field: { value, onChange } }) => (
+                            <IssueDateSelect
+                              label="Start date"
+                              maxDate={maxDate ?? undefined}
+                              onChange={onChange}
+                              value={value}
+                            />
+                          )}
                         />
-                      )}
-                    />
-                  </div>
-                )}
-                {(fieldsToShow.includes("all") || fieldsToShow.includes("dueDate")) && (
-                  <div>
-                    <Controller
-                      control={control}
-                      name="target_date"
-                      render={({ field: { value, onChange } }) => (
-                        <IssueDateSelect
-                          label="Due date"
-                          minDate={minDate ?? undefined}
-                          onChange={onChange}
-                          value={value}
+                      </div>
+                    )}
+                    {(fieldsToShow.includes("all") || fieldsToShow.includes("dueDate")) && (
+                      <div>
+                        <Controller
+                          control={control}
+                          name="target_date"
+                          render={({ field: { value, onChange } }) => (
+                            <IssueDateSelect
+                              label="Due date"
+                              minDate={minDate ?? undefined}
+                              onChange={onChange}
+                              value={value}
+                            />
+                          )}
                         />
-                      )}
-                    />
-                  </div>
-                )}
-                {(fieldsToShow.includes("all") || fieldsToShow.includes("estimate")) && (
-                  <div>
-                    <Controller
-                      control={control}
-                      name="estimate_point"
-                      render={({ field: { value, onChange } }) => (
-                        <IssueEstimateSelect value={value} onChange={onChange} />
-                      )}
-                    />
-                  </div>
-                )}
-                {(fieldsToShow.includes("all") || fieldsToShow.includes("parent")) && (
-                  <Controller
-                    control={control}
-                    name="parent"
-                    render={({ field: { onChange } }) => (
-                      <ParentIssuesListModal
-                        isOpen={parentIssueListModalOpen}
-                        handleClose={() => setParentIssueListModalOpen(false)}
-                        onChange={(issue) => {
-                          onChange(issue.id);
-                          setSelectedParentIssue(issue);
-                        }}
-                        projectId={projectId}
+                      </div>
+                    )}
+                    {(fieldsToShow.includes("all") || fieldsToShow.includes("estimate")) && (
+                      <div>
+                        <Controller
+                          control={control}
+                          name="estimate_point"
+                          render={({ field: { value, onChange } }) => (
+                            <IssueEstimateSelect value={value} onChange={onChange} />
+                          )}
+                        />
+                      </div>
+                    )}
+                    {(fieldsToShow.includes("all") || fieldsToShow.includes("parent")) && (
+                      <Controller
+                        control={control}
+                        name="parent"
+                        render={({ field: { onChange } }) => (
+                          <ParentIssuesListModal
+                            isOpen={parentIssueListModalOpen}
+                            handleClose={() => setParentIssueListModalOpen(false)}
+                            onChange={(issue) => {
+                              onChange(issue.id);
+                              setSelectedParentIssue(issue);
+                            }}
+                            projectId={projectId}
+                          />
+                        )}
                       />
                     )}
-                  />
-                )}
-                {(fieldsToShow.includes("all") || fieldsToShow.includes("parent")) && (
-                  <CustomMenu ellipsis>
-                    {watch("parent") ? (
-                      <>
-                        <CustomMenu.MenuItem
-                          renderAs="button"
-                          onClick={() => setParentIssueListModalOpen(true)}
-                        >
-                          Change parent issue
-                        </CustomMenu.MenuItem>
-                        <CustomMenu.MenuItem
-                          renderAs="button"
-                          onClick={() => setValue("parent", null)}
-                        >
-                          Remove parent issue
-                        </CustomMenu.MenuItem>
-                      </>
-                    ) : (
-                      <CustomMenu.MenuItem
-                        renderAs="button"
-                        onClick={() => setParentIssueListModalOpen(true)}
-                      >
-                        Select Parent Issue
-                      </CustomMenu.MenuItem>
+                    {(fieldsToShow.includes("all") || fieldsToShow.includes("parent")) && (
+                      <CustomMenu ellipsis>
+                        {watch("parent") ? (
+                          <>
+                            <CustomMenu.MenuItem
+                              renderAs="button"
+                              onClick={() => setParentIssueListModalOpen(true)}
+                            >
+                              Change parent issue
+                            </CustomMenu.MenuItem>
+                            <CustomMenu.MenuItem
+                              renderAs="button"
+                              onClick={() => setValue("parent", null)}
+                            >
+                              Remove parent issue
+                            </CustomMenu.MenuItem>
+                          </>
+                        ) : (
+                          <CustomMenu.MenuItem
+                            renderAs="button"
+                            onClick={() => setParentIssueListModalOpen(true)}
+                          >
+                            Select Parent Issue
+                          </CustomMenu.MenuItem>
+                        )}
+                      </CustomMenu>
                     )}
-                  </CustomMenu>
+                  </>
                 )}
               </div>
             </div>

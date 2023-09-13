@@ -1,7 +1,5 @@
 // react-hook-form
-import { Controller, useForm } from "react-hook-form";
-// headless ui
-import { Disclosure } from "@headlessui/react";
+import { Controller } from "react-hook-form";
 // components
 import { FileFormatsDropdown, FormComponentProps, Input } from "components/custom-attributes";
 

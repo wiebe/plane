@@ -2,19 +2,13 @@ import { KeyedMutator } from "swr";
 import type {
   IState,
   IUser,
-  IProject,
   ICycle,
   IModule,
   IUserLite,
   IProjectLite,
   IWorkspaceLite,
   IStateLite,
-  TStateGroups,
   Properties,
-  IIssueFilterOptions,
-  TIssueGroupByOptions,
-  TIssueViewOptions,
-  TIssueOrderByOptions,
   IIssueDisplayFilterOptions,
 } from "types";
 
@@ -87,6 +81,7 @@ export interface IIssue {
   assignees_list: string[];
   attachment_count: number;
   attachments: any[];
+  entity: string | null;
   issue_relations: {
     id: string;
     issue: string;
