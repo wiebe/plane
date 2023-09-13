@@ -15,19 +15,21 @@ export type TCustomAttributeTypes =
 export type TCustomAttributeUnits = "cycle" | "issue" | "module" | "user";
 
 export interface ICustomAttribute {
+  children: ICustomAttribute[];
   color: string;
-  default_value: string;
+  default_value: string | null;
   description: string;
   display_name: string;
-  extra_settings: any;
-  icon: string;
+  extra_settings: { [key: string]: any };
+  icon: string | null;
   id: string;
   is_default: boolean;
   is_multi: boolean;
   is_required: boolean;
-  is_shared: boolean;
   parent: string;
+  project: string | null;
   sort_order: number;
   type: TCustomAttributeTypes;
-  unit: TCustomAttributeUnits;
+  unit: TCustomAttributeUnits | null;
+  workspace: string;
 }

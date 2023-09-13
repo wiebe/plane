@@ -1,15 +1,3 @@
-// components
-import {
-  CheckboxAttributeForm,
-  DateTimeAttributeForm,
-  EmailAttributeForm,
-  FileAttributeForm,
-  NumberAttributeForm,
-  RelationAttributeForm,
-  SelectAttributeForm,
-  TextAttributeForm,
-  UrlAttributeForm,
-} from "components/custom-attributes";
 // icons
 import {
   AtSign,
@@ -25,66 +13,117 @@ import {
   LucideIcon,
 } from "lucide-react";
 // types
-import { TCustomAttributeTypes, TCustomAttributeUnits } from "types";
+import { ICustomAttribute, TCustomAttributeTypes, TCustomAttributeUnits } from "types";
 
 export const CUSTOM_ATTRIBUTES_LIST: {
   [key in Partial<TCustomAttributeTypes>]: {
-    component: React.FC<any>;
+    defaultFormValues: Partial<ICustomAttribute>;
     icon: LucideIcon;
+    initialPayload?: Partial<ICustomAttribute>;
     label: string;
   };
 } = {
   checkbox: {
-    component: CheckboxAttributeForm,
+    defaultFormValues: {
+      default_value: "checked",
+      display_name: "",
+      extra_settings: {
+        representation: "check",
+      },
+      is_required: false,
+    },
     icon: CheckCircle,
+    initialPayload: {
+      extra_settings: {
+        representation: "check",
+      },
+    },
     label: "Checkbox",
   },
   datetime: {
-    component: DateTimeAttributeForm,
+    defaultFormValues: {
+      default_value: "",
+      display_name: "",
+      extra_settings: {
+        date_format: "DD-MM-YYYY",
+        time_format: "12",
+      },
+      is_required: false,
+    },
     icon: Clock4,
     label: "Date Time",
   },
   email: {
-    component: EmailAttributeForm,
+    defaultFormValues: { default_value: "", display_name: "", is_required: false },
     icon: AtSign,
     label: "Email",
   },
   files: {
-    component: FileAttributeForm,
+    defaultFormValues: {
+      display_name: "",
+      extra_settings: {
+        file_formats: [],
+      },
+      is_multi: false,
+      is_required: false,
+    },
     icon: FileMinus,
     label: "Files",
+    initialPayload: {
+      extra_settings: {
+        file_formats: [".jpg", ".jpeg"],
+      },
+    },
   },
   multi_select: {
-    component: SelectAttributeForm,
+    defaultFormValues: { default_value: "", display_name: "", is_required: false },
     icon: Disc,
     label: "Multi Select",
   },
   number: {
-    component: NumberAttributeForm,
+    defaultFormValues: {
+      default_value: "",
+      display_name: "",
+      extra_settings: {
+        color: "Blue",
+        divided_by: 100,
+        representation: "numerical",
+        show_number: true,
+      },
+      is_required: false,
+    },
     icon: Hash,
     label: "Number",
+    initialPayload: {
+      extra_settings: {
+        representation: "numerical",
+      },
+    },
   },
   option: {
     icon: Baseline,
     label: "Option",
   },
   relation: {
-    component: RelationAttributeForm,
+    defaultFormValues: { display_name: "", is_multi: false, is_required: false, unit: "cycle" },
     icon: Forward,
     label: "Relation",
+    initialPayload: {
+      unit: "cycle",
+    },
   },
   select: {
-    component: SelectAttributeForm,
+    defaultFormValues: { default_value: "", display_name: "", is_required: false },
     icon: Disc,
     label: "Select",
   },
   text: {
-    component: TextAttributeForm,
+    defaultFormValues: { default_value: "", display_name: "", is_required: false },
     icon: CaseSensitive,
     label: "Text",
   },
   url: {
-    component: UrlAttributeForm,
+    defaultFormValues: { default_value: "", display_name: "", is_required: false },
     icon: Link2,
     label: "URL",
   },

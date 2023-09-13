@@ -1,3 +1,4 @@
+export * from "./attribute-form";
 export * from "./checkbox-attribute-form";
 export * from "./date-time-attribute-form";
 export * from "./email-attribute-form";
