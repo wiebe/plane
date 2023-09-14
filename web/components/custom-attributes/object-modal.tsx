@@ -8,20 +8,7 @@ import { useMobxStore } from "lib/mobx/store-provider";
 // headless ui
 import { Dialog, Transition } from "@headlessui/react";
 // components
-import {
-  TextAttributeForm,
-  Input,
-  TypesDropdown,
-  NumberAttributeForm,
-  CheckboxAttributeForm,
-  RelationAttributeForm,
-  DateTimeAttributeForm,
-  UrlAttributeForm,
-  EmailAttributeForm,
-  FileAttributeForm,
-  SelectAttributeForm,
-  AttributeForm,
-} from "components/custom-attributes";
+import { Input, TypesDropdown, AttributeForm } from "components/custom-attributes";
 // ui
 import { Loader, PrimaryButton, SecondaryButton } from "components/ui";
 // types
@@ -211,6 +198,7 @@ export const ObjectModal: React.FC<Props> = observer(
                                   handleUpdateAttribute={async (data) =>
                                     await handleUpdateAttribute(attributeId, data)
                                   }
+                                  objectId={object.id ?? ""}
                                   type={attribute.type}
                                 />
                               );

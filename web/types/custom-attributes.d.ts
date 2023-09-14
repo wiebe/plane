@@ -17,7 +17,7 @@ export type TCustomAttributeUnits = "cycle" | "issue" | "module" | "user";
 export interface ICustomAttribute {
   children: ICustomAttribute[];
   color: string;
-  default_value: string | null;
+  default_value: string;
   description: string;
   display_name: string;
   extra_settings: { [key: string]: any };
@@ -26,7 +26,7 @@ export interface ICustomAttribute {
   is_default: boolean;
   is_multi: boolean;
   is_required: boolean;
-  parent: string;
+  parent: string | null;
   project: string | null;
   sort_order: number;
   type: TCustomAttributeTypes;

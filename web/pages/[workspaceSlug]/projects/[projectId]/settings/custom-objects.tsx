@@ -8,7 +8,7 @@ import { ProjectAuthorizationWrapper } from "layouts/auth-layout";
 import useToast from "hooks/use-toast";
 import useProjectDetails from "hooks/use-project-details";
 // components
-import { SettingsHeader } from "components/project";
+import { SettingsSidebar } from "components/project";
 import { ObjectModal, ObjectsList } from "components/custom-attributes";
 // ui
 import { BreadcrumbItem, Breadcrumbs } from "components/breadcrumbs";
@@ -19,7 +19,7 @@ import { truncateText } from "helpers/string.helper";
 import type { NextPage } from "next";
 import { ICustomAttribute } from "types";
 
-const ControlSettings: NextPage = () => {
+const CustomObjectSettings: NextPage = () => {
   const [isCreateObjectModalOpen, setIsCreateObjectModalOpen] = useState(false);
   const [objectToEdit, setObjectToEdit] = useState<ICustomAttribute | null>(null);
 
@@ -56,25 +56,29 @@ const ControlSettings: NextPage = () => {
           setObjectToEdit(null);
         }}
       />
-      <div className="p-8">
-        <SettingsHeader />
-        <div>
-          <div className="flex items-center justify-between gap-4">
-            <h2 className="text-xl font-medium">Custom Objects</h2>
+      <div className="flex flex-row gap-2">
+        <div className="w-80 py-8">
+          <SettingsSidebar />
+        </div>
+        <section className="pr-9 py-8 w-full">
+          <div className="flex items-center justify-between gap-2 py-3.5 border-b border-custom-border-200">
+            <h3 className="text-xl font-medium">Custom Objects</h3>
             <PrimaryButton onClick={() => setIsCreateObjectModalOpen(true)}>
               Add Object
             </PrimaryButton>
           </div>
-          <div className="mt-4 border-y border-custom-border-100">
-            <ObjectsList
-              handleEditObject={handleEditObject}
-              projectId={projectId?.toString() ?? ""}
-            />
+          <div>
+            <div className="mt-4 border-y border-custom-border-100">
+              <ObjectsList
+                handleEditObject={handleEditObject}
+                projectId={projectId?.toString() ?? ""}
+              />
+            </div>
           </div>
-        </div>
+        </section>
       </div>
     </ProjectAuthorizationWrapper>
   );
 };
 
-export default ControlSettings;
+export default CustomObjectSettings;

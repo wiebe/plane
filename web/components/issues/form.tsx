@@ -10,7 +10,7 @@ import aiService from "services/ai.service";
 import useToast from "hooks/use-toast";
 // components
 import { GptAssistantModal } from "components/core";
-import { ParentIssuesListModal } from "components/issues";
+import { CustomAttributesList, ParentIssuesListModal } from "components/issues";
 import {
   IssueAssigneeSelect,
   IssueDateSelect,
@@ -416,7 +416,7 @@ export const IssueForm: FC<IssueFormProps> = ({
                   />
                 )}
                 {/* default object properties */}
-                {watch("entity") === null && (
+                {watch("entity") === null ? (
                   <>
                     {(fieldsToShow.includes("all") || fieldsToShow.includes("priority")) && (
                       <Controller
@@ -542,6 +542,12 @@ export const IssueForm: FC<IssueFormProps> = ({
                       </CustomMenu>
                     )}
                   </>
+                ) : (
+                  <CustomAttributesList
+                    entityId={watch("entity") ?? ""}
+                    issueId=""
+                    projectId={projectId}
+                  />
                 )}
               </div>
             </div>

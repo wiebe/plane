@@ -29,18 +29,53 @@ type Props = {
   data: Partial<ICustomAttribute>;
   handleDeleteAttribute: () => void;
   handleUpdateAttribute: (data: Partial<ICustomAttribute>) => Promise<void>;
+  objectId: string;
   type: TCustomAttributeTypes;
 };
 
 export type FormComponentProps = {
   control: Control<Partial<ICustomAttribute>, any>;
-  watch?: UseFormWatch<Partial<ICustomAttribute>>;
+  objectId: string;
+  watch: UseFormWatch<Partial<ICustomAttribute>>;
+};
+
+const RenderForm: React.FC<{ type: TCustomAttributeTypes } & FormComponentProps> = ({
+  control,
+  objectId,
+  type,
+  watch,
+}) => {
+  let FormToRender: any = <></>;
+
+  if (type === "checkbox")
+    FormToRender = <CheckboxAttributeForm control={control} objectId={objectId} watch={watch} />;
+  else if (type === "datetime")
+    FormToRender = <DateTimeAttributeForm control={control} objectId={objectId} watch={watch} />;
+  else if (type === "email")
+    FormToRender = <EmailAttributeForm control={control} objectId={objectId} watch={watch} />;
+  else if (type === "files")
+    FormToRender = <FileAttributeForm control={control} objectId={objectId} watch={watch} />;
+  else if (type === "multi_select")
+    FormToRender = <SelectAttributeForm control={control} objectId={objectId} watch={watch} />;
+  else if (type === "number")
+    FormToRender = <NumberAttributeForm control={control} objectId={objectId} watch={watch} />;
+  else if (type === "relation")
+    FormToRender = <RelationAttributeForm control={control} objectId={objectId} watch={watch} />;
+  else if (type === "select")
+    FormToRender = <SelectAttributeForm control={control} objectId={objectId} watch={watch} />;
+  else if (type === "text")
+    FormToRender = <TextAttributeForm control={control} objectId={objectId} watch={watch} />;
+  else if (type === "url")
+    FormToRender = <UrlAttributeForm control={control} objectId={objectId} watch={watch} />;
+
+  return FormToRender;
 };
 
 export const AttributeForm: React.FC<Props> = ({
   data,
   handleDeleteAttribute,
   handleUpdateAttribute,
+  objectId,
   type,
 }) => {
   const typeMetaData = CUSTOM_ATTRIBUTES_LIST[type];
@@ -55,25 +90,6 @@ export const AttributeForm: React.FC<Props> = ({
 
   const handleFormSubmit = async (data: Partial<ICustomAttribute>) => {
     await handleUpdateAttribute(data);
-  };
-
-  const renderForm = (type: TCustomAttributeTypes): JSX.Element => {
-    let FormToRender = <></>;
-
-    if (type === "checkbox") FormToRender = <CheckboxAttributeForm control={control} />;
-    else if (type === "datetime") FormToRender = <DateTimeAttributeForm control={control} />;
-    else if (type === "email") FormToRender = <EmailAttributeForm control={control} />;
-    else if (type === "files") FormToRender = <FileAttributeForm control={control} />;
-    else if (type === "multi_select")
-      FormToRender = <SelectAttributeForm control={control} multiple />;
-    else if (type === "number")
-      FormToRender = <NumberAttributeForm control={control} watch={watch} />;
-    else if (type === "relation") FormToRender = <RelationAttributeForm control={control} />;
-    else if (type === "select") FormToRender = <SelectAttributeForm control={control} />;
-    else if (type === "text") FormToRender = <TextAttributeForm control={control} />;
-    else if (type === "url") FormToRender = <UrlAttributeForm control={control} />;
-
-    return FormToRender;
   };
 
   useEffect(() => {
@@ -95,7 +111,7 @@ export const AttributeForm: React.FC<Props> = ({
           <Disclosure.Button className="p-3 flex items-center justify-between gap-1 w-full">
             <div className="flex items-center gap-2.5">
               <typeMetaData.icon size={14} strokeWidth={1.5} />
-              <h6 className="text-sm">{typeMetaData.label}</h6>
+              <h6 className="text-sm">{data.display_name ?? typeMetaData.label}</h6>
             </div>
             <div className={`${open ? "-rotate-180" : ""} transition-all`}>
               <ChevronDown size={16} strokeWidth={1.5} rotate="180deg" />
@@ -103,7 +119,9 @@ export const AttributeForm: React.FC<Props> = ({
           </Disclosure.Button>
           <Disclosure.Panel>
             <form onSubmit={handleSubmit(handleFormSubmit)} className="p-3 pl-9 pt-0">
-              {renderForm(type)}
+              {data.type && (
+                <RenderForm type={data.type} control={control} objectId={objectId} watch={watch} />
+              )}
               <div className="mt-8 flex items-center justify-between">
                 <div className="flex-shrink-0 flex items-center gap-2">
                   <Controller
@@ -123,7 +141,9 @@ export const AttributeForm: React.FC<Props> = ({
                   >
                     Remove
                   </button>
-                  <PrimaryButton type="submit">{isSubmitting ? "Saving..." : "Save"}</PrimaryButton>
+                  <PrimaryButton type="submit" loading={isSubmitting}>
+                    {isSubmitting ? "Saving..." : "Save"}
+                  </PrimaryButton>
                 </div>
               </div>
             </form>

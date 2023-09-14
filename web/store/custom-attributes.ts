@@ -14,6 +14,7 @@ class CustomAttributesStore {
   fetchEntitiesLoader = false;
   fetchEntityDetailsLoader = false;
   createEntityAttributeLoader = false;
+  createAttributeOptionLoader = false;
   // errors
   attributesFetchError: any | null = null;
   error: any | null = null;
@@ -30,6 +31,9 @@ class CustomAttributesStore {
       createEntityAttribute: action,
       updateEntityAttribute: action,
       deleteEntityAttribute: action,
+      createAttributeOption: action,
+      updateAttributeOption: action,
+      deleteAttributeOption: action,
     });
 
     this.rootStore = _rootStore;
@@ -193,6 +197,117 @@ class CustomAttributesStore {
     } catch (error) {
       runInAction(() => {
         this.error = error;
+      });
+    }
+  };
+
+  createAttributeOption = async (
+    workspaceSlug: string,
+    objectId: string,
+    data: Partial<ICustomAttribute> & { parent: string }
+  ) => {
+    try {
+      this.createAttributeOptionLoader = true;
+
+      const response = await customAttributesService.createProperty(workspaceSlug, data);
+
+      runInAction(() => {
+        this.entityAttributes = {
+          ...this.entityAttributes,
+          [objectId]: {
+            ...this.entityAttributes[objectId],
+            [data.parent]: {
+              ...this.entityAttributes[objectId][data.parent],
+              children: [...this.entityAttributes[objectId][data.parent].children, response],
+            },
+          },
+        };
+        this.createAttributeOptionLoader = false;
+      });
+
+      return response;
+    } catch (error) {
+      runInAction(() => {
+        this.error = error;
+        this.createAttributeOptionLoader = false;
+      });
+    }
+  };
+
+  updateAttributeOption = async (
+    workspaceSlug: string,
+    objectId: string,
+    parentId: string,
+    propertyId: string,
+    data: Partial<ICustomAttribute>
+  ) => {
+    try {
+      this.createAttributeOptionLoader = true;
+
+      const response = await customAttributesService.patchProperty(workspaceSlug, propertyId, data);
+
+      const newOptions = this.entityAttributes[objectId][parentId].children.map((option) => ({
+        ...option,
+        ...(option.id === propertyId ? response : {}),
+      }));
+
+      runInAction(() => {
+        this.entityAttributes = {
+          ...this.entityAttributes,
+          [objectId]: {
+            ...this.entityAttributes[objectId],
+            [parentId]: {
+              ...this.entityAttributes[objectId][parentId],
+              children: newOptions,
+            },
+          },
+        };
+        this.createAttributeOptionLoader = false;
+      });
+
+      return response;
+    } catch (error) {
+      runInAction(() => {
+        this.error = error;
+        this.createAttributeOptionLoader = false;
+      });
+    }
+  };
+
+  deleteAttributeOption = async (
+    workspaceSlug: string,
+    objectId: string,
+    parentId: string,
+    propertyId: string
+  ) => {
+    try {
+      this.createAttributeOptionLoader = true;
+
+      const response = await customAttributesService.deleteProperty(workspaceSlug, propertyId);
+
+      const newOptions = this.entityAttributes[objectId][parentId].children.filter(
+        (option) => option.id !== propertyId
+      );
+
+      runInAction(() => {
+        this.entityAttributes = {
+          ...this.entityAttributes,
+          [objectId]: {
+            ...this.entityAttributes[objectId],
+            [parentId]: {
+              ...this.entityAttributes[objectId][parentId],
+              children: newOptions,
+            },
+          },
+        };
+        this.createAttributeOptionLoader = false;
+      });
+
+      return response;
+    } catch (error) {
+      runInAction(() => {
+        this.error = error;
+        this.createAttributeOptionLoader = false;
       });
     }
   };
