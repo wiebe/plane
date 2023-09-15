@@ -266,7 +266,7 @@ export const IssueForm: FC<IssueFormProps> = ({
               </h3>
             </div>
             <div className="flex-shrink-0">
-              {(fieldsToShow.includes("all") || fieldsToShow.includes("project")) && (
+              {(fieldsToShow.includes("all") || fieldsToShow.includes("entity")) && (
                 <Controller
                   control={control}
                   name="entity"
@@ -559,7 +559,7 @@ export const IssueForm: FC<IssueFormProps> = ({
             onClick={() => setCreateMore((prevData) => !prevData)}
           >
             <span className="text-xs">Create more</span>
-            <ToggleSwitch value={createMore} onChange={() => {}} size="md" />
+            <ToggleSwitch value={createMore} onChange={() => {}} size="sm" />
           </div>
           <div className="flex items-center gap-2">
             <SecondaryButton onClick={handleClose}>Discard</SecondaryButton>

@@ -40,7 +40,7 @@ export const SelectOption: React.FC<Props> = observer(({ objectId, option }) => 
           <p
             className="text-custom-text-300 text-xs p-1 rounded inline truncate"
             style={{
-              backgroundColor: `${option.color}20`,
+              backgroundColor: `${option.color}40`,
             }}
           >
             {option.display_name}

@@ -32,6 +32,7 @@ import {
   SidebarLabelSelect,
   SidebarDuplicateSelect,
   SidebarRelatesSelect,
+  SidebarCustomAttributesList,
 } from "components/issues";
 // ui
 import { CustomDatePicker, Icon } from "components/ui";
@@ -48,13 +49,14 @@ import {
   UserIcon,
   RectangleGroupIcon,
 } from "@heroicons/react/24/outline";
+import { ContrastIcon } from "components/icons";
 // helpers
 import { copyTextToClipboard } from "helpers/string.helper";
 // types
 import type { ICycle, IIssue, IIssueLink, linkDetails, IModule } from "types";
 // fetch-keys
 import { ISSUE_DETAILS } from "constants/fetch-keys";
-import { ContrastIcon } from "components/icons";
+import { ObjectsSelect } from "components/custom-attributes";
 
 type Props = {
   control: any;
@@ -62,6 +64,7 @@ type Props = {
   issueDetail: IIssue | undefined;
   watch: UseFormWatch<IIssue>;
   fieldsToShow?: (
+    | "entity"
     | "state"
     | "assignee"
     | "priority"
@@ -350,6 +353,27 @@ export const IssueDetailsSidebar: React.FC<Props> = ({
           <div className={`divide-y-2 divide-custom-border-200 ${uneditable ? "opacity-60" : ""}`}>
             {showFirstSection && (
               <div className="py-1">
+                {/* {(fieldsToShow.includes("all") || fieldsToShow.includes("entity")) && (
+                  <div className="flex flex-wrap items-center py-2">
+                    <div className="flex items-center gap-x-2 text-sm text-custom-text-200 sm:basis-1/2">
+                      <Squares2X2Icon className="h-4 w-4 flex-shrink-0" />
+                      <p>Object</p>
+                    </div>
+                    <div className="sm:basis-1/2">
+                      <Controller
+                        control={control}
+                        name="entity"
+                        render={({ field: { value } }) => (
+                          <ObjectsSelect
+                            onChange={(val: string | null) => submitChanges({ entity: val })}
+                            projectId={projectId?.toString() ?? ""}
+                            value={value}
+                          />
+                        )}
+                      />
+                    </div>
+                  </div>
+                )} */}
                 {(fieldsToShow.includes("all") || fieldsToShow.includes("state")) && (
                   <div className="flex flex-wrap items-center py-2">
                     <div className="flex items-center gap-x-2 text-sm text-custom-text-200 sm:basis-1/2">
@@ -371,49 +395,52 @@ export const IssueDetailsSidebar: React.FC<Props> = ({
                     </div>
                   </div>
                 )}
-                {(fieldsToShow.includes("all") || fieldsToShow.includes("assignee")) && (
-                  <div className="flex flex-wrap items-center py-2">
-                    <div className="flex items-center gap-x-2 text-sm text-custom-text-200 sm:basis-1/2">
-                      <UserGroupIcon className="h-4 w-4 flex-shrink-0" />
-                      <p>Assignees</p>
+                {(fieldsToShow.includes("all") || fieldsToShow.includes("assignee")) &&
+                  watchIssue("entity") === null && (
+                    <div className="flex flex-wrap items-center py-2">
+                      <div className="flex items-center gap-x-2 text-sm text-custom-text-200 sm:basis-1/2">
+                        <UserGroupIcon className="h-4 w-4 flex-shrink-0" />
+                        <p>Assignees</p>
+                      </div>
+                      <div className="sm:basis-1/2">
+                        <Controller
+                          control={control}
+                          name="assignees_list"
+                          render={({ field: { value } }) => (
+                            <SidebarAssigneeSelect
+                              value={value}
+                              onChange={(val: string[]) => submitChanges({ assignees_list: val })}
+                              disabled={memberRole.isGuest || memberRole.isViewer || uneditable}
+                            />
+                          )}
+                        />
+                      </div>
                     </div>
-                    <div className="sm:basis-1/2">
-                      <Controller
-                        control={control}
-                        name="assignees_list"
-                        render={({ field: { value } }) => (
-                          <SidebarAssigneeSelect
-                            value={value}
-                            onChange={(val: string[]) => submitChanges({ assignees_list: val })}
-                            disabled={memberRole.isGuest || memberRole.isViewer || uneditable}
-                          />
-                        )}
-                      />
+                  )}
+                {(fieldsToShow.includes("all") || fieldsToShow.includes("priority")) &&
+                  watchIssue("entity") === null && (
+                    <div className="flex flex-wrap items-center py-2">
+                      <div className="flex items-center gap-x-2 text-sm text-custom-text-200 sm:basis-1/2">
+                        <ChartBarIcon className="h-4 w-4 flex-shrink-0" />
+                        <p>Priority</p>
+                      </div>
+                      <div className="sm:basis-1/2">
+                        <Controller
+                          control={control}
+                          name="priority"
+                          render={({ field: { value } }) => (
+                            <SidebarPrioritySelect
+                              value={value}
+                              onChange={(val) => submitChanges({ priority: val })}
+                              disabled={memberRole.isGuest || memberRole.isViewer || uneditable}
+                            />
+                          )}
+                        />
+                      </div>
                     </div>
-                  </div>
-                )}
-                {(fieldsToShow.includes("all") || fieldsToShow.includes("priority")) && (
-                  <div className="flex flex-wrap items-center py-2">
-                    <div className="flex items-center gap-x-2 text-sm text-custom-text-200 sm:basis-1/2">
-                      <ChartBarIcon className="h-4 w-4 flex-shrink-0" />
-                      <p>Priority</p>
-                    </div>
-                    <div className="sm:basis-1/2">
-                      <Controller
-                        control={control}
-                        name="priority"
-                        render={({ field: { value } }) => (
-                          <SidebarPrioritySelect
-                            value={value}
-                            onChange={(val) => submitChanges({ priority: val })}
-                            disabled={memberRole.isGuest || memberRole.isViewer || uneditable}
-                          />
-                        )}
-                      />
-                    </div>
-                  </div>
-                )}
+                  )}
                 {(fieldsToShow.includes("all") || fieldsToShow.includes("estimate")) &&
+                  watchIssue("entity") === null &&
                   isEstimateActive && (
                     <div className="flex flex-wrap items-center py-2">
                       <div className="flex items-center gap-x-2 text-sm text-custom-text-200 sm:basis-1/2">
@@ -439,7 +466,7 @@ export const IssueDetailsSidebar: React.FC<Props> = ({
                   )}
               </div>
             )}
-            {showSecondSection && (
+            {showSecondSection && watchIssue("entity") === null && (
               <div className="py-1">
                 {(fieldsToShow.includes("all") || fieldsToShow.includes("parent")) && (
                   <div className="flex flex-wrap items-center py-2">
@@ -603,7 +630,7 @@ export const IssueDetailsSidebar: React.FC<Props> = ({
                 )}
               </div>
             )}
-            {showThirdSection && (
+            {showThirdSection && watchIssue("entity") === null && (
               <div className="py-1">
                 {(fieldsToShow.includes("all") || fieldsToShow.includes("cycle")) && (
                   <div className="flex flex-wrap items-center py-2">
@@ -638,43 +665,50 @@ export const IssueDetailsSidebar: React.FC<Props> = ({
               </div>
             )}
           </div>
-          {(fieldsToShow.includes("all") || fieldsToShow.includes("label")) && (
-            <SidebarLabelSelect
-              issueDetails={issueDetail}
-              issueControl={control}
-              watchIssue={watchIssue}
-              submitChanges={submitChanges}
-              isNotAllowed={isNotAllowed}
-              uneditable={uneditable ?? false}
-            />
-          )}
-          {(fieldsToShow.includes("all") || fieldsToShow.includes("link")) && (
-            <div className={`min-h-[116px] py-1 text-xs ${uneditable ? "opacity-60" : ""}`}>
-              <div className="flex items-center justify-between gap-2">
-                <h4>Links</h4>
-                {!isNotAllowed && (
-                  <button
-                    type="button"
-                    className={`grid h-7 w-7 place-items-center rounded p-1 outline-none duration-300 hover:bg-custom-background-90 ${
-                      uneditable ? "cursor-not-allowed" : "cursor-pointer"
-                    }`}
-                    onClick={() => setLinkModal(true)}
-                    disabled={uneditable}
-                  >
-                    <PlusIcon className="h-4 w-4" />
-                  </button>
-                )}
+          {(fieldsToShow.includes("all") || fieldsToShow.includes("label")) &&
+            watchIssue("entity") === null && (
+              <SidebarLabelSelect
+                issueDetails={issueDetail}
+                issueControl={control}
+                watchIssue={watchIssue}
+                submitChanges={submitChanges}
+                isNotAllowed={isNotAllowed}
+                uneditable={uneditable ?? false}
+              />
+            )}
+          {(fieldsToShow.includes("all") || fieldsToShow.includes("link")) &&
+            watchIssue("entity") === null && (
+              <div className={`min-h-[116px] py-1 text-xs ${uneditable ? "opacity-60" : ""}`}>
+                <div className="flex items-center justify-between gap-2">
+                  <h4>Links</h4>
+                  {!isNotAllowed && (
+                    <button
+                      type="button"
+                      className={`grid h-7 w-7 place-items-center rounded p-1 outline-none duration-300 hover:bg-custom-background-90 ${
+                        uneditable ? "cursor-not-allowed" : "cursor-pointer"
+                      }`}
+                      onClick={() => setLinkModal(true)}
+                      disabled={uneditable}
+                    >
+                      <PlusIcon className="h-4 w-4" />
+                    </button>
+                  )}
+                </div>
+                <div className="mt-2 space-y-2">
+                  {issueDetail?.issue_link && issueDetail.issue_link.length > 0 ? (
+                    <LinksList
+                      links={issueDetail.issue_link}
+                      handleDeleteLink={handleDeleteLink}
+                      handleEditLink={handleEditLink}
+                      userAuth={memberRole}
+                    />
+                  ) : null}
+                </div>
               </div>
-              <div className="mt-2 space-y-2">
-                {issueDetail?.issue_link && issueDetail.issue_link.length > 0 ? (
-                  <LinksList
-                    links={issueDetail.issue_link}
-                    handleDeleteLink={handleDeleteLink}
-                    handleEditLink={handleEditLink}
-                    userAuth={memberRole}
-                  />
-                ) : null}
-              </div>
+            )}
+          {watchIssue("entity") && (
+            <div className="py-1">
+              <SidebarCustomAttributesList issue={issueDetail} />
             </div>
           )}
         </div>

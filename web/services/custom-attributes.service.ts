@@ -1,7 +1,7 @@
 // services
 import APIService from "services/api.service";
 // types
-import { ICustomAttribute } from "types";
+import { ICustomAttribute, ICustomAttributeValue, ICustomAttributeValueFormData } from "types";
 
 const { NEXT_PUBLIC_API_BASE_URL } = process.env;
 
@@ -56,6 +56,36 @@ class CustomAttributesService extends APIService {
 
   async deleteProperty(workspaceSlug: string, propertyId: string): Promise<any> {
     return this.delete(`/api/workspaces/${workspaceSlug}/properties/${propertyId}/`)
+      .then((response) => response?.data)
+      .catch((error) => {
+        throw error?.response?.data;
+      });
+  }
+
+  async getAttributeValues(
+    workspaceSlug: string,
+    projectId: string,
+    issueId: string
+  ): Promise<{ children: ICustomAttributeValue[] }> {
+    return this.get(
+      `/api/workspaces/${workspaceSlug}/projects/${projectId}/issues/${issueId}/property-values/`
+    )
+      .then((response) => response?.data)
+      .catch((error) => {
+        throw error?.response?.data;
+      });
+  }
+
+  async createPropertyValues(
+    workspaceSlug: string,
+    projectId: string,
+    issueId: string,
+    data: ICustomAttributeValueFormData
+  ): Promise<{ children: ICustomAttributeValue[] }> {
+    return this.post(
+      `/api/workspaces/${workspaceSlug}/projects/${projectId}/issues/${issueId}/property-values/`,
+      data
+    )
       .then((response) => response?.data)
       .catch((error) => {
         throw error?.response?.data;

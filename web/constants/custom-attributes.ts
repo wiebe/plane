@@ -34,6 +34,7 @@ export const CUSTOM_ATTRIBUTES_LIST: {
     },
     icon: CheckCircle,
     initialPayload: {
+      default_value: "checked",
       extra_settings: {
         representation: "check",
       },
@@ -51,6 +52,14 @@ export const CUSTOM_ATTRIBUTES_LIST: {
       is_required: false,
     },
     icon: Clock4,
+    initialPayload: {
+      extra_settings: {
+        date_format: "DD-MM-YYYY",
+        hide_date: false,
+        hide_time: false,
+        time_format: "12",
+      },
+    },
     label: "Date Time",
   },
   email: {

@@ -5,28 +5,28 @@ import { Controller, useForm } from "react-hook-form";
 // types
 import { Props } from "./types";
 
-export const CustomTextAttribute: React.FC<Props & { value: string | undefined }> = ({
+export const CustomEmailAttribute: React.FC<Props & { value: string | undefined }> = ({
   onChange,
   value,
 }) => {
   const [isEditing, setIsEditing] = useState(false);
 
-  const { control, handleSubmit, reset, setFocus } = useForm({ defaultValues: { text: "" } });
+  const { control, handleSubmit, reset, setFocus } = useForm({ defaultValues: { email: "" } });
 
-  const handleFormSubmit = (data: { text: string }) => {
+  const handleFormSubmit = (data: { email: string }) => {
     setIsEditing(false);
 
-    onChange(data.text);
+    onChange(data.email);
   };
 
   useEffect(() => {
     if (isEditing) {
-      setFocus("text");
+      setFocus("email");
     }
   }, [isEditing, setFocus]);
 
   useEffect(() => {
-    reset({ text: value ?? "" });
+    reset({ email: value?.toString() });
   }, [reset, value]);
 
   useEffect(() => {
@@ -52,10 +52,10 @@ export const CustomTextAttribute: React.FC<Props & { value: string | undefined }
         <form onSubmit={handleSubmit(handleFormSubmit)} className="flex items-center">
           <Controller
             control={control}
-            name="text"
+            name="email"
             render={({ field }) => (
               <input
-                type="text"
+                type="email"
                 className="text-xs px-2 py-0.5 bg-custom-background-80 rounded w-full outline-none"
                 {...field}
               />

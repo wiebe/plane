@@ -34,6 +34,8 @@ export const ObjectsSelect: React.FC<Props> = observer(({ onChange, projectId, v
   }));
   options?.unshift({ value: null, query: "default", content: "Default" });
 
+  console.log("entities", entities);
+
   useEffect(() => {
     if (!workspaceSlug) return;
 
@@ -42,7 +44,11 @@ export const ObjectsSelect: React.FC<Props> = observer(({ onChange, projectId, v
 
   return (
     <CustomSearchSelect
-      label={entities?.find((e) => e.id === value)?.display_name ?? "Default"}
+      customButton={
+        <button type="button" className="bg-custom-background-80 rounded text-xs px-2.5 py-0.5">
+          {entities?.find((e) => e.id === value)?.display_name ?? "Default"}
+        </button>
+      }
       value={value}
       maxHeight="md"
       optionsClassName="!min-w-[10rem]"

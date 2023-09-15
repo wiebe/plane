@@ -42,6 +42,10 @@ export const SettingsSidebar = () => {
       label: "Automations",
       href: `/${workspaceSlug}/projects/${projectId}/settings/automations`,
     },
+    {
+      label: "Custom Objects",
+      href: `/${workspaceSlug}/projects/${projectId}/settings/custom-objects`,
+    },
   ];
   return (
     <div className="flex flex-col gap-2 w-80 px-9">

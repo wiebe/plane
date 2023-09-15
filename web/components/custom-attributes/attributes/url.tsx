@@ -5,28 +5,28 @@ import { Controller, useForm } from "react-hook-form";
 // types
 import { Props } from "./types";
 
-export const CustomTextAttribute: React.FC<Props & { value: string | undefined }> = ({
+export const CustomUrlAttribute: React.FC<Props & { value: string | undefined }> = ({
   onChange,
   value,
 }) => {
   const [isEditing, setIsEditing] = useState(false);
 
-  const { control, handleSubmit, reset, setFocus } = useForm({ defaultValues: { text: "" } });
+  const { control, handleSubmit, reset, setFocus } = useForm({ defaultValues: { url: "" } });
 
-  const handleFormSubmit = (data: { text: string }) => {
+  const handleFormSubmit = (data: { url: string }) => {
     setIsEditing(false);
 
-    onChange(data.text);
+    onChange(data.url);
   };
 
   useEffect(() => {
     if (isEditing) {
-      setFocus("text");
+      setFocus("url");
     }
   }, [isEditing, setFocus]);
 
   useEffect(() => {
-    reset({ text: value ?? "" });
+    reset({ url: value?.toString() });
   }, [reset, value]);
 
   useEffect(() => {
@@ -52,10 +52,10 @@ export const CustomTextAttribute: React.FC<Props & { value: string | undefined }
         <form onSubmit={handleSubmit(handleFormSubmit)} className="flex items-center">
           <Controller
             control={control}
-            name="text"
+            name="url"
             render={({ field }) => (
               <input
-                type="text"
+                type="url"
                 className="text-xs px-2 py-0.5 bg-custom-background-80 rounded w-full outline-none"
                 {...field}
               />

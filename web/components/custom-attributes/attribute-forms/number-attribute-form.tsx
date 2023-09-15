@@ -114,6 +114,9 @@ export const NumberAttributeForm: React.FC<FormComponentProps> = ({ control, wat
                     step={1}
                   />
                 )}
+                rules={{
+                  required: "This field is required",
+                }}
               />
             </div>
           </>

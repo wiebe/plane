@@ -26,7 +26,14 @@ const checkboxAttributeRepresentations = [
 export const CheckboxAttributeForm: React.FC<FormComponentProps> = ({ control }) => (
   <>
     <div className="space-y-3">
-      <Input placeholder="Enter field title" />
+      {" "}
+      <Controller
+        control={control}
+        name="display_name"
+        render={({ field: { onChange, value } }) => (
+          <Input placeholder="Enter field title" value={value} onChange={onChange} />
+        )}
+      />
       <div>
         <p className="text-xs">Default value</p>
         <div className="mt-2 flex items-center gap-6 accent-custom-primary-100">

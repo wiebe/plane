@@ -13,6 +13,7 @@ export * from "./form";
 export * from "./main-content";
 export * from "./modal";
 export * from "./parent-issues-list-modal";
+export * from "./sidebar-custom-attributes-list"
 export * from "./sidebar";
 export * from "./sub-issues-list";
 export * from "./label";

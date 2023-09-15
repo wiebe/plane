@@ -5,17 +5,25 @@ import { useRouter } from "next/router";
 // mobx
 import { useMobxStore } from "lib/mobx/store-provider";
 import { observer } from "mobx-react-lite";
+// components
+import {
+  CustomCheckboxAttribute,
+  CustomFileAttribute,
+  CustomSelectAttribute,
+  CustomTextAttribute,
+} from "components/custom-attributes";
+// ui
 import { Loader } from "components/ui";
-import { CustomTextAttribute } from "components/custom-attributes";
 
 type Props = {
   entityId: string;
   issueId: string;
+  onSubmit: () => Promise<void>;
   projectId: string;
 };
 
 export const CustomAttributesList: React.FC<Props> = observer(
-  ({ entityId, issueId, projectId }) => {
+  ({ entityId, issueId, onSubmit, projectId }) => {
     const router = useRouter();
     const { workspaceSlug } = router.query;
 
@@ -52,6 +60,33 @@ export const CustomAttributesList: React.FC<Props> = observer(
                     onChange={() => {}}
                     projectId={projectId}
                     value={attribute.default_value ?? ""}
+                  />
+                )}
+                {attribute.type === "select" && (
+                  <CustomSelectAttribute
+                    attributeDetails={attribute}
+                    issueId={issueId}
+                    onChange={() => {}}
+                    projectId={projectId}
+                    value={attribute.default_value ?? ""}
+                  />
+                )}
+                {attribute.type === "checkbox" && (
+                  <CustomCheckboxAttribute
+                    attributeDetails={attribute}
+                    issueId={issueId}
+                    onChange={() => {}}
+                    projectId={projectId}
+                    value={attribute.default_value === "checked" ? true : false}
+                  />
+                )}
+                {attribute.type === "files" && (
+                  <CustomFileAttribute
+                    attributeDetails={attribute}
+                    issueId={issueId}
+                    onChange={() => {}}
+                    projectId={projectId}
+                    value={null}
                   />
                 )}
               </div>

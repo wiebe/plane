@@ -12,7 +12,7 @@ export type TCustomAttributeTypes =
   | "text"
   | "url";
 
-export type TCustomAttributeUnits = "cycle" | "issue" | "module" | "user";
+export type TCustomAttributeUnits = "cycle" | "issue" | "module" | "user" | null;
 
 export interface ICustomAttribute {
   children: ICustomAttribute[];
@@ -30,6 +30,27 @@ export interface ICustomAttribute {
   project: string | null;
   sort_order: number;
   type: TCustomAttributeTypes;
-  unit: TCustomAttributeUnits | null;
+  unit: TCustomAttributeUnits;
   workspace: string;
+}
+
+export interface ICustomAttributeValue {
+  children: ICustomAttributeValue[];
+  id: string;
+  name: string;
+  prop_value:
+    | {
+        type: string;
+        value: string;
+      }[]
+    | null;
+  type: TCustomAttributeTypes;
+  unit: TCustomAttributeUnits;
+}
+
+export interface ICustomAttributeValueFormData {
+  issue_properties: {
+    [key: string]: string;
+  };
+  a_epoch?: number;
 }
