@@ -20,6 +20,7 @@ import {
 import { ICustomAttributeValueFormData, IIssue } from "types";
 // constants
 import { CUSTOM_ATTRIBUTES_LIST } from "constants/custom-attributes";
+import { Loader } from "components/ui";
 
 type Props = {
   issue: IIssue | undefined;
@@ -76,6 +77,16 @@ export const SidebarCustomAttributesList: React.FC<Props> = observer(({ issue })
   }, [fetchIssueAttributeValues, issue, issueAttributeValues, workspaceSlug]);
 
   if (!issue || !issue?.entity) return null;
+
+  if (!entityAttributes[issue.entity] || !issueAttributeValues?.[issue.id])
+    return (
+      <Loader className="space-y-4">
+        <Loader.Item height="30px" />
+        <Loader.Item height="30px" />
+        <Loader.Item height="30px" />
+        <Loader.Item height="30px" />
+      </Loader>
+    );
 
   return (
     <div>
