@@ -61,8 +61,8 @@ export const CustomNumberAttribute: React.FC<Props & { value: number | undefined
                     <div
                       className="absolute top-0 left-0 h-full"
                       style={{
-                        backgroundColor: extraSettings?.color ?? "rgb(var(--color-primary-100))",
-                        width: `${(value / parseInt(extraSettings.divided_by, 10)) * 100}%`,
+                        backgroundColor: attributeDetails.color ?? "rgb(var(--color-primary-100))",
+                        width: `${(value / parseInt(extraSettings.divided_by ?? 100, 10)) * 100}%`,
                       }}
                     />
                   </div>
@@ -73,9 +73,9 @@ export const CustomNumberAttribute: React.FC<Props & { value: number | undefined
                     <span className="flex-shrink-0 font-medium">{value}</span>
                   )}
                   <ProgressBar
-                    activeStrokeColor={extraSettings?.color ?? "rgb(var(--color-primary-100))"}
+                    activeStrokeColor={attributeDetails.color ?? "rgb(var(--color-primary-100))"}
                     value={value}
-                    maxValue={parseInt(extraSettings.divided_by, 10)}
+                    maxValue={parseInt(extraSettings.divided_by ?? 100, 10)}
                   />
                 </div>
               ) : (
@@ -96,6 +96,10 @@ export const CustomNumberAttribute: React.FC<Props & { value: number | undefined
               <input
                 type="number"
                 className="hide-arrows text-xs px-2 py-0.5 bg-custom-background-80 rounded w-full outline-none"
+                step={1}
+                min={extraSettings.divided_by ? 0 : undefined}
+                max={extraSettings.divided_by ?? undefined}
+                required={attributeDetails.is_required}
                 {...field}
               />
             )}

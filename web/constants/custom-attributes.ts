@@ -1,7 +1,6 @@
 // icons
 import {
   AtSign,
-  Baseline,
   CaseSensitive,
   CheckCircle,
   Clock4,
@@ -91,10 +90,10 @@ export const CUSTOM_ATTRIBUTES_LIST: {
   },
   number: {
     defaultFormValues: {
+      color: "#000000",
       default_value: "",
       display_name: "",
       extra_settings: {
-        color: "Blue",
         divided_by: 100,
         representation: "numerical",
         show_number: true,
@@ -108,10 +107,6 @@ export const CUSTOM_ATTRIBUTES_LIST: {
         representation: "numerical",
       },
     },
-  },
-  option: {
-    icon: Baseline,
-    label: "Option",
   },
   relation: {
     defaultFormValues: { display_name: "", is_multi: false, is_required: false, unit: "cycle" },

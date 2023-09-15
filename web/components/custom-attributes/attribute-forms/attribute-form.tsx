@@ -124,14 +124,18 @@ export const AttributeForm: React.FC<Props> = ({
               )}
               <div className="mt-8 flex items-center justify-between">
                 <div className="flex-shrink-0 flex items-center gap-2">
-                  <Controller
-                    control={control}
-                    name="is_required"
-                    render={({ field: { onChange, value } }) => (
-                      <ToggleSwitch value={value ?? false} onChange={onChange} />
-                    )}
-                  />
-                  <span className="text-xs">Mandatory field</span>
+                  {data.type !== "checkbox" && (
+                    <>
+                      <Controller
+                        control={control}
+                        name="is_required"
+                        render={({ field: { onChange, value } }) => (
+                          <ToggleSwitch value={value ?? false} onChange={onChange} />
+                        )}
+                      />
+                      <span className="text-xs">Mandatory field</span>
+                    </>
+                  )}
                 </div>
                 <div className="flex items-center gap-2">
                   <button

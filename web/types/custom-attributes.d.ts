@@ -14,6 +14,37 @@ export type TCustomAttributeTypes =
 
 export type TCustomAttributeUnits = "cycle" | "issue" | "module" | "user" | null;
 
+// export type TCustomAttributeExtraSettings =
+//   | {
+//       type: "checkbox";
+//       extra_settings: {
+//         representation: "check" | "toggle_switch";
+//       };
+//     }
+//   | {
+//       type: "datetime";
+//       extra_settings: {
+//         date_format: "DD-MM-YYYY" | "MM-DD-YYYY" | "YYYY-MM-DD";
+//         hide_date: boolean;
+//         hide_time: boolean;
+//         time_format: "12" | "24";
+//       };
+//     }
+//   | {
+//       type: "files";
+//       extra_settings: {
+//         file_formats: string[];
+//       };
+//     }
+//   | {
+//       type: "number";
+//       extra_settings: {
+//         divided_by: number;
+//         representation: "numerical" | "bar" | "ring";
+//         show_number: boolean;
+//       };
+//     };
+
 export interface ICustomAttribute {
   children: ICustomAttribute[];
   color: string;
@@ -40,8 +71,14 @@ export interface ICustomAttributeValue {
   name: string;
   prop_value:
     | {
-        type: string;
+        type: 0 | 1;
         value: string;
+      }[]
+    | null;
+  prop_extra:
+    | {
+        id: string;
+        name: string;
       }[]
     | null;
   type: TCustomAttributeTypes;

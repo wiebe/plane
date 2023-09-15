@@ -111,12 +111,12 @@ export const NumberAttributeForm: React.FC<FormComponentProps> = ({ control, wat
                     placeholder="Maximum value"
                     value={value}
                     onChange={onChange}
+                    className="hide-arrows"
+                    min={0}
                     step={1}
+                    required
                   />
                 )}
-                rules={{
-                  required: "This field is required",
-                }}
               />
             </div>
           </>
@@ -125,9 +125,15 @@ export const NumberAttributeForm: React.FC<FormComponentProps> = ({ control, wat
             <div className="col-span-2">
               <Controller
                 control={control}
-                name="extra_settings.color"
+                name="color"
                 render={({ field: { onChange, value } }) => (
-                  <Input type="text" placeholder="Accent color" value={value} onChange={onChange} />
+                  <Input
+                    type="text"
+                    placeholder="Accent color"
+                    value={value}
+                    onChange={onChange}
+                    required
+                  />
                 )}
               />
             </div>

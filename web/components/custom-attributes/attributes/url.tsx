@@ -6,6 +6,7 @@ import { Controller, useForm } from "react-hook-form";
 import { Props } from "./types";
 
 export const CustomUrlAttribute: React.FC<Props & { value: string | undefined }> = ({
+  attributeDetails,
   onChange,
   value,
 }) => {
@@ -57,6 +58,7 @@ export const CustomUrlAttribute: React.FC<Props & { value: string | undefined }>
               <input
                 type="url"
                 className="text-xs px-2 py-0.5 bg-custom-background-80 rounded w-full outline-none"
+                required={attributeDetails.is_required}
                 {...field}
               />
             )}
