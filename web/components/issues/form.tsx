@@ -11,6 +11,7 @@ import { Controller, useForm } from "react-hook-form";
 import aiService from "services/ai.service";
 // hooks
 import useToast from "hooks/use-toast";
+import useLocalStorage from "hooks/use-local-storage";
 // components
 import { GptAssistantModal } from "components/core";
 import { ParentIssuesListModal } from "components/issues";
@@ -59,8 +60,11 @@ export interface IssueFormProps {
   createMore: boolean;
   setCreateMore: React.Dispatch<React.SetStateAction<boolean>>;
   handleClose: () => void;
+  handleDiscardClose: () => void;
   status: boolean;
   user: ICurrentUserResponse | undefined;
+  setIsConfirmDiscardOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  handleFormDirty: (payload: Partial<IIssue> | null) => void;
   fieldsToShow: (
     | "project"
     | "name"
@@ -78,7 +82,11 @@ export interface IssueFormProps {
   )[];
 }
 
+<<<<<<< HEAD
 export const IssueForm: FC<IssueFormProps> = observer((props) => {
+=======
+export const IssueForm: FC<IssueFormProps> = (props) => {
+>>>>>>> 3d72279edbe0889626647b1aecf29c86a33746f4
   const {
     handleFormSubmit,
     initialData,
@@ -86,10 +94,18 @@ export const IssueForm: FC<IssueFormProps> = observer((props) => {
     setActiveProject,
     createMore,
     setCreateMore,
+<<<<<<< HEAD
     handleClose,
     status,
     user,
     fieldsToShow,
+=======
+    handleDiscardClose,
+    status,
+    user,
+    fieldsToShow,
+    handleFormDirty,
+>>>>>>> 3d72279edbe0889626647b1aecf29c86a33746f4
   } = props;
 
   const [stateModal, setStateModal] = useState(false);
@@ -100,7 +116,11 @@ export const IssueForm: FC<IssueFormProps> = observer((props) => {
   const [gptAssistantModal, setGptAssistantModal] = useState(false);
   const [iAmFeelingLucky, setIAmFeelingLucky] = useState(false);
 
+<<<<<<< HEAD
   const [attributesList, setAttributesList] = useState<{ [key: string]: string[] }>({});
+=======
+  const { setValue: setValueInLocalStorage } = useLocalStorage<any>("draftedIssue", null);
+>>>>>>> 3d72279edbe0889626647b1aecf29c86a33746f4
 
   const editorRef = useRef<any>(null);
 
@@ -114,7 +134,7 @@ export const IssueForm: FC<IssueFormProps> = observer((props) => {
 
   const {
     register,
-    formState: { errors, isSubmitting },
+    formState: { errors, isSubmitting, isDirty },
     handleSubmit,
     reset,
     watch,
@@ -128,6 +148,23 @@ export const IssueForm: FC<IssueFormProps> = observer((props) => {
   });
 
   const issueName = watch("name");
+
+  const payload: Partial<IIssue> = {
+    name: getValues("name"),
+    description: getValues("description"),
+    state: getValues("state"),
+    priority: getValues("priority"),
+    assignees: getValues("assignees"),
+    target_date: getValues("target_date"),
+    labels: getValues("labels"),
+    project: getValues("project"),
+  };
+
+  useEffect(() => {
+    if (isDirty) handleFormDirty(payload);
+    else handleFormDirty(null);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [JSON.stringify(payload), isDirty]);
 
   const handleCreateUpdateIssue = async (formData: Partial<IIssue>) => {
     await handleFormSubmit(formData);
@@ -581,7 +618,15 @@ export const IssueForm: FC<IssueFormProps> = observer((props) => {
             <ToggleSwitch value={createMore} onChange={() => {}} size="sm" />
           </div>
           <div className="flex items-center gap-2">
-            <SecondaryButton onClick={handleClose}>Discard</SecondaryButton>
+            <SecondaryButton
+              onClick={() => {
+                const data = JSON.stringify(getValues());
+                setValueInLocalStorage(data);
+                handleDiscardClose();
+              }}
+            >
+              Discard
+            </SecondaryButton>
             <PrimaryButton type="submit" loading={isSubmitting}>
               {status
                 ? isSubmitting
