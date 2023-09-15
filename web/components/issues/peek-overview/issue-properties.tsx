@@ -1,5 +1,3 @@
-// mobx
-import { observer } from "mobx-react-lite";
 // headless ui
 import { Disclosure } from "@headlessui/react";
 import { StateGroupIcon } from "components/icons";
@@ -14,12 +12,13 @@ import {
   SidebarStateSelect,
   TPeekOverviewModes,
 } from "components/issues";
+import { PeekOverviewCustomAttributesList } from "components/custom-attributes";
 // ui
 import { CustomDatePicker, Icon } from "components/ui";
 // helpers
 import { copyTextToClipboard } from "helpers/string.helper";
 // types
-import { IIssue, TIssuePriorities } from "types";
+import { IIssue } from "types";
 
 type Props = {
   handleDeleteIssue: () => void;
@@ -96,72 +95,77 @@ export const PeekOverviewIssueProperties: React.FC<Props> = ({
             />
           </div>
         </div>
-        <div className="flex items-center gap-2 text-sm">
-          <div className="flex-shrink-0 w-1/4 flex items-center gap-2 font-medium">
-            <Icon iconName="group" className="!text-base flex-shrink-0" />
-            <span className="flex-grow truncate">Assignees</span>
-          </div>
-          <div className="w-3/4">
-            <SidebarAssigneeSelect
-              value={issue.assignees}
-              onChange={(val: string[]) => handleUpdateIssue({ assignees_list: val })}
-              disabled={readOnly}
-            />
-          </div>
-        </div>
-        <div className="flex items-center gap-2 text-sm">
-          <div className="flex-shrink-0 w-1/4 flex items-center gap-2 font-medium">
-            <Icon iconName="signal_cellular_alt" className="!text-base flex-shrink-0" />
-            <span className="flex-grow truncate">Priority</span>
-          </div>
-          <div className="w-3/4">
-            <SidebarPrioritySelect
-              value={issue.priority}
-              onChange={(val) => handleUpdateIssue({ priority: val })}
-              disabled={readOnly}
-            />
-          </div>
-        </div>
-        <div className="flex items-center gap-2 text-sm">
-          <div className="flex-shrink-0 w-1/4 flex items-center gap-2 font-medium">
-            <Icon iconName="calendar_today" className="!text-base flex-shrink-0" />
-            <span className="flex-grow truncate">Start date</span>
-          </div>
-          <div>
-            <CustomDatePicker
-              placeholder="Select start date"
-              value={issue.start_date}
-              onChange={(val) =>
-                handleUpdateIssue({
-                  start_date: val,
-                })
-              }
-              className="bg-custom-background-80 border-none"
-              maxDate={maxDate ?? undefined}
-              disabled={readOnly}
-            />
-          </div>
-        </div>
-        <div className="flex items-center gap-2 text-sm">
-          <div className="flex-shrink-0 w-1/4 flex items-center gap-2 font-medium">
-            <Icon iconName="calendar_today" className="!text-base flex-shrink-0" />
-            <span className="flex-grow truncate">Due date</span>
-          </div>
-          <div>
-            <CustomDatePicker
-              placeholder="Select due date"
-              value={issue.target_date}
-              onChange={(val) =>
-                handleUpdateIssue({
-                  target_date: val,
-                })
-              }
-              className="bg-custom-background-80 border-none"
-              minDate={minDate ?? undefined}
-              disabled={readOnly}
-            />
-          </div>
-        </div>
+        {issue.entity === null && (
+          <>
+            <div className="flex items-center gap-2 text-sm">
+              <div className="flex-shrink-0 w-1/4 flex items-center gap-2 font-medium">
+                <Icon iconName="group" className="!text-base flex-shrink-0" />
+                <span className="flex-grow truncate">Assignees</span>
+              </div>
+              <div className="w-3/4">
+                <SidebarAssigneeSelect
+                  value={issue.assignees}
+                  onChange={(val: string[]) => handleUpdateIssue({ assignees_list: val })}
+                  disabled={readOnly}
+                />
+              </div>
+            </div>
+            <div className="flex items-center gap-2 text-sm">
+              <div className="flex-shrink-0 w-1/4 flex items-center gap-2 font-medium">
+                <Icon iconName="signal_cellular_alt" className="!text-base flex-shrink-0" />
+                <span className="flex-grow truncate">Priority</span>
+              </div>
+              <div className="w-3/4">
+                <SidebarPrioritySelect
+                  value={issue.priority}
+                  onChange={(val) => handleUpdateIssue({ priority: val })}
+                  disabled={readOnly}
+                />
+              </div>
+            </div>
+            <div className="flex items-center gap-2 text-sm">
+              <div className="flex-shrink-0 w-1/4 flex items-center gap-2 font-medium">
+                <Icon iconName="calendar_today" className="!text-base flex-shrink-0" />
+                <span className="flex-grow truncate">Start date</span>
+              </div>
+              <div>
+                <CustomDatePicker
+                  placeholder="Select start date"
+                  value={issue.start_date}
+                  onChange={(val) =>
+                    handleUpdateIssue({
+                      start_date: val,
+                    })
+                  }
+                  className="bg-custom-background-80 border-none"
+                  maxDate={maxDate ?? undefined}
+                  disabled={readOnly}
+                />
+              </div>
+            </div>
+            <div className="flex items-center gap-2 text-sm">
+              <div className="flex-shrink-0 w-1/4 flex items-center gap-2 font-medium">
+                <Icon iconName="calendar_today" className="!text-base flex-shrink-0" />
+                <span className="flex-grow truncate">Due date</span>
+              </div>
+              <div>
+                <CustomDatePicker
+                  placeholder="Select due date"
+                  value={issue.target_date}
+                  onChange={(val) =>
+                    handleUpdateIssue({
+                      target_date: val,
+                    })
+                  }
+                  className="bg-custom-background-80 border-none"
+                  minDate={minDate ?? undefined}
+                  disabled={readOnly}
+                />
+              </div>
+            </div>
+          </>
+        )}
+        {issue.entity !== null && <PeekOverviewCustomAttributesList issue={issue} />}
         {/* <div className="flex items-center gap-2 text-sm">
           <div className="flex-shrink-0 w-1/4 flex items-center gap-2 font-medium">
             <Icon iconName="change_history" className="!text-base flex-shrink-0" />

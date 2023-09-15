@@ -1,5 +1,6 @@
 export * from "./attribute-display";
 export * from "./attribute-forms";
+export * from "./attributes-list";
 export * from "./dropdowns";
 export * from "./delete-object-modal";
 export * from "./input";

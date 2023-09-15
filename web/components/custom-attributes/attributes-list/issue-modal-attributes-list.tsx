@@ -22,7 +22,7 @@ type Props = {
   projectId: string;
 };
 
-export const CustomAttributesList: React.FC<Props> = observer(
+export const IssueModalCustomAttributesList: React.FC<Props> = observer(
   ({ entityId, issueId, onSubmit, projectId }) => {
     const router = useRouter();
     const { workspaceSlug } = router.query;

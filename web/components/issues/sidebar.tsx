@@ -32,8 +32,8 @@ import {
   SidebarLabelSelect,
   SidebarDuplicateSelect,
   SidebarRelatesSelect,
-  SidebarCustomAttributesList,
 } from "components/issues";
+import { SidebarCustomAttributesList } from "components/custom-attributes";
 // ui
 import { CustomDatePicker, Icon } from "components/ui";
 // icons
@@ -56,7 +56,6 @@ import { copyTextToClipboard } from "helpers/string.helper";
 import type { ICycle, IIssue, IIssueLink, linkDetails, IModule } from "types";
 // fetch-keys
 import { ISSUE_DETAILS } from "constants/fetch-keys";
-import { ObjectsSelect } from "components/custom-attributes";
 
 type Props = {
   control: any;

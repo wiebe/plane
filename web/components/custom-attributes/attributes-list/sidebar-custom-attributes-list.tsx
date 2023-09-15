@@ -10,17 +10,19 @@ import {
   CustomCheckboxAttribute,
   CustomDateTimeAttribute,
   CustomEmailAttribute,
+  CustomFileAttribute,
   CustomNumberAttribute,
   CustomRelationAttribute,
   CustomSelectAttribute,
   CustomTextAttribute,
   CustomUrlAttribute,
 } from "components/custom-attributes";
+// ui
+import { Loader } from "components/ui";
 // types
 import { ICustomAttributeValueFormData, IIssue } from "types";
 // constants
 import { CUSTOM_ATTRIBUTES_LIST } from "constants/custom-attributes";
-import { Loader } from "components/ui";
 
 type Props = {
   issue: IIssue | undefined;
@@ -125,6 +127,15 @@ export const SidebarCustomAttributesList: React.FC<Props> = observer(({ issue })
               )}
               {attribute.type === "email" && (
                 <CustomEmailAttribute
+                  attributeDetails={attribute}
+                  issueId={issue.id}
+                  onChange={(val: string) => handleAttributeUpdate(attribute.id, val)}
+                  projectId={issue.project}
+                  value={attributeValue ? attributeValue?.[0]?.value : undefined}
+                />
+              )}
+              {attribute.type === "file" && (
+                <CustomFileAttribute
                   attributeDetails={attribute}
                   issueId={issue.id}
                   onChange={(val: string) => handleAttributeUpdate(attribute.id, val)}

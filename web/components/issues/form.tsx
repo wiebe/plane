@@ -10,7 +10,7 @@ import aiService from "services/ai.service";
 import useToast from "hooks/use-toast";
 // components
 import { GptAssistantModal } from "components/core";
-import { CustomAttributesList, ParentIssuesListModal } from "components/issues";
+import { ParentIssuesListModal } from "components/issues";
 import {
   IssueAssigneeSelect,
   IssueDateSelect,
@@ -22,7 +22,7 @@ import {
 } from "components/issues/select";
 import { CreateStateModal } from "components/states";
 import { CreateLabelModal } from "components/labels";
-import { ObjectsSelect } from "components/custom-attributes";
+import { IssueModalCustomAttributesList, ObjectsSelect } from "components/custom-attributes";
 // ui
 import { CustomMenu, Input, PrimaryButton, SecondaryButton, ToggleSwitch } from "components/ui";
 import { TipTapEditor } from "components/tiptap";
@@ -543,9 +543,10 @@ export const IssueForm: FC<IssueFormProps> = ({
                     )}
                   </>
                 ) : (
-                  <CustomAttributesList
+                  <IssueModalCustomAttributesList
                     entityId={watch("entity") ?? ""}
                     issueId=""
+                    onSubmit={async () => {}}
                     projectId={projectId}
                   />
                 )}

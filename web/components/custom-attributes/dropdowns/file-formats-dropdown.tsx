@@ -58,17 +58,14 @@ export const FileFormatsDropdown: React.FC<Props> = ({ onChange, value }) => {
     <Combobox
       as="div"
       value={value}
-      onChange={(val) => {
-        console.log(val);
-        onChange(val);
-      }}
+      onChange={(val) => onChange(val)}
       className="relative flex-shrink-0 text-left"
       multiple
     >
       {({ open }: { open: boolean }) => (
         <>
           <Combobox.Button className="px-3 py-2 bg-custom-background-100 rounded border border-custom-border-200 text-xs w-full text-left">
-            All Formats
+            {value.length > 0 ? value.join(", ") : "Select file formats"}
           </Combobox.Button>
           <Transition
             show={open}

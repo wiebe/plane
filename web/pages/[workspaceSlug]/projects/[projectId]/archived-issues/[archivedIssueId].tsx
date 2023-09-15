@@ -180,7 +180,7 @@ const ArchivedIssueDetailsPage: NextPage = () => {
                 </button>
               </div>
             )}
-            <div className="space-y-5 divide-y-2 divide-custom-border-200 opacity-60 pointer-events-none">
+            <div className="space-y-5 divide-y divide-custom-border-200 opacity-60 pointer-events-none">
               <IssueMainContent
                 issueDetails={issueDetails}
                 submitChanges={submitChanges}
