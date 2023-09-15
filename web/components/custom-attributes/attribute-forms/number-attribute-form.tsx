@@ -3,7 +3,7 @@ import Image from "next/image";
 // react-hook-form
 import { Controller } from "react-hook-form";
 // components
-import { FormComponentProps } from "components/custom-attributes";
+import { ColorPicker, FormComponentProps } from "components/custom-attributes";
 // ui
 import { ToggleSwitch } from "components/ui";
 import { Input } from "../input";
@@ -127,13 +127,24 @@ export const NumberAttributeForm: React.FC<FormComponentProps> = ({ control, wat
                 control={control}
                 name="color"
                 render={({ field: { onChange, value } }) => (
-                  <Input
-                    type="text"
-                    placeholder="Accent color"
-                    value={value}
-                    onChange={onChange}
-                    required
-                  />
+                  <ColorPicker onChange={onChange} selectedColor={value ?? "#000000"} size={18} />
+                  // <label htmlFor="numberColorPicker" className="relative block cursor-pointer">
+                  //   <Input
+                  //     type="color"
+                  //     id="numberColorPicker"
+                  //     placeholder="Accent color"
+                  //     className="hide-color cursor-pointer"
+                  //     value={value}
+                  //     onChange={(e) => onChange(e.target.value)}
+                  //     required
+                  //   />
+                  //   <span
+                  //     className="absolute top-1/2 -translate-y-[65%] left-2 h-5 w-5 rounded pointer-events-none"
+                  //     style={{
+                  //       backgroundColor: value,
+                  //     }}
+                  //   />
+                  // </label>
                 )}
               />
             </div>

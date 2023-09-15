@@ -80,7 +80,7 @@ export const CustomAttributesList: React.FC<Props> = observer(
                     value={attribute.default_value === "checked" ? true : false}
                   />
                 )}
-                {attribute.type === "files" && (
+                {attribute.type === "file" && (
                   <CustomFileAttribute
                     attributeDetails={attribute}
                     issueId={issueId}

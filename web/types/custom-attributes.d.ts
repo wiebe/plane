@@ -3,7 +3,7 @@ export type TCustomAttributeTypes =
   | "datetime"
   | "email"
   | "entity"
-  | "files"
+  | "file"
   | "multi_select"
   | "number"
   | "option"
@@ -28,12 +28,6 @@ export type TCustomAttributeUnits = "cycle" | "issue" | "module" | "user" | null
 //         hide_date: boolean;
 //         hide_time: boolean;
 //         time_format: "12" | "24";
-//       };
-//     }
-//   | {
-//       type: "files";
-//       extra_settings: {
-//         file_formats: string[];
 //       };
 //     }
 //   | {

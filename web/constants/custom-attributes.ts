@@ -66,7 +66,7 @@ export const CUSTOM_ATTRIBUTES_LIST: {
     icon: AtSign,
     label: "Email",
   },
-  files: {
+  file: {
     defaultFormValues: {
       display_name: "",
       extra_settings: {
@@ -76,7 +76,7 @@ export const CUSTOM_ATTRIBUTES_LIST: {
       is_required: false,
     },
     icon: FileMinus,
-    label: "Files",
+    label: "File",
     initialPayload: {
       extra_settings: {
         file_formats: [".jpg", ".jpeg"],

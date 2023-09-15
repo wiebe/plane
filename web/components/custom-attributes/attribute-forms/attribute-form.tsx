@@ -53,7 +53,7 @@ const RenderForm: React.FC<{ type: TCustomAttributeTypes } & FormComponentProps>
     FormToRender = <DateTimeAttributeForm control={control} objectId={objectId} watch={watch} />;
   else if (type === "email")
     FormToRender = <EmailAttributeForm control={control} objectId={objectId} watch={watch} />;
-  else if (type === "files")
+  else if (type === "file")
     FormToRender = <FileAttributeForm control={control} objectId={objectId} watch={watch} />;
   else if (type === "multi_select")
     FormToRender = <SelectAttributeForm control={control} objectId={objectId} watch={watch} />;

@@ -5,12 +5,11 @@ import { useRouter } from "next/router";
 // mobx
 import { observer } from "mobx-react-lite";
 import { useMobxStore } from "lib/mobx/store-provider";
-// headless ui
-import { Popover, Transition } from "@headlessui/react";
-// react-color
-import { TwitterPicker } from "react-color";
+// components
+import { ColorPicker } from "components/custom-attributes";
 // ui
 import { PrimaryButton } from "components/ui";
+// types
 import { ICustomAttribute } from "types";
 
 type Props = {
@@ -59,38 +58,7 @@ export const OptionForm: React.FC<Props> = observer(({ objectId, parentId }) => 
           onChange={(e) => setOptionName(e.target.value)}
           placeholder="Enter new option"
         />
-        <Popover className="relative">
-          {({ close }) => (
-            <>
-              <Popover.Button className="grid place-items-center h-3.5 w-3.5 rounded-sm focus:outline-none">
-                <span
-                  className="h-full w-full rounded-sm"
-                  style={{ backgroundColor: optionColor }}
-                />
-              </Popover.Button>
-
-              <Transition
-                as={React.Fragment}
-                enter="transition ease-out duration-200"
-                enterFrom="opacity-0 translate-y-1"
-                enterTo="opacity-100 translate-y-0"
-                leave="transition ease-in duration-150"
-                leaveFrom="opacity-100 translate-y-0"
-                leaveTo="opacity-0 translate-y-1"
-              >
-                <Popover.Panel className="absolute bottom-full right-0 z-10 mb-1 px-2 sm:px-0">
-                  <TwitterPicker
-                    color={optionColor}
-                    onChange={(value) => {
-                      setOptionColor(value.hex);
-                      close();
-                    }}
-                  />
-                </Popover.Panel>
-              </Transition>
-            </>
-          )}
-        </Popover>
+        <ColorPicker onChange={(val) => setOptionColor(val)} selectedColor={optionColor} />
       </div>
       <div className="flex-shrink-0">
         <PrimaryButton

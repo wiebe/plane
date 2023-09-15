@@ -372,3 +372,14 @@ input.hide-arrows[type="number"] {
   -moz-appearance: textfield;
   appearance: textfield;
 }
+
+input.hide-color[type="color"]::-webkit-color-swatch {
+  display: none;
+  border-radius: 2px;
+  border: none;
+}
+input.hide-color[type="color"]::-moz-color-swatch {
+  width: 10px !important;
+  border-radius: 2px;
+  border: none;
+}
