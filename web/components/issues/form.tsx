@@ -82,11 +82,7 @@ export interface IssueFormProps {
   )[];
 }
 
-<<<<<<< HEAD
 export const IssueForm: FC<IssueFormProps> = observer((props) => {
-=======
-export const IssueForm: FC<IssueFormProps> = (props) => {
->>>>>>> 3d72279edbe0889626647b1aecf29c86a33746f4
   const {
     handleFormSubmit,
     initialData,
@@ -94,18 +90,11 @@ export const IssueForm: FC<IssueFormProps> = (props) => {
     setActiveProject,
     createMore,
     setCreateMore,
-<<<<<<< HEAD
-    handleClose,
-    status,
-    user,
-    fieldsToShow,
-=======
     handleDiscardClose,
     status,
     user,
     fieldsToShow,
     handleFormDirty,
->>>>>>> 3d72279edbe0889626647b1aecf29c86a33746f4
   } = props;
 
   const [stateModal, setStateModal] = useState(false);
@@ -116,11 +105,8 @@ export const IssueForm: FC<IssueFormProps> = (props) => {
   const [gptAssistantModal, setGptAssistantModal] = useState(false);
   const [iAmFeelingLucky, setIAmFeelingLucky] = useState(false);
 
-<<<<<<< HEAD
   const [attributesList, setAttributesList] = useState<{ [key: string]: string[] }>({});
-=======
   const { setValue: setValueInLocalStorage } = useLocalStorage<any>("draftedIssue", null);
->>>>>>> 3d72279edbe0889626647b1aecf29c86a33746f4
 
   const editorRef = useRef<any>(null);
 
