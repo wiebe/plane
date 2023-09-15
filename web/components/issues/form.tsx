@@ -65,6 +65,8 @@ export interface IssueFormProps {
   user: ICurrentUserResponse | undefined;
   setIsConfirmDiscardOpen: React.Dispatch<React.SetStateAction<boolean>>;
   handleFormDirty: (payload: Partial<IIssue> | null) => void;
+  customAttributesList: { [key: string]: string[] };
+  handleCustomAttributesChange: (attributeId: string, val: string[]) => void;
   fieldsToShow: (
     | "project"
     | "name"
@@ -95,6 +97,8 @@ export const IssueForm: FC<IssueFormProps> = observer((props) => {
     user,
     fieldsToShow,
     handleFormDirty,
+    customAttributesList,
+    handleCustomAttributesChange,
   } = props;
 
   const [stateModal, setStateModal] = useState(false);
@@ -105,7 +109,6 @@ export const IssueForm: FC<IssueFormProps> = observer((props) => {
   const [gptAssistantModal, setGptAssistantModal] = useState(false);
   const [iAmFeelingLucky, setIAmFeelingLucky] = useState(false);
 
-  const [attributesList, setAttributesList] = useState<{ [key: string]: string[] }>({});
   const { setValue: setValueInLocalStorage } = useLocalStorage<any>("draftedIssue", null);
 
   const editorRef = useRef<any>(null);
@@ -114,9 +117,6 @@ export const IssueForm: FC<IssueFormProps> = observer((props) => {
   const { workspaceSlug } = router.query;
 
   const { setToastAlert } = useToast();
-
-  const { customAttributeValues: customAttributeValuesStore } = useMobxStore();
-  const { createAttributeValue } = customAttributeValuesStore;
 
   const {
     register,
@@ -156,10 +156,6 @@ export const IssueForm: FC<IssueFormProps> = observer((props) => {
     await handleFormSubmit(formData);
 
     if (!workspaceSlug) return;
-
-    await createAttributeValue(workspaceSlug.toString(), projectId, watch("id"), {
-      issue_properties: attributesList,
-    });
 
     setGptAssistantModal(false);
 
@@ -250,8 +246,6 @@ export const IssueForm: FC<IssueFormProps> = observer((props) => {
 
   const maxDate = targetDate ? new Date(targetDate) : null;
   maxDate?.setDate(maxDate.getDate());
-
-  console.log("attributesList", attributesList);
 
   return (
     <>
@@ -579,16 +573,9 @@ export const IssueForm: FC<IssueFormProps> = observer((props) => {
                   <IssueModalCustomAttributesList
                     entityId={watch("entity") ?? ""}
                     issueId={watch("id") ?? ""}
-                    onChange={async (attributeId: string, val: string[]) => {
-                      console.log(val);
-
-                      setAttributesList((prev) => ({
-                        ...prev,
-                        [attributeId]: val,
-                      }));
-                    }}
+                    onChange={handleCustomAttributesChange}
                     projectId={projectId}
-                    values={attributesList}
+                    values={customAttributesList}
                   />
                 )}
               </div>

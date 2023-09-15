@@ -24,7 +24,7 @@ export const CUSTOM_ATTRIBUTES_LIST: {
 } = {
   checkbox: {
     defaultFormValues: {
-      default_value: "checked",
+      default_value: "true",
       display_name: "",
       extra_settings: {
         representation: "check",

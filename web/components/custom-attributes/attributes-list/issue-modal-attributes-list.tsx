@@ -23,7 +23,7 @@ import { Loader } from "components/ui";
 type Props = {
   entityId: string;
   issueId: string;
-  onChange: (attributeId: string, val: string[]) => Promise<void>;
+  onChange: (attributeId: string, val: string[]) => void;
   projectId: string;
   values: { [key: string]: string[] };
 };
@@ -65,7 +65,7 @@ export const IssueModalCustomAttributesList: React.FC<Props> = observer(
                     issueId={issueId}
                     onChange={(val: string) => onChange(attribute.id, [val])}
                     projectId={projectId}
-                    value={attribute.default_value === "checked" ? true : false}
+                    value={values[attribute.id]?.[0] === "true" ? true : false}
                   />
                 )}
                 {attribute.type === "datetime" && (
@@ -75,7 +75,7 @@ export const IssueModalCustomAttributesList: React.FC<Props> = observer(
                     onChange={(val: string) => onChange(attribute.id, [val])}
                     projectId={projectId}
                     value={
-                      attribute.default_value !== "" ? new Date(attribute.default_value) : undefined
+                      values[attribute.id]?.[0] ? new Date(values[attribute.id]?.[0]) : undefined
                     }
                   />
                 )}
@@ -85,7 +85,7 @@ export const IssueModalCustomAttributesList: React.FC<Props> = observer(
                     issueId={issueId}
                     onChange={(val: string) => onChange(attribute.id, [val])}
                     projectId={projectId}
-                    value={attribute.default_value}
+                    value={values[attribute.id]?.[0]}
                   />
                 )}
                 {attribute.type === "file" && (
@@ -103,7 +103,7 @@ export const IssueModalCustomAttributesList: React.FC<Props> = observer(
                     issueId={issueId}
                     onChange={(val: string[]) => onChange(attribute.id, val)}
                     projectId={projectId}
-                    value={[]}
+                    value={values[attribute.id] ?? []}
                     multiple
                   />
                 )}
@@ -114,9 +114,7 @@ export const IssueModalCustomAttributesList: React.FC<Props> = observer(
                     onChange={(val: string) => onChange(attribute.id, [val])}
                     projectId={projectId}
                     value={
-                      attribute.default_value !== ""
-                        ? parseInt(attribute.default_value, 10)
-                        : undefined
+                      values[attribute.id]?.[0] ? parseInt(values[attribute.id]?.[0]) : undefined
                     }
                   />
                 )}
@@ -126,7 +124,7 @@ export const IssueModalCustomAttributesList: React.FC<Props> = observer(
                     issueId={issueId}
                     onChange={(val: string) => onChange(attribute.id, [val])}
                     projectId={projectId}
-                    value={attribute.default_value !== "" ? attribute.default_value : undefined}
+                    value={values[attribute.id]?.[0]}
                   />
                 )}
                 {attribute.type === "select" && (

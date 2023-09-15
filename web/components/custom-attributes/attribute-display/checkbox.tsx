@@ -11,7 +11,7 @@ export const CustomCheckboxAttribute: React.FC<Props & { value: boolean }> = ({
   const handleUpdateCheckbox = (val: boolean | string) => onChange(val.toString());
 
   return (
-    <>
+    <div className="bg-custom-background-80 flex items-center gap-2 rounded px-2.5 py-0.5 text-xs">
       {attributeDetails.extra_settings.representation === "toggle_switch" ? (
         <ToggleSwitch value={value ?? false} onChange={handleUpdateCheckbox} />
       ) : (
@@ -23,6 +23,7 @@ export const CustomCheckboxAttribute: React.FC<Props & { value: boolean }> = ({
           />
         </div>
       )}
-    </>
+      <span>{attributeDetails.display_name}</span>
+    </div>
   );
 };

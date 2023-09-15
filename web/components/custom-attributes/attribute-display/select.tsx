@@ -69,26 +69,52 @@ export const CustomSelectAttribute: React.FC<
   if (multiple) comboboxProps.multiple = true;
 
   return (
-    <Combobox as="div" className="flex-shrink-0 text-left" {...comboboxProps}>
+    <Combobox as="div" className="flex-shrink-0 text-left flex items-center" {...comboboxProps}>
       {({ open }: { open: boolean }) => {
         if (open) handleOnOpen();
 
         return (
           <>
-            <Combobox.Button
-              ref={dropdownButtonRef}
-              className={`flex items-center text-xs rounded px-2.5 py-0.5 truncate w-min max-w-full text-left ${
-                selectedOption ? "" : "bg-custom-background-80"
-              }`}
-              style={{
-                backgroundColor: `${selectedOption?.color}40`,
-              }}
-            >
-              {Array.isArray(value)
-                ? value.length > 0
-                  ? value.map((v) => options.find((o) => o.id === v)?.display_name).join(", ")
-                  : `Select ${attributeDetails.display_name}`
-                : value}
+            <Combobox.Button ref={dropdownButtonRef}>
+              {value ? (
+                Array.isArray(value) ? (
+                  value.length > 0 ? (
+                    <div className="flex items-center gap-1 flex-wrap">
+                      {value.map((v) => {
+                        const optionDetails = options.find((o) => o.id === v);
+
+                        return (
+                          <span
+                            className="px-2.5 py-0.5 rounded text-xs"
+                            style={{
+                              backgroundColor: `${optionDetails?.color}40`,
+                            }}
+                          >
+                            {optionDetails?.display_name}
+                          </span>
+                        );
+                      })}
+                    </div>
+                  ) : (
+                    <div className="text-xs px-2.5 py-0.5 rounded bg-custom-background-80">
+                      Select {attributeDetails.display_name}
+                    </div>
+                  )
+                ) : (
+                  <span
+                    className="px-2.5 py-0.5 rounded text-xs"
+                    style={{
+                      backgroundColor: `${options.find((o) => o.id === value)?.color}40`,
+                    }}
+                  >
+                    {options.find((o) => o.id === value)?.display_name}
+                  </span>
+                )
+              ) : (
+                <div className="cursor-pointer text-xs truncate bg-custom-background-80 px-2.5 py-0.5 rounded">
+                  Select {attributeDetails.display_name}
+                </div>
+              )}
             </Combobox.Button>
             <Transition
               as={React.Fragment}

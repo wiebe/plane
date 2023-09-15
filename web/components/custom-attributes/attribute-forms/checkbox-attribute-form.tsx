@@ -41,7 +41,7 @@ export const CheckboxAttributeForm: React.FC<FormComponentProps> = ({ control })
             <input
               type="radio"
               name="default_value"
-              value="checked"
+              value="true"
               id="checked"
               className="scale-75"
               defaultChecked
@@ -53,7 +53,7 @@ export const CheckboxAttributeForm: React.FC<FormComponentProps> = ({ control })
             <input
               type="radio"
               name="default_value"
-              value="unchecked"
+              value="false"
               id="unchecked"
               className="scale-75"
             />

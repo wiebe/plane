@@ -43,8 +43,11 @@ export const CustomUrlAttribute: React.FC<Props & { value: string | undefined }>
   return (
     <div className="flex-shrink-0">
       {!isEditing && (
-        <div className="cursor-pointer text-xs truncate" onClick={() => setIsEditing(true)}>
-          {value ?? "Empty"}
+        <div
+          className="cursor-pointer text-xs truncate bg-custom-background-80 px-2.5 py-0.5 rounded"
+          onClick={() => setIsEditing(true)}
+        >
+          {value && value !== "" ? value : `Enter ${attributeDetails.display_name}`}
         </div>
       )}
       {isEditing && (
