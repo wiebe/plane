@@ -39,11 +39,9 @@ export const ObjectModal: React.FC<Props> = observer(
       createEntity,
       createEntityAttribute,
       createEntityAttributeLoader,
-      deleteEntityAttribute,
       entityAttributes,
       fetchEntityDetails,
       fetchEntityDetailsLoader,
-      updateEntityAttribute,
     } = customAttributesStore;
 
     const handleClose = () => {
@@ -86,18 +84,6 @@ export const ObjectModal: React.FC<Props> = observer(
       };
 
       await createEntityAttribute(workspaceSlug.toString(), { ...payload, parent: object.id });
-    };
-
-    const handleUpdateAttribute = async (attributeId: string, data: Partial<ICustomAttribute>) => {
-      if (!workspaceSlug || !object || !object.id) return;
-
-      await updateEntityAttribute(workspaceSlug.toString(), object.id, attributeId, data);
-    };
-
-    const handleDeleteAttribute = async (attributeId: string) => {
-      if (!workspaceSlug || !object || !object.id) return;
-
-      await deleteEntityAttribute(workspaceSlug.toString(), object.id, attributeId);
     };
 
     // fetch the object details if object state has id
@@ -193,11 +179,7 @@ export const ObjectModal: React.FC<Props> = observer(
                               return (
                                 <AttributeForm
                                   key={attributeId}
-                                  data={attribute}
-                                  handleDeleteAttribute={() => handleDeleteAttribute(attributeId)}
-                                  handleUpdateAttribute={async (data) =>
-                                    await handleUpdateAttribute(attributeId, data)
-                                  }
+                                  attributeDetails={attribute}
                                   objectId={object.id ?? ""}
                                   type={attribute.type}
                                 />

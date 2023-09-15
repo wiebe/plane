@@ -40,7 +40,7 @@ export const RelationAttributeForm: React.FC<FormComponentProps> = ({ control })
         </CustomSelect>
       )}
     />
-    <div>
+    {/* <div>
       <p className="text-xs">Selection type</p>
       <div className="mt-2 flex items-center gap-6 accent-custom-primary-100">
         <div className="flex items-center gap-1 text-xs">
@@ -60,6 +60,6 @@ export const RelationAttributeForm: React.FC<FormComponentProps> = ({ control })
           <label htmlFor="multiSelect">Multi select</label>
         </div>
       </div>
-    </div>
+    </div> */}
   </div>
 );

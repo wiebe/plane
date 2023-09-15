@@ -63,7 +63,10 @@ class CustomAttributeValuesStore {
 
     newChildren.map((child) => {
       if (attributesToUpdate.includes(child.id) && child)
-        child.prop_value = [{ type: 0, value: data.issue_properties[child.id] }];
+        child.prop_value = data.issue_properties[child.id].map((value) => ({
+          type: 0,
+          value,
+        }));
 
       return child;
     });

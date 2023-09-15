@@ -1,5 +1,10 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
+import { useRouter } from "next/router";
+
+// mobx
+import { observer } from "mobx-react-lite";
+import { useMobxStore } from "lib/mobx/store-provider";
 // headless ui
 import { Disclosure } from "@headlessui/react";
 // react-hook-form
@@ -17,7 +22,7 @@ import {
   UrlAttributeForm,
 } from "components/custom-attributes";
 // ui
-import { PrimaryButton, ToggleSwitch } from "components/ui";
+import { PrimaryButton, SecondaryButton, ToggleSwitch } from "components/ui";
 // icons
 import { ChevronDown } from "lucide-react";
 // types
@@ -26,9 +31,7 @@ import { ICustomAttribute, TCustomAttributeTypes } from "types";
 import { CUSTOM_ATTRIBUTES_LIST } from "constants/custom-attributes";
 
 type Props = {
-  data: Partial<ICustomAttribute>;
-  handleDeleteAttribute: () => void;
-  handleUpdateAttribute: (data: Partial<ICustomAttribute>) => Promise<void>;
+  attributeDetails: Partial<ICustomAttribute>;
   objectId: string;
   type: TCustomAttributeTypes;
 };
@@ -56,7 +59,9 @@ const RenderForm: React.FC<{ type: TCustomAttributeTypes } & FormComponentProps>
   else if (type === "file")
     FormToRender = <FileAttributeForm control={control} objectId={objectId} watch={watch} />;
   else if (type === "multi_select")
-    FormToRender = <SelectAttributeForm control={control} objectId={objectId} watch={watch} />;
+    FormToRender = (
+      <SelectAttributeForm control={control} objectId={objectId} watch={watch} multiple />
+    );
   else if (type === "number")
     FormToRender = <NumberAttributeForm control={control} objectId={objectId} watch={watch} />;
   else if (type === "relation")
@@ -71,14 +76,16 @@ const RenderForm: React.FC<{ type: TCustomAttributeTypes } & FormComponentProps>
   return FormToRender;
 };
 
-export const AttributeForm: React.FC<Props> = ({
-  data,
-  handleDeleteAttribute,
-  handleUpdateAttribute,
-  objectId,
-  type,
-}) => {
+export const AttributeForm: React.FC<Props> = observer(({ attributeDetails, objectId, type }) => {
+  const [isRemoving, setIsRemoving] = useState(false);
+
+  const router = useRouter();
+  const { workspaceSlug } = router.query;
+
   const typeMetaData = CUSTOM_ATTRIBUTES_LIST[type];
+
+  const { customAttributes: customAttributesStore } = useMobxStore();
+  const { deleteEntityAttribute, updateEntityAttribute } = customAttributesStore;
 
   const {
     control,
@@ -88,18 +95,30 @@ export const AttributeForm: React.FC<Props> = ({
     watch,
   } = useForm({ defaultValues: typeMetaData.defaultFormValues });
 
-  const handleFormSubmit = async (data: Partial<ICustomAttribute>) => {
-    await handleUpdateAttribute(data);
+  const handleUpdateAttribute = async (data: Partial<ICustomAttribute>) => {
+    if (!workspaceSlug || !attributeDetails.id || !objectId) return;
+
+    await updateEntityAttribute(workspaceSlug.toString(), objectId, attributeDetails.id, data);
+  };
+
+  const handleDeleteAttribute = async () => {
+    if (!workspaceSlug || !attributeDetails.id || !objectId) return;
+
+    setIsRemoving(true);
+
+    await deleteEntityAttribute(workspaceSlug.toString(), objectId, attributeDetails.id).finally(
+      () => setIsRemoving(false)
+    );
   };
 
   useEffect(() => {
-    if (!data) return;
+    if (!attributeDetails) return;
 
     reset({
       ...typeMetaData.defaultFormValues,
-      ...data,
+      ...attributeDetails,
     });
-  }, [data, reset, typeMetaData.defaultFormValues]);
+  }, [attributeDetails, reset, typeMetaData.defaultFormValues]);
 
   return (
     <Disclosure
@@ -111,20 +130,25 @@ export const AttributeForm: React.FC<Props> = ({
           <Disclosure.Button className="p-3 flex items-center justify-between gap-1 w-full">
             <div className="flex items-center gap-2.5">
               <typeMetaData.icon size={14} strokeWidth={1.5} />
-              <h6 className="text-sm">{data.display_name ?? typeMetaData.label}</h6>
+              <h6 className="text-sm">{attributeDetails.display_name ?? typeMetaData.label}</h6>
             </div>
             <div className={`${open ? "-rotate-180" : ""} transition-all`}>
               <ChevronDown size={16} strokeWidth={1.5} rotate="180deg" />
             </div>
           </Disclosure.Button>
           <Disclosure.Panel>
-            <form onSubmit={handleSubmit(handleFormSubmit)} className="p-3 pl-9 pt-0">
-              {data.type && (
-                <RenderForm type={data.type} control={control} objectId={objectId} watch={watch} />
+            <form onSubmit={handleSubmit(handleUpdateAttribute)} className="p-3 pl-9 pt-0">
+              {attributeDetails.type && (
+                <RenderForm
+                  type={attributeDetails.type}
+                  control={control}
+                  objectId={objectId}
+                  watch={watch}
+                />
               )}
               <div className="mt-8 flex items-center justify-between">
                 <div className="flex-shrink-0 flex items-center gap-2">
-                  {data.type !== "checkbox" && (
+                  {attributeDetails.type !== "checkbox" && (
                     <>
                       <Controller
                         control={control}
@@ -138,13 +162,13 @@ export const AttributeForm: React.FC<Props> = ({
                   )}
                 </div>
                 <div className="flex items-center gap-2">
-                  <button
+                  <SecondaryButton
                     type="button"
                     onClick={handleDeleteAttribute}
-                    className="text-xs font-medium px-3 py-2 rounded bg-custom-background-100 border border-custom-border-200"
+                    loading={isRemoving}
                   >
-                    Remove
-                  </button>
+                    {isRemoving ? "Removing..." : "Remove"}
+                  </SecondaryButton>
                   <PrimaryButton type="submit" loading={isSubmitting}>
                     {isSubmitting ? "Saving..." : "Save"}
                   </PrimaryButton>
@@ -156,4 +180,4 @@ export const AttributeForm: React.FC<Props> = ({
       )}
     </Disclosure>
   );
-};
+});

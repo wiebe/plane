@@ -84,8 +84,9 @@ export const CUSTOM_ATTRIBUTES_LIST: {
     },
   },
   multi_select: {
-    defaultFormValues: { default_value: "", display_name: "", is_required: false },
+    defaultFormValues: { default_value: "", display_name: "", is_multi: true, is_required: false },
     icon: Disc,
+    initialPayload: { is_multi: true },
     label: "Multi Select",
   },
   number: {

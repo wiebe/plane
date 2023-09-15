@@ -81,7 +81,7 @@ export interface ICustomAttributeValue {
 
 export interface ICustomAttributeValueFormData {
   issue_properties: {
-    [key: string]: string;
+    [key: string]: string[];
   };
   a_epoch?: number;
 }
