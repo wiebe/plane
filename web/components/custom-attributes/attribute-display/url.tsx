@@ -21,9 +21,7 @@ export const CustomUrlAttribute: React.FC<Props & { value: string | undefined }>
   };
 
   useEffect(() => {
-    if (isEditing) {
-      setFocus("url");
-    }
+    if (isEditing) setFocus("url");
   }, [isEditing, setFocus]);
 
   useEffect(() => {

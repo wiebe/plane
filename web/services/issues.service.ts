@@ -25,7 +25,7 @@ class ProjectIssuesServices extends APIService {
     projectId: string,
     data: any,
     user: ICurrentUserResponse | undefined
-  ): Promise<any> {
+  ): Promise<IIssue> {
     return this.post(`/api/workspaces/${workspaceSlug}/projects/${projectId}/issues/`, data)
       .then((response) => {
         if (trackEvent) trackEventServices.trackIssueEvent(response.data, "ISSUE_CREATE", user);
@@ -404,7 +404,7 @@ class ProjectIssuesServices extends APIService {
     issueId: string,
     data: Partial<IIssue>,
     user: ICurrentUserResponse | undefined
-  ): Promise<any> {
+  ): Promise<IIssue> {
     return this.patch(
       `/api/workspaces/${workspaceSlug}/projects/${projectId}/issues/${issueId}/`,
       data

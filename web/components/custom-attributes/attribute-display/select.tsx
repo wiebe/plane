@@ -84,7 +84,11 @@ export const CustomSelectAttribute: React.FC<
                 backgroundColor: `${selectedOption?.color}40`,
               }}
             >
-              {selectedOption?.display_name ?? "Select"}
+              {Array.isArray(value)
+                ? value.length > 0
+                  ? value.map((v) => options.find((o) => o.id === v)?.display_name).join(", ")
+                  : `Select ${attributeDetails.display_name}`
+                : value}
             </Combobox.Button>
             <Transition
               as={React.Fragment}
@@ -98,7 +102,7 @@ export const CustomSelectAttribute: React.FC<
               <div className="fixed z-10 top-0 left-0 h-full w-full cursor-auto">
                 <Combobox.Options
                   ref={dropdownOptionsRef}
-                  className="absolute z-10 border border-custom-border-300 px-2 py-2.5 rounded bg-custom-background-100 text-xs shadow-lg focus:outline-none w-48 whitespace-nowrap"
+                  className="fixed z-10 border border-custom-border-300 px-2 py-2.5 rounded bg-custom-background-100 text-xs shadow-lg focus:outline-none w-48 whitespace-nowrap"
                 >
                   <div className="flex w-full items-center justify-start rounded-sm border-[0.6px] border-custom-border-200 bg-custom-background-90 px-2 mb-1">
                     <Search className="text-custom-text-400" size={12} strokeWidth={1.5} />

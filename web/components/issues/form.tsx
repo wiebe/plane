@@ -2,6 +2,9 @@ import React, { FC, useState, useEffect, useRef } from "react";
 
 import { useRouter } from "next/router";
 
+// mobx
+import { observer } from "mobx-react-lite";
+import { useMobxStore } from "lib/mobx/store-provider";
 // react-hook-form
 import { Controller, useForm } from "react-hook-form";
 // services
@@ -75,18 +78,20 @@ export interface IssueFormProps {
   )[];
 }
 
-export const IssueForm: FC<IssueFormProps> = ({
-  handleFormSubmit,
-  initialData,
-  projectId,
-  setActiveProject,
-  createMore,
-  setCreateMore,
-  handleClose,
-  status,
-  user,
-  fieldsToShow,
-}) => {
+export const IssueForm: FC<IssueFormProps> = observer((props) => {
+  const {
+    handleFormSubmit,
+    initialData,
+    projectId,
+    setActiveProject,
+    createMore,
+    setCreateMore,
+    handleClose,
+    status,
+    user,
+    fieldsToShow,
+  } = props;
+
   const [stateModal, setStateModal] = useState(false);
   const [labelModal, setLabelModal] = useState(false);
   const [parentIssueListModalOpen, setParentIssueListModalOpen] = useState(false);
@@ -95,12 +100,17 @@ export const IssueForm: FC<IssueFormProps> = ({
   const [gptAssistantModal, setGptAssistantModal] = useState(false);
   const [iAmFeelingLucky, setIAmFeelingLucky] = useState(false);
 
+  const [attributesList, setAttributesList] = useState<{ [key: string]: string[] }>({});
+
   const editorRef = useRef<any>(null);
 
   const router = useRouter();
   const { workspaceSlug } = router.query;
 
   const { setToastAlert } = useToast();
+
+  const { customAttributeValues: customAttributeValuesStore } = useMobxStore();
+  const { createAttributeValue } = customAttributeValuesStore;
 
   const {
     register,
@@ -122,19 +132,17 @@ export const IssueForm: FC<IssueFormProps> = ({
   const handleCreateUpdateIssue = async (formData: Partial<IIssue>) => {
     await handleFormSubmit(formData);
 
+    if (!workspaceSlug) return;
+
+    await createAttributeValue(workspaceSlug.toString(), projectId, watch("id"), {
+      issue_properties: attributesList,
+    });
+
     setGptAssistantModal(false);
 
     reset({
       ...defaultValues,
       project: projectId,
-      description: {
-        type: "doc",
-        content: [
-          {
-            type: "paragraph",
-          },
-        ],
-      },
       description_html: "<p></p>",
     });
     editorRef?.current?.clearEditor();
@@ -219,6 +227,8 @@ export const IssueForm: FC<IssueFormProps> = ({
 
   const maxDate = targetDate ? new Date(targetDate) : null;
   maxDate?.setDate(maxDate.getDate());
+
+  console.log("attributesList", attributesList);
 
   return (
     <>
@@ -545,9 +555,17 @@ export const IssueForm: FC<IssueFormProps> = ({
                 ) : (
                   <IssueModalCustomAttributesList
                     entityId={watch("entity") ?? ""}
-                    issueId=""
-                    onSubmit={async () => {}}
+                    issueId={watch("id") ?? ""}
+                    onChange={async (attributeId: string, val: string[]) => {
+                      console.log(val);
+
+                      setAttributesList((prev) => ({
+                        ...prev,
+                        [attributeId]: val,
+                      }));
+                    }}
                     projectId={projectId}
+                    values={attributesList}
                   />
                 )}
               </div>
@@ -578,4 +596,4 @@ export const IssueForm: FC<IssueFormProps> = ({
       </form>
     </>
   );
-};
+});
