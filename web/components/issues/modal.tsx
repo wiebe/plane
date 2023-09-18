@@ -4,6 +4,9 @@ import { useRouter } from "next/router";
 
 import { mutate } from "swr";
 
+// mobx
+import { observer } from "mobx-react-lite";
+import { useMobxStore } from "lib/mobx/store-provider";
 // headless ui
 import { Dialog, Transition } from "@headlessui/react";
 // services
@@ -39,42 +42,41 @@ import {
 } from "constants/fetch-keys";
 // constants
 import { INBOX_ISSUE_SOURCE } from "constants/inbox";
-import { observer } from "mobx-react-lite";
-import { useMobxStore } from "lib/mobx/store-provider";
+
+export type TIssueFormAttributes =
+  | "project"
+  | "name"
+  | "description"
+  | "entity"
+  | "state"
+  | "priority"
+  | "assignee"
+  | "label"
+  | "startDate"
+  | "dueDate"
+  | "estimate"
+  | "parent"
+  | "all";
 
 export interface IssuesModalProps {
   data?: IIssue | null;
+  fieldsToShow?: TIssueFormAttributes[];
   handleClose: () => void;
   isOpen: boolean;
   isUpdatingSingleIssue?: boolean;
-  prePopulateData?: Partial<IIssue>;
-  fieldsToShow?: (
-    | "project"
-    | "name"
-    | "description"
-    | "entity"
-    | "state"
-    | "priority"
-    | "assignee"
-    | "label"
-    | "startDate"
-    | "dueDate"
-    | "estimate"
-    | "parent"
-    | "all"
-  )[];
   onSubmit?: (data: Partial<IIssue>) => Promise<void>;
+  prePopulateData?: Partial<IIssue>;
 }
 
 export const CreateUpdateIssueModal: React.FC<IssuesModalProps> = observer(
   ({
     data,
+    fieldsToShow = ["all"],
     handleClose,
     isOpen,
     isUpdatingSingleIssue = false,
-    prePopulateData,
-    fieldsToShow = ["all"],
     onSubmit,
+    prePopulateData,
   }) => {
     // states
     const [createMore, setCreateMore] = useState(false);

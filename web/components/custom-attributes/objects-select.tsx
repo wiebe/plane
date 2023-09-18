@@ -34,8 +34,6 @@ export const ObjectsSelect: React.FC<Props> = observer(({ onChange, projectId, v
   }));
   options?.unshift({ value: null, query: "default", content: "Default" });
 
-  console.log("entities", entities);
-
   useEffect(() => {
     if (!workspaceSlug) return;
 

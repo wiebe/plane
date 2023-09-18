@@ -14,7 +14,7 @@ import useToast from "hooks/use-toast";
 import useLocalStorage from "hooks/use-local-storage";
 // components
 import { GptAssistantModal } from "components/core";
-import { ParentIssuesListModal } from "components/issues";
+import { ParentIssuesListModal, TIssueFormAttributes } from "components/issues";
 import {
   IssueAssigneeSelect,
   IssueDateSelect,
@@ -67,21 +67,7 @@ export interface IssueFormProps {
   handleFormDirty: (payload: Partial<IIssue> | null) => void;
   customAttributesList: { [key: string]: string[] };
   handleCustomAttributesChange: (attributeId: string, val: string[]) => void;
-  fieldsToShow: (
-    | "project"
-    | "name"
-    | "description"
-    | "entity"
-    | "state"
-    | "priority"
-    | "assignee"
-    | "label"
-    | "startDate"
-    | "dueDate"
-    | "estimate"
-    | "parent"
-    | "all"
-  )[];
+  fieldsToShow: TIssueFormAttributes[];
 }
 
 export const IssueForm: FC<IssueFormProps> = observer((props) => {
