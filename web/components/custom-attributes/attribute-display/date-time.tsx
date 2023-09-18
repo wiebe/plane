@@ -1,44 +1,41 @@
-import { useState } from "react";
-
+// react-datepicker
+import ReactDatePicker from "react-datepicker";
 // types
 import { Props } from "./types";
-import { renderDateFormat } from "helpers/date-time.helper";
+
+const DATE_FORMATS: { [key: string]: string } = {
+  "MM-DD-YYYY": "MM-dd-yyyy",
+  "DD-MM-YYYY": "dd-MM-yyyy",
+  "YYYY-MM-DD": "yyyy-MM-dd",
+};
+
+const TIME_FORMATS: { [key: string]: string } = {
+  "12": "hh:mm aa",
+  "24": "HH:mm",
+};
 
 export const CustomDateTimeAttribute: React.FC<Props & { value: Date | undefined }> = ({
+  attributeDetails,
   onChange,
   value,
-}) => {
-  const [isEditing, setIsEditing] = useState(false);
-
-  const handleUpdateDateTime = (val: string) => {
-    setIsEditing(false);
-
-    onChange(new Date(val));
-  };
-
-  return (
-    <div className="flex-shrink-0">
-      {!isEditing &&
-        (value ? (
-          <div
-            className="cursor-pointer text-xs px-2 py-0.5 bg-custom-background-80 rounded w-min max-w-full whitespace-nowrap outline-none"
-            onClick={() => setIsEditing(true)}
-          >
-            {renderDateFormat(value)}
-          </div>
-        ) : (
-          <div className="cursor-pointer text-xs truncate" onClick={() => setIsEditing(true)}>
-            Empty
-          </div>
-        ))}
-      {isEditing && (
-        <input
-          type="datetime-local"
-          className="text-xs px-2 py-0.5 bg-custom-background-80 rounded w-full outline-none"
-          defaultValue={value?.toString()}
-          onBlur={(e) => handleUpdateDateTime(e.target.value)}
-        />
-      )}
-    </div>
-  );
-};
+}) => (
+  <div className="flex-shrink-0">
+    <ReactDatePicker
+      selected={value}
+      onChange={onChange}
+      className="bg-custom-background-80 rounded text-xs px-2.5 py-0.5 outline-none"
+      calendarClassName="!bg-custom-background-80"
+      dateFormat={`${
+        attributeDetails.extra_settings.hide_date
+          ? ""
+          : DATE_FORMATS[attributeDetails.extra_settings.date_format] ?? "dd-MM-yyyy"
+      }${
+        attributeDetails.extra_settings.hide_time
+          ? ""
+          : ", " + (TIME_FORMATS[attributeDetails.extra_settings.time_format] ?? "HH:mm")
+      }`}
+      showTimeInput={!attributeDetails.extra_settings.hide_time}
+      isClearable={!attributeDetails.is_required}
+    />
+  </div>
+);

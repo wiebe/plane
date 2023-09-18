@@ -120,7 +120,7 @@ export const SidebarCustomAttributesList: React.FC<Props> = observer(({ issue })
                 <CustomDateTimeAttribute
                   attributeDetails={attribute}
                   issueId={issue.id}
-                  onChange={(val: string) => handleAttributeUpdate(attribute.id, [val])}
+                  onChange={(val: Date) => handleAttributeUpdate(attribute.id, [val.toISOString()])}
                   projectId={issue.project}
                   value={attributeValue ? new Date(attributeValue?.[0]?.value ?? "") : undefined}
                 />

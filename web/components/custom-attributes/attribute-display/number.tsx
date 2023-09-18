@@ -49,7 +49,7 @@ export const CustomNumberAttribute: React.FC<Props & { value: number | undefined
   return (
     <div className="flex-shrink-0">
       {!isEditing && (
-        <div className="cursor-pointer text-xs" onClick={() => setIsEditing(true)}>
+        <div className="cursor-pointer text-xs truncate flex" onClick={() => setIsEditing(true)}>
           {value ? (
             <>
               {extraSettings?.representation === "bar" ? (
@@ -79,12 +79,12 @@ export const CustomNumberAttribute: React.FC<Props & { value: number | undefined
                   />
                 </div>
               ) : (
-                <span className="font-medium">{value}</span>
+                <span className="font-medium truncate">{value}</span>
               )}
             </>
           ) : (
             <div
-              className="cursor-pointer text-xs truncate bg-custom-background-80 px-2.5 py-0.5 rounded"
+              className="cursor-pointer text-xs truncate bg-custom-background-80 px-2.5 py-0.5 rounded w-min whitespace-nowrap flex-grow"
               onClick={() => setIsEditing(true)}
             >
               {value ?? `Enter ${attributeDetails.display_name}`}

@@ -107,21 +107,19 @@ export const CustomFileAttribute: React.FC<Props & { value: string | undefined }
       )}
       <div
         {...getRootProps()}
-        className={`flex items-center justify-center bg-custom-background-80 text-xs rounded px-2.5 py-0.5 cursor-pointer ${
+        className={`flex items-center bg-custom-background-80 text-xs rounded px-2.5 py-0.5 cursor-pointer truncate w-min max-w-full whitespace-nowrap ${
           isDragActive ? "bg-custom-primary-100/10" : ""
         } ${isDragReject ? "bg-red-500/10" : ""}`}
       >
-        <input {...getInputProps()} />
-        <span className="">
-          {isDragActive ? (
-            <p>Drop here...</p>
-          ) : fileError ? (
-            <p className="text-red-500">{fileError}</p>
-          ) : isUploading ? (
-            <p>Uploading...</p>
-          ) : (
-            <p>Upload {value && value !== "" ? "new " : ""}file</p>
-          )}
+        <input className="flex-shrink-0" {...getInputProps()} />
+        <span className={`flex-grow truncate text-left ${fileError ? "text-red-500" : ""}`}>
+          {isDragActive
+            ? "Drop here..."
+            : fileError
+            ? fileError
+            : isUploading
+            ? "Uploading..."
+            : `Upload ${value && value !== "" ? "new " : ""}file`}
         </span>
       </div>
     </div>

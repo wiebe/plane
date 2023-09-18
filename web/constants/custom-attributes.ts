@@ -46,6 +46,8 @@ export const CUSTOM_ATTRIBUTES_LIST: {
       display_name: "",
       extra_settings: {
         date_format: "DD-MM-YYYY",
+        hide_date: false,
+        hide_time: false,
         time_format: "12",
       },
       is_required: false,
