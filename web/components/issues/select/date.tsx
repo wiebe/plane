@@ -19,20 +19,22 @@ export const IssueDateSelect: React.FC<Props> = ({ label, maxDate, minDate, onCh
   <Popover className="relative flex items-center justify-center  rounded-lg">
     {({ close }) => (
       <>
-        <Popover.Button className="flex items-center gap-1 rounded text-xs bg-custom-background-80 px-2.5 py-0.5">
-          {value ? (
-            <>
-              <span className="text-custom-text-100">{renderShortDateWithYearFormat(value)}</span>
-              <button onClick={() => onChange(null)}>
-                <XMarkIcon className="h-3 w-3" />
-              </button>
-            </>
-          ) : (
-            <>
-              <CalendarDaysIcon className="h-3.5 w-3.5 flex-shrink-0" />
-              <span>{label}</span>
-            </>
-          )}
+        <Popover.Button className="flex cursor-pointer items-center rounded-md border border-custom-border-200 text-xs shadow-sm duration-200">
+          <span className="flex items-center justify-center gap-2 px-2 py-1 text-xs text-custom-text-200 hover:bg-custom-background-80">
+            {value ? (
+              <>
+                <span className="text-custom-text-100">{renderShortDateWithYearFormat(value)}</span>
+                <button onClick={() => onChange(null)}>
+                  <XMarkIcon className="h-3 w-3" />
+                </button>
+              </>
+            ) : (
+              <>
+                <CalendarDaysIcon className="h-3.5 w-3.5 flex-shrink-0" />
+                <span>{label}</span>
+              </>
+            )}
+          </span>
         </Popover.Button>
 
         <Transition

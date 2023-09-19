@@ -55,11 +55,8 @@ export const IssueStateSelect: React.FC<Props> = ({ setIsOpen, value, onChange, 
       value={value}
       onChange={onChange}
       options={options}
-      customButton={
-        <button
-          type="button"
-          className="flex items-center gap-2 bg-custom-background-80 rounded text-xs px-2.5 py-0.5"
-        >
+      label={
+        <div className="flex items-center gap-2">
           {selectedOption ? (
             <StateGroupIcon stateGroup={selectedOption.group} color={selectedOption.color} />
           ) : currentDefaultState ? (
@@ -73,7 +70,7 @@ export const IssueStateSelect: React.FC<Props> = ({ setIsOpen, value, onChange, 
           {selectedOption?.name
             ? selectedOption.name
             : currentDefaultState?.name ?? <span className="text-custom-text-200">State</span>}
-        </button>
+        </div>
       }
       footerOption={
         <button

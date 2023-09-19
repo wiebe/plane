@@ -17,11 +17,8 @@ type Props = {
 export const IssuePrioritySelect: React.FC<Props> = ({ value, onChange }) => (
   <CustomSelect
     value={value}
-    customButton={
-      <button
-        type="button"
-        className="flex items-center justify-center gap-2 text-xs bg-custom-background-80 rounded px-2.5 py-0.5"
-      >
+    label={
+      <div className="flex items-center justify-center gap-2 text-xs">
         <span className="flex items-center">
           <PriorityIcon
             priority={value}
@@ -31,7 +28,7 @@ export const IssuePrioritySelect: React.FC<Props> = ({ value, onChange }) => (
         <span className={`${value ? "" : "text-custom-text-200"} capitalize`}>
           {value ?? "Priority"}
         </span>
-      </button>
+      </div>
     }
     onChange={onChange}
     noChevron

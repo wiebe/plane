@@ -69,9 +69,9 @@ export const IssueLabelSelect: React.FC<Props> = ({ setIsOpen, value, onChange, 
                 />
               </span>
             ) : (
-              <span className="flex items-center justify-center gap-2 px-2.5 py-0.5 text-xs rounded bg-custom-background-80">
-                <TagIcon className="h-3.5 w-3.5" />
-                <span>Label</span>
+              <span className="flex items-center justify-center gap-2 px-2 py-1 text-xs rounded shadow-sm border border-custom-border-300 hover:bg-custom-background-80">
+                <TagIcon className="h-3.5 w-3.5 text-custom-text-200" />
+                <span className=" text-custom-text-200">Label</span>
               </span>
             )}
           </Combobox.Button>
