@@ -8,17 +8,26 @@ import { useDropzone } from "react-dropzone";
 import fileService from "services/file.service";
 // hooks
 import useToast from "hooks/use-toast";
+import useWorkspaceDetails from "hooks/use-workspace-details";
 // icons
 import { getFileIcon } from "components/icons";
+import { X } from "lucide-react";
 // helpers
 import { getFileExtension, getFileName } from "helpers/attachment.helper";
 // types
-import { Props } from "./types";
-import useWorkspaceDetails from "hooks/use-workspace-details";
+import { ICustomAttribute } from "types";
+
+type Props = {
+  attributeDetails: ICustomAttribute;
+  issueId: string;
+  projectId: string;
+  value: string | undefined;
+  onChange: (val: string | undefined) => void;
+};
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5 MB
 
-export const CustomFileAttribute: React.FC<Props & { value: string | undefined }> = (props) => {
+export const CustomFileAttribute: React.FC<Props> = (props) => {
   const { attributeDetails, onChange, value } = props;
 
   const [isUploading, setIsUploading] = useState(false);
@@ -80,6 +89,13 @@ export const CustomFileAttribute: React.FC<Props & { value: string | undefined }
     ]
   );
 
+  const handleRemoveFile = () => {
+    if (!workspaceDetails || !value || value === "") return;
+
+    onChange(undefined);
+    fileService.deleteFile(workspaceDetails.id, value);
+  };
+
   const { getRootProps, getInputProps, isDragActive, isDragReject, fileRejections } = useDropzone({
     onDrop,
     maxSize: MAX_FILE_SIZE,
@@ -95,15 +111,24 @@ export const CustomFileAttribute: React.FC<Props & { value: string | undefined }
   return (
     <div className="flex-shrink-0 truncate space-y-1">
       {value && value !== "" && (
-        <a
-          href={value}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex items-center gap-1 p-1 rounded border border-custom-border-200 text-xs truncate"
-        >
-          <span className="flex-shrink-0 h-6 w-6">{getFileIcon(getFileExtension(value))}</span>
-          <span className="truncate">{getFileName(value)}</span>
-        </a>
+        <div className="group flex items-center justify-between gap-2 p-1 rounded border border-custom-border-200 text-xs truncate">
+          <a
+            href={value}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1 flex-grow truncate"
+          >
+            <span className="flex-shrink-0 h-6 w-6">{getFileIcon(getFileExtension(value))}</span>
+            <span className="truncate">{getFileName(value)}</span>
+          </a>
+          <button
+            type="button"
+            className="hidden group-hover:grid place-items-center flex-shrink-0"
+            onClick={handleRemoveFile}
+          >
+            <X size={12} strokeWidth={1.5} />
+          </button>
+        </div>
       )}
       <div
         {...getRootProps()}

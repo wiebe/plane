@@ -20,6 +20,7 @@ class CustomAttributeValuesStore {
       issueAttributeValues: observable.ref,
       fetchIssueAttributeValues: action,
       createAttributeValue: action,
+      deleteAttributeValue: action,
     });
 
     this.rootStore = _rootStore;
@@ -94,8 +95,37 @@ class CustomAttributeValuesStore {
           ...this.issueAttributeValues,
           [issueId]: response.children,
         };
-        this.fetchIssueAttributeValuesLoader = false;
       });
+    } catch (error) {
+      runInAction(() => {
+        this.error = error;
+      });
+    }
+  };
+
+  deleteAttributeValue = async (
+    workspaceSlug: string,
+    projectId: string,
+    issueId: string,
+    propertyId: string
+  ) => {
+    const newChildren = [...(this.issueAttributeValues?.[issueId] ?? [])];
+    newChildren.filter((c) => c.id !== propertyId);
+
+    try {
+      runInAction(() => {
+        this.issueAttributeValues = {
+          ...this.issueAttributeValues,
+          [issueId]: newChildren,
+        };
+      });
+
+      await customAttributesService.deletePropertyValue(
+        workspaceSlug,
+        projectId,
+        issueId,
+        propertyId
+      );
     } catch (error) {
       runInAction(() => {
         this.error = error;

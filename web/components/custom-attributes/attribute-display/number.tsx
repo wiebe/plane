@@ -5,13 +5,17 @@ import { Controller, useForm } from "react-hook-form";
 // ui
 import { ProgressBar } from "components/ui";
 // types
-import { Props } from "./types";
+import { ICustomAttribute } from "types";
 
-export const CustomNumberAttribute: React.FC<Props & { value: number | undefined }> = ({
-  attributeDetails,
-  onChange,
-  value,
-}) => {
+type Props = {
+  attributeDetails: ICustomAttribute;
+  issueId: string;
+  projectId: string;
+  value: number | undefined;
+  onChange: (val: number | undefined) => void;
+};
+
+export const CustomNumberAttribute: React.FC<Props> = ({ attributeDetails, onChange, value }) => {
   const [isEditing, setIsEditing] = useState(false);
 
   const { control, handleSubmit, reset, setFocus } = useForm({ defaultValues: { number: "" } });
@@ -19,7 +23,10 @@ export const CustomNumberAttribute: React.FC<Props & { value: number | undefined
   const handleFormSubmit = (data: { number: string }) => {
     setIsEditing(false);
 
-    onChange(data.number);
+    const number = parseInt(data.number, 10);
+
+    if (isNaN(number)) onChange(undefined);
+    else onChange(number);
   };
 
   useEffect(() => {
@@ -84,10 +91,10 @@ export const CustomNumberAttribute: React.FC<Props & { value: number | undefined
             </>
           ) : (
             <div
-              className="cursor-pointer text-xs truncate bg-custom-background-80 px-2.5 py-0.5 rounded w-min whitespace-nowrap flex-grow"
+              className="text-xs truncate bg-custom-background-80 px-2.5 py-0.5 w-min max-w-full whitespace-nowrap"
               onClick={() => setIsEditing(true)}
             >
-              {value ?? `Enter ${attributeDetails.display_name}`}
+              {value ?? "Empty"}
             </div>
           )}
         </div>

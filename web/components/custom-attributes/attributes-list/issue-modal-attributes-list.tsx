@@ -63,7 +63,7 @@ export const IssueModalCustomAttributesList: React.FC<Props> = observer(
                   <CustomCheckboxAttribute
                     attributeDetails={attribute}
                     issueId={issueId}
-                    onChange={(val: string) => onChange(attribute.id, [val])}
+                    onChange={(val) => onChange(attribute.id, [`${val}`])}
                     projectId={projectId}
                     value={values[attribute.id]?.[0] === "true" ? true : false}
                   />
@@ -72,7 +72,7 @@ export const IssueModalCustomAttributesList: React.FC<Props> = observer(
                   <CustomDateTimeAttribute
                     attributeDetails={attribute}
                     issueId={issueId}
-                    onChange={(val: string) => onChange(attribute.id, [val])}
+                    onChange={(val) => onChange(attribute.id, [val?.toISOString() ?? ""])}
                     projectId={projectId}
                     value={
                       values[attribute.id]?.[0] ? new Date(values[attribute.id]?.[0]) : undefined
@@ -101,7 +101,9 @@ export const IssueModalCustomAttributesList: React.FC<Props> = observer(
                   <CustomSelectAttribute
                     attributeDetails={attribute}
                     issueId={issueId}
-                    onChange={(val: string[]) => onChange(attribute.id, val)}
+                    onChange={(val) => {
+                      if (val) onChange(attribute.id, val);
+                    }}
                     projectId={projectId}
                     value={values[attribute.id] ?? []}
                     multiple
@@ -111,7 +113,9 @@ export const IssueModalCustomAttributesList: React.FC<Props> = observer(
                   <CustomNumberAttribute
                     attributeDetails={attribute}
                     issueId={issueId}
-                    onChange={(val: string) => onChange(attribute.id, [val])}
+                    onChange={(val) => {
+                      if (val) onChange(attribute.id, [val.toString()]);
+                    }}
                     projectId={projectId}
                     value={
                       values[attribute.id]?.[0] ? parseInt(values[attribute.id]?.[0]) : undefined
@@ -122,7 +126,9 @@ export const IssueModalCustomAttributesList: React.FC<Props> = observer(
                   <CustomRelationAttribute
                     attributeDetails={attribute}
                     issueId={issueId}
-                    onChange={(val: string) => onChange(attribute.id, [val])}
+                    onChange={(val) => {
+                      if (val) onChange(attribute.id, [val]);
+                    }}
                     projectId={projectId}
                     value={values[attribute.id]?.[0]}
                   />
@@ -131,16 +137,19 @@ export const IssueModalCustomAttributesList: React.FC<Props> = observer(
                   <CustomSelectAttribute
                     attributeDetails={attribute}
                     issueId={issueId}
-                    onChange={(val: string) => onChange(attribute.id, [val])}
+                    onChange={(val) => {
+                      if (val) onChange(attribute.id, [val]);
+                    }}
                     projectId={projectId}
                     value={attribute.default_value !== "" ? attribute.default_value : undefined}
+                    multiple={false}
                   />
                 )}
                 {attribute.type === "text" && (
                   <CustomTextAttribute
                     attributeDetails={attribute}
                     issueId={issueId}
-                    onChange={(val: string) => onChange(attribute.id, [val])}
+                    onChange={(val) => onChange(attribute.id, [val])}
                     projectId={projectId}
                     value={attribute.default_value}
                   />
@@ -149,10 +158,7 @@ export const IssueModalCustomAttributesList: React.FC<Props> = observer(
                   <CustomUrlAttribute
                     attributeDetails={attribute}
                     issueId={issueId}
-                    onChange={(val: string) => {
-                      console.log(val);
-                      onChange(attribute.id, [val]);
-                    }}
+                    onChange={(val: string) => onChange(attribute.id, [val])}
                     projectId={projectId}
                     value={values[attribute.id]?.[0]}
                   />

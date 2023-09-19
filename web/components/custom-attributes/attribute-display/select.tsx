@@ -7,15 +7,22 @@ import useOutsideClickDetector from "hooks/use-outside-click-detector";
 // icons
 import { Check, Search } from "lucide-react";
 // types
-import { Props } from "./types";
+import { ICustomAttribute } from "types";
 
-export const CustomSelectAttribute: React.FC<
-  Props &
-    (
-      | { multiple?: false; value: string | undefined }
-      | { multiple?: true; value: string[] | undefined }
-    )
-> = (props) => {
+type Props = {
+  attributeDetails: ICustomAttribute;
+  issueId: string;
+  projectId: string;
+} & (
+  | {
+      multiple?: false;
+      onChange: (val: string | undefined) => void;
+      value: string | undefined;
+    }
+  | { multiple?: true; onChange: (val: string[] | undefined) => void; value: string[] | undefined }
+);
+
+export const CustomSelectAttribute: React.FC<Props> = (props) => {
   const { attributeDetails, multiple = false, onChange, value } = props;
 
   const [isOpen, setIsOpen] = useState(false);
@@ -62,8 +69,8 @@ export const CustomSelectAttribute: React.FC<
   });
 
   const comboboxProps: any = {
-    value,
     onChange,
+    value,
   };
 
   if (multiple) comboboxProps.multiple = true;
@@ -101,14 +108,16 @@ export const CustomSelectAttribute: React.FC<
                     </div>
                   )
                 ) : (
-                  <span
-                    className="px-2.5 py-0.5 rounded text-xs"
-                    style={{
-                      backgroundColor: `${options.find((o) => o.id === value)?.color}40`,
-                    }}
-                  >
-                    {options.find((o) => o.id === value)?.display_name}
-                  </span>
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span
+                      className="px-2.5 py-0.5 rounded text-xs"
+                      style={{
+                        backgroundColor: `${options.find((o) => o.id === value)?.color}40`,
+                      }}
+                    >
+                      {options.find((o) => o.id === value)?.display_name}
+                    </span>
+                  </div>
                 )
               ) : (
                 <div className="cursor-pointer text-xs truncate bg-custom-background-80 px-2.5 py-0.5 rounded">

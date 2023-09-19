@@ -305,7 +305,7 @@ export const IssueDetailsSidebar: React.FC<Props> = ({
         data={issueDetail ?? null}
         user={user}
       />
-      <div className="h-full w-full flex flex-col divide-y-2 divide-custom-border-200 overflow-hidden">
+      <div className="h-full w-full flex flex-col divide-y divide-custom-border-300 overflow-hidden">
         <div className="flex items-center justify-between px-5 pb-3">
           <h4 className="text-sm font-medium">
             {issueDetail?.project_detail?.identifier}-{issueDetail?.sequence_id}
@@ -349,30 +349,9 @@ export const IssueDetailsSidebar: React.FC<Props> = ({
         </div>
 
         <div className="h-full w-full px-5 overflow-y-auto">
-          <div className={`divide-y-2 divide-custom-border-200 ${uneditable ? "opacity-60" : ""}`}>
+          <div className={`divide-y divide-custom-border-300 ${uneditable ? "opacity-60" : ""}`}>
             {showFirstSection && (
               <div className="py-1">
-                {/* {(fieldsToShow.includes("all") || fieldsToShow.includes("entity")) && (
-                  <div className="flex flex-wrap items-center py-2">
-                    <div className="flex items-center gap-x-2 text-sm text-custom-text-200 sm:basis-1/2">
-                      <Squares2X2Icon className="h-4 w-4 flex-shrink-0" />
-                      <p>Object</p>
-                    </div>
-                    <div className="sm:basis-1/2">
-                      <Controller
-                        control={control}
-                        name="entity"
-                        render={({ field: { value } }) => (
-                          <ObjectsSelect
-                            onChange={(val: string | null) => submitChanges({ entity: val })}
-                            projectId={projectId?.toString() ?? ""}
-                            value={value}
-                          />
-                        )}
-                      />
-                    </div>
-                  </div>
-                )} */}
                 {(fieldsToShow.includes("all") || fieldsToShow.includes("state")) && (
                   <div className="flex flex-wrap items-center py-2">
                     <div className="flex items-center gap-x-2 text-sm text-custom-text-200 sm:basis-1/2">
@@ -663,6 +642,14 @@ export const IssueDetailsSidebar: React.FC<Props> = ({
                 )}
               </div>
             )}
+            {watchIssue("entity") && (
+              <div className="py-1">
+                <SidebarCustomAttributesList
+                  issue={issueDetail}
+                  projectId={projectId?.toString() ?? ""}
+                />
+              </div>
+            )}
           </div>
           {(fieldsToShow.includes("all") || fieldsToShow.includes("label")) &&
             watchIssue("entity") === null && (
@@ -705,11 +692,6 @@ export const IssueDetailsSidebar: React.FC<Props> = ({
                 </div>
               </div>
             )}
-          {watchIssue("entity") && (
-            <div className="py-1">
-              <SidebarCustomAttributesList issue={issueDetail} />
-            </div>
-          )}
         </div>
       </div>
     </>

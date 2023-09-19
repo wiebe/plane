@@ -3,11 +3,11 @@ import { Controller } from "react-hook-form";
 // components
 import { FormComponentProps, Input } from "components/custom-attributes";
 // ui
-import { CustomSelect, ToggleSwitch } from "components/ui";
+import { CustomSelect, ToggleSwitch, Tooltip } from "components/ui";
 // constants
 import { DATE_FORMATS, TIME_FORMATS } from "constants/custom-attributes";
 
-export const DateTimeAttributeForm: React.FC<FormComponentProps> = ({ control }) => (
+export const DateTimeAttributeForm: React.FC<FormComponentProps> = ({ control, watch }) => (
   <div className="space-y-3">
     <Controller
       control={control}
@@ -44,8 +44,20 @@ export const DateTimeAttributeForm: React.FC<FormComponentProps> = ({ control })
         name="extra_settings.hide_date"
         render={({ field: { onChange, value } }) => (
           <div className="flex items-center justify-end gap-1 mt-2">
-            <ToggleSwitch value={value ?? false} onChange={onChange} size="sm" />
-            <span className="text-xs">Don{"'"}t show date</span>
+            <Tooltip
+              tooltipContent="Cannot disable both, date and time"
+              disabled={!watch("extra_settings.hide_time")}
+            >
+              <div className="flex items-center gap-1">
+                <ToggleSwitch
+                  value={value ?? false}
+                  onChange={onChange}
+                  size="sm"
+                  disabled={watch("extra_settings.hide_time")}
+                />
+                <span className="text-xs">Don{"'"}t show date</span>
+              </div>
+            </Tooltip>
           </div>
         )}
       />
@@ -78,8 +90,20 @@ export const DateTimeAttributeForm: React.FC<FormComponentProps> = ({ control })
         name="extra_settings.hide_time"
         render={({ field: { onChange, value } }) => (
           <div className="flex items-center justify-end gap-1 mt-2">
-            <ToggleSwitch value={value ?? false} onChange={onChange} size="sm" />
-            <span className="text-xs">Don{"'"}t show time</span>
+            <Tooltip
+              tooltipContent="Cannot disable both, date and time"
+              disabled={!watch("extra_settings.hide_date")}
+            >
+              <div className="flex items-center gap-1">
+                <ToggleSwitch
+                  value={value ?? false}
+                  onChange={onChange}
+                  size="sm"
+                  disabled={watch("extra_settings.hide_date")}
+                />
+                <span className="text-xs">Don{"'"}t show time</span>
+              </div>
+            </Tooltip>
           </div>
         )}
       />

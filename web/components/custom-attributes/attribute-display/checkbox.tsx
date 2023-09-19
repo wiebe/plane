@@ -1,17 +1,25 @@
 // ui
 import { ToggleSwitch } from "components/ui";
 // types
-import { Props } from "./types";
+import { ICustomAttribute } from "types";
+
+type Props = {
+  attributeDetails: ICustomAttribute;
+  issueId: string;
+  projectId: string;
+  value: boolean;
+  onChange: (val: boolean) => void;
+};
 
 export const CustomCheckboxAttribute: React.FC<Props & { value: boolean }> = ({
   attributeDetails,
   onChange,
   value,
 }) => {
-  const handleUpdateCheckbox = (val: boolean | string) => onChange(val.toString());
+  const handleUpdateCheckbox = (val: boolean) => onChange(val);
 
   return (
-    <div className="bg-custom-background-80 flex items-center gap-2 rounded px-2.5 py-0.5 text-xs">
+    <div className="text-xs truncate">
       {attributeDetails.extra_settings.representation === "toggle_switch" ? (
         <ToggleSwitch value={value ?? false} onChange={handleUpdateCheckbox} />
       ) : (
@@ -23,7 +31,6 @@ export const CustomCheckboxAttribute: React.FC<Props & { value: boolean }> = ({
           />
         </div>
       )}
-      <span>{attributeDetails.display_name}</span>
     </div>
   );
 };

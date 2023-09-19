@@ -26,9 +26,10 @@ import { CUSTOM_ATTRIBUTES_LIST } from "constants/custom-attributes";
 
 type Props = {
   issue: IIssue | undefined;
+  projectId: string;
 };
 
-export const SidebarCustomAttributesList: React.FC<Props> = observer(({ issue }) => {
+export const SidebarCustomAttributesList: React.FC<Props> = observer(({ issue, projectId }) => {
   const router = useRouter();
   const { workspaceSlug } = router.query;
 
@@ -37,14 +38,20 @@ export const SidebarCustomAttributesList: React.FC<Props> = observer(({ issue })
     customAttributeValues: customAttributeValuesStore,
   } = useMobxStore();
   const { entityAttributes, fetchEntityDetails } = customAttributesStore;
-  const { issueAttributeValues, fetchIssueAttributeValues } = customAttributeValuesStore;
+  const { issueAttributeValues, fetchIssueAttributeValues, deleteAttributeValue } =
+    customAttributeValuesStore;
 
-  const handleAttributeUpdate = (attributeId: string, value: string[]) => {
+  const handleAttributeUpdate = (attributeId: string, value: string | string[] | undefined) => {
     if (!issue || !workspaceSlug) return;
+
+    if (!value) {
+      deleteAttributeValue(workspaceSlug.toString(), projectId, issue.id, attributeId);
+      return;
+    }
 
     const payload: ICustomAttributeValueFormData = {
       issue_properties: {
-        [attributeId]: value,
+        [attributeId]: Array.isArray(value) ? value : [value],
       },
     };
 
@@ -109,7 +116,7 @@ export const SidebarCustomAttributesList: React.FC<Props> = observer(({ issue })
                 <CustomCheckboxAttribute
                   attributeDetails={attribute}
                   issueId={issue.id}
-                  onChange={(val: string) => handleAttributeUpdate(attribute.id, [val])}
+                  onChange={(val) => handleAttributeUpdate(attribute.id, [`${val}`])}
                   projectId={issue.project}
                   value={
                     attributeValue ? (attributeValue?.[0]?.value === "true" ? true : false) : false
@@ -120,7 +127,9 @@ export const SidebarCustomAttributesList: React.FC<Props> = observer(({ issue })
                 <CustomDateTimeAttribute
                   attributeDetails={attribute}
                   issueId={issue.id}
-                  onChange={(val: Date) => handleAttributeUpdate(attribute.id, [val.toISOString()])}
+                  onChange={(val: Date | null) => {
+                    handleAttributeUpdate(attribute.id, val ? [val.toISOString()] : undefined);
+                  }}
                   projectId={issue.project}
                   value={attributeValue ? new Date(attributeValue?.[0]?.value ?? "") : undefined}
                 />
@@ -129,7 +138,9 @@ export const SidebarCustomAttributesList: React.FC<Props> = observer(({ issue })
                 <CustomEmailAttribute
                   attributeDetails={attribute}
                   issueId={issue.id}
-                  onChange={(val: string) => handleAttributeUpdate(attribute.id, [val])}
+                  onChange={(val) => {
+                    handleAttributeUpdate(attribute.id, val && val !== "" ? [val] : undefined);
+                  }}
                   projectId={issue.project}
                   value={attributeValue ? attributeValue?.[0]?.value : undefined}
                 />
@@ -138,7 +149,7 @@ export const SidebarCustomAttributesList: React.FC<Props> = observer(({ issue })
                 <CustomFileAttribute
                   attributeDetails={attribute}
                   issueId={issue.id}
-                  onChange={(val: string) => handleAttributeUpdate(attribute.id, [val])}
+                  onChange={(val) => handleAttributeUpdate(attribute.id, val)}
                   projectId={issue.project}
                   value={attributeValue ? attributeValue?.[0]?.value : undefined}
                 />
@@ -147,7 +158,7 @@ export const SidebarCustomAttributesList: React.FC<Props> = observer(({ issue })
                 <CustomSelectAttribute
                   attributeDetails={attribute}
                   issueId={issue.id}
-                  onChange={(val: string[]) => handleAttributeUpdate(attribute.id, val)}
+                  onChange={(val) => handleAttributeUpdate(attribute.id, val)}
                   projectId={issue.project}
                   value={Array.isArray(attributeValue) ? attributeValue.map((v) => v.value) : []}
                   multiple
@@ -157,7 +168,9 @@ export const SidebarCustomAttributesList: React.FC<Props> = observer(({ issue })
                 <CustomNumberAttribute
                   attributeDetails={attribute}
                   issueId={issue.id}
-                  onChange={(val: string) => handleAttributeUpdate(attribute.id, [val])}
+                  onChange={(val) => {
+                    handleAttributeUpdate(attribute.id, val ? val.toString() : undefined);
+                  }}
                   projectId={issue.project}
                   value={
                     attributeValue ? parseInt(attributeValue?.[0]?.value ?? "0", 10) : undefined
@@ -168,7 +181,7 @@ export const SidebarCustomAttributesList: React.FC<Props> = observer(({ issue })
                 <CustomRelationAttribute
                   attributeDetails={attribute}
                   issueId={issue.id}
-                  onChange={(val: string) => handleAttributeUpdate(attribute.id, [val])}
+                  onChange={(val) => handleAttributeUpdate(attribute.id, val)}
                   projectId={issue.project}
                   value={attributeValue ? attributeValue?.[0]?.value : undefined}
                 />
@@ -177,16 +190,19 @@ export const SidebarCustomAttributesList: React.FC<Props> = observer(({ issue })
                 <CustomSelectAttribute
                   attributeDetails={attribute}
                   issueId={issue.id}
-                  onChange={(val: string) => handleAttributeUpdate(attribute.id, [val])}
+                  onChange={(val) => handleAttributeUpdate(attribute.id, val)}
                   projectId={issue.project}
                   value={attributeValue ? attributeValue?.[0]?.value : undefined}
+                  multiple={false}
                 />
               )}
               {attribute.type === "text" && (
                 <CustomTextAttribute
                   attributeDetails={attribute}
                   issueId={issue.id}
-                  onChange={(val: string) => handleAttributeUpdate(attribute.id, [val])}
+                  onChange={(val) =>
+                    handleAttributeUpdate(attribute.id, val && val !== "" ? [val] : undefined)
+                  }
                   projectId={issue.project}
                   value={attributeValue ? attributeValue?.[0].value : undefined}
                 />
@@ -195,7 +211,9 @@ export const SidebarCustomAttributesList: React.FC<Props> = observer(({ issue })
                 <CustomUrlAttribute
                   attributeDetails={attribute}
                   issueId={issue.id}
-                  onChange={(val: string) => handleAttributeUpdate(attribute.id, [val])}
+                  onChange={(val) =>
+                    handleAttributeUpdate(attribute.id, val && val !== "" ? [val] : undefined)
+                  }
                   projectId={issue.project}
                   value={attributeValue ? attributeValue?.[0]?.value : undefined}
                 />

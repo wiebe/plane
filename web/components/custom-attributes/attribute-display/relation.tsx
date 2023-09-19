@@ -12,11 +12,19 @@ import modulesService from "services/modules.service";
 // icons
 import { Search } from "lucide-react";
 // types
-import { Props } from "./types";
+import { ICustomAttribute } from "types";
 // fetch-keys
 import { CYCLES_LIST, MODULE_LIST } from "constants/fetch-keys";
 
-export const CustomRelationAttribute: React.FC<Props & { value: string | undefined }> = ({
+type Props = {
+  attributeDetails: ICustomAttribute;
+  issueId: string;
+  projectId: string;
+  value: string | undefined;
+  onChange: (val: string | undefined) => void;
+};
+
+export const CustomRelationAttribute: React.FC<Props> = ({
   attributeDetails,
   onChange,
   projectId,

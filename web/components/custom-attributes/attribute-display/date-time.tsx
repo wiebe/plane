@@ -1,7 +1,15 @@
 // react-datepicker
 import ReactDatePicker from "react-datepicker";
 // types
-import { Props } from "./types";
+import { ICustomAttribute } from "types";
+
+type Props = {
+  attributeDetails: ICustomAttribute;
+  issueId: string;
+  projectId: string;
+  value: Date | undefined;
+  onChange: (val: Date | null) => void;
+};
 
 const DATE_FORMATS: { [key: string]: string } = {
   "MM-DD-YYYY": "MM-dd-yyyy",
@@ -14,16 +22,12 @@ const TIME_FORMATS: { [key: string]: string } = {
   "24": "HH:mm",
 };
 
-export const CustomDateTimeAttribute: React.FC<Props & { value: Date | undefined }> = ({
-  attributeDetails,
-  onChange,
-  value,
-}) => (
+export const CustomDateTimeAttribute: React.FC<Props> = ({ attributeDetails, onChange, value }) => (
   <div className="flex-shrink-0">
     <ReactDatePicker
       selected={value}
       onChange={onChange}
-      className="bg-custom-background-80 rounded text-xs px-2.5 py-0.5 outline-none"
+      className="bg-custom-background-80 rounded text-xs px-2.5 py-0.5 outline-none truncate"
       calendarClassName="!bg-custom-background-80"
       dateFormat={`${
         attributeDetails.extra_settings.hide_date
@@ -36,6 +40,7 @@ export const CustomDateTimeAttribute: React.FC<Props & { value: Date | undefined
       }`}
       showTimeInput={!attributeDetails.extra_settings.hide_time}
       isClearable={!attributeDetails.is_required}
+      placeholderText={`Enter ${attributeDetails.display_name}`}
     />
   </div>
 );

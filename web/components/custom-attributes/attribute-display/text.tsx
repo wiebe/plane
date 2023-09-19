@@ -3,7 +3,15 @@ import { useEffect, useState } from "react";
 // react-hook-form
 import { Controller, useForm } from "react-hook-form";
 // types
-import { Props } from "./types";
+import { ICustomAttribute } from "types";
+
+type Props = {
+  attributeDetails: ICustomAttribute;
+  issueId: string;
+  projectId: string;
+  value: string | undefined;
+  onChange: (val: string) => void;
+};
 
 export const CustomTextAttribute: React.FC<Props & { value: string | undefined }> = ({
   attributeDetails,
@@ -45,7 +53,10 @@ export const CustomTextAttribute: React.FC<Props & { value: string | undefined }
   return (
     <div className="flex-shrink-0">
       {!isEditing && (
-        <div className="cursor-pointer text-xs truncate" onClick={() => setIsEditing(true)}>
+        <div
+          className="cursor-pointer text-xs truncate bg-custom-background-80 px-2.5 py-0.5 w-min max-w-full whitespace-nowrap"
+          onClick={() => setIsEditing(true)}
+        >
           {value && value !== "" ? value : `Enter ${attributeDetails.display_name}`}
         </div>
       )}

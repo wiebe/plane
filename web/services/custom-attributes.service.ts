@@ -91,6 +91,21 @@ class CustomAttributesService extends APIService {
         throw error?.response?.data;
       });
   }
+
+  async deletePropertyValue(
+    workspaceSlug: string,
+    projectId: string,
+    issueId: string,
+    propertyId: string
+  ): Promise<any> {
+    return this.delete(
+      `/api/workspaces/${workspaceSlug}/projects/${projectId}/issues/${issueId}/property-values/${propertyId}/`
+    )
+      .then((response) => response?.data)
+      .catch((error) => {
+        throw error?.response?.data;
+      });
+  }
 }
 
 const customAttributesService = new CustomAttributesService();
