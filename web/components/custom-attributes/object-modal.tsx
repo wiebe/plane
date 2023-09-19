@@ -15,6 +15,8 @@ import { Loader, PrimaryButton, SecondaryButton } from "components/ui";
 import { ICustomAttribute, TCustomAttributeTypes } from "types";
 // constants
 import { CUSTOM_ATTRIBUTES_LIST } from "constants/custom-attributes";
+import { renderEmoji } from "helpers/emoji.helper";
+import EmojiIconPicker from "components/emoji-icon-picker";
 
 type Props = {
   objectIdToEdit?: string | null;
@@ -53,6 +55,7 @@ export const ObjectModal: React.FC<Props> = observer(
       const payload: Partial<ICustomAttribute> = {
         description: object.description ?? "",
         display_name: object.display_name ?? "",
+        icon: object.icon ?? "",
         project: projectId.toString(),
         type: "entity",
       };
@@ -74,6 +77,7 @@ export const ObjectModal: React.FC<Props> = observer(
       const payload: Partial<ICustomAttribute> = {
         description: object.description ?? "",
         display_name: object.display_name ?? "",
+        icon: object.icon ?? "",
       };
 
       await customAttributes
@@ -152,8 +156,16 @@ export const ObjectModal: React.FC<Props> = observer(
                   <div className="mt-5 space-y-5 h-full overflow-y-auto">
                     <div className="space-y-4 px-6">
                       <div className="flex items-center gap-2">
-                        <div className="h-9 w-9 bg-custom-background-80 grid place-items-center rounded text-sm">
-                          🚀
+                        <div className="h-9 w-9 bg-custom-background-80 grid place-items-center rounded">
+                          <EmojiIconPicker
+                            label={object.icon ? renderEmoji(object.icon) : "Icon"}
+                            onChange={(icon) => {
+                              if (typeof icon === "string")
+                                setObject((prevData) => ({ ...prevData, icon }));
+                            }}
+                            value={object.icon}
+                            showIconPicker={false}
+                          />
                         </div>
                         <Input
                           placeholder="Enter Object Title"

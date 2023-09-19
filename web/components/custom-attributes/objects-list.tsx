@@ -13,6 +13,7 @@ import { CustomMenu, Loader } from "components/ui";
 import { TableProperties } from "lucide-react";
 // types
 import { ICustomAttribute } from "types";
+import { renderEmoji } from "helpers/emoji.helper";
 
 type Props = {
   handleEditObject: (object: ICustomAttribute) => void;
@@ -60,7 +61,11 @@ export const ObjectsList: React.FC<Props> = observer(({ handleEditObject, projec
               <div key={entity.id} className="p-4 flex items-center justify-between gap-4">
                 <div className="flex gap-4">
                   <div className="bg-custom-background-80 h-10 w-10 grid place-items-center rounded">
-                    <TableProperties size={20} strokeWidth={1.5} />
+                    {entity.icon ? (
+                      renderEmoji(entity.icon)
+                    ) : (
+                      <TableProperties size={20} strokeWidth={1.5} />
+                    )}
                   </div>
                   <div>
                     <h5 className="text-sm font-medium">{entity.display_name}</h5>

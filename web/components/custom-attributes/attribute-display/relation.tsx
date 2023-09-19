@@ -94,7 +94,7 @@ export const CustomRelationAttribute: React.FC<Props> = ({
       {({ open }: { open: boolean }) => (
         <>
           <Combobox.Button
-            className={`lex items-center text-xs rounded px-2.5 py-0.5 truncate w-min max-w-full text-left bg-custom-background-80 ${className}`}
+            className={`flex items-center text-xs rounded px-2.5 py-0.5 truncate w-min max-w-full text-left bg-custom-background-80 ${className}`}
           >
             {selectedOption?.label ?? `Select ${attributeDetails.unit}`}
           </Combobox.Button>

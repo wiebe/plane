@@ -31,6 +31,8 @@ const EmojiIconPicker: React.FC<Props> = ({
   onChange,
   onIconColorChange,
   disabled = false,
+  showEmojiPicker = true,
+  showIconPicker = true,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [openColorPicker, setOpenColorPicker] = useState(false);
@@ -75,23 +77,28 @@ const EmojiIconPicker: React.FC<Props> = ({
           >
             <Tab.Group as="div" className="flex h-full w-full flex-col">
               <Tab.List className="flex-0 -mx-2 flex justify-around gap-1 p-1">
-                {tabOptions.map((tab) => (
-                  <Tab key={tab.key} as={React.Fragment}>
-                    {({ selected }) => (
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setOpenColorPicker(false);
-                        }}
-                        className={`-my-1 w-1/2 border-b pb-2 text-center text-sm font-medium outline-none transition-colors ${
-                          selected ? "" : "border-transparent text-custom-text-200"
-                        }`}
-                      >
-                        {tab.title}
-                      </button>
-                    )}
-                  </Tab>
-                ))}
+                {tabOptions.map((tab) => {
+                  if (!showEmojiPicker && tab.key === "emoji") return null;
+                  if (!showIconPicker && tab.key === "icon") return null;
+
+                  return (
+                    <Tab key={tab.key} as={React.Fragment}>
+                      {({ selected }) => (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setOpenColorPicker(false);
+                          }}
+                          className={`-my-1 w-1/2 border-b pb-2 text-center text-sm font-medium outline-none transition-colors ${
+                            selected ? "" : "border-transparent text-custom-text-200"
+                          }`}
+                        >
+                          {tab.title}
+                        </button>
+                      )}
+                    </Tab>
+                  );
+                })}
               </Tab.List>
               <Tab.Panels className="flex-1 overflow-y-auto">
                 <Tab.Panel>

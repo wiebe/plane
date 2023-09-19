@@ -11,4 +11,6 @@ export type Props = {
   ) => void;
   onIconColorChange?: (data: any) => void;
   disabled?: boolean;
+  showEmojiPicker?: boolean;
+  showIconPicker?: boolean;
 };
