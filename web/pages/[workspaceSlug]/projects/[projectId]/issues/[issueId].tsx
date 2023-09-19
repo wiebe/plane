@@ -148,7 +148,7 @@ const IssueDetailsPage: NextPage = () => {
           <div className="w-2/3 h-full overflow-y-auto space-y-5 divide-y divide-custom-border-200 p-5">
             <IssueMainContent issueDetails={issueDetails} submitChanges={submitChanges} />
           </div>
-          <div className="w-1/3 h-full space-y-5 border-l border-custom-border-300 py-5 overflow-hidden">
+          <div className="w-1/3 h-full space-y-5 border-l border-custom-border-200 py-5 overflow-hidden">
             <IssueDetailsSidebar
               control={control}
               issueDetail={issueDetails}

@@ -165,7 +165,9 @@ export const PeekOverviewIssueProperties: React.FC<Props> = ({
             </div>
           </>
         )}
-        {issue.entity !== null && <PeekOverviewCustomAttributesList issue={issue} />}
+        {issue.entity !== null && (
+          <PeekOverviewCustomAttributesList issue={issue} projectId={issue.project} />
+        )}
         {/* <div className="flex items-center gap-2 text-sm">
           <div className="flex-shrink-0 w-1/4 flex items-center gap-2 font-medium">
             <Icon iconName="change_history" className="!text-base flex-shrink-0" />

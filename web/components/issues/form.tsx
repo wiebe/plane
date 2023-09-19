@@ -66,7 +66,7 @@ export interface IssueFormProps {
   setIsConfirmDiscardOpen: React.Dispatch<React.SetStateAction<boolean>>;
   handleFormDirty: (payload: Partial<IIssue> | null) => void;
   customAttributesList: { [key: string]: string[] };
-  handleCustomAttributesChange: (attributeId: string, val: string[]) => void;
+  handleCustomAttributesChange: (attributeId: string, val: string | string[] | undefined) => void;
   fieldsToShow: TIssueFormAttributes[];
 }
 
@@ -429,7 +429,7 @@ export const IssueForm: FC<IssueFormProps> = observer((props) => {
                   />
                 )}
                 {/* default object properties */}
-                {watch("entity") === null ? (
+                {watch("entity") === null && (
                   <>
                     {(fieldsToShow.includes("all") || fieldsToShow.includes("priority")) && (
                       <Controller
@@ -555,7 +555,10 @@ export const IssueForm: FC<IssueFormProps> = observer((props) => {
                       </CustomMenu>
                     )}
                   </>
-                ) : (
+                )}
+              </div>
+              {watch("entity") !== null && (
+                <div>
                   <IssueModalCustomAttributesList
                     entityId={watch("entity") ?? ""}
                     issueId={watch("id") ?? ""}
@@ -563,8 +566,8 @@ export const IssueForm: FC<IssueFormProps> = observer((props) => {
                     projectId={projectId}
                     values={customAttributesList}
                   />
-                )}
-              </div>
+                </div>
+              )}
             </div>
           </div>
         </div>

@@ -128,6 +128,7 @@ export const CreateUpdateIssueModal: React.FC<IssuesModalProps> = observer(
     const onDiscardClose = () => {
       handleClose();
       setActiveProject(null);
+      setCustomAttributesList({});
     };
 
     const handleFormDirty = (data: any) => {
@@ -395,25 +396,61 @@ export const CreateUpdateIssueModal: React.FC<IssuesModalProps> = observer(
     const handleFormSubmit = async (formData: Partial<IIssue>) => {
       if (!workspaceSlug || !activeProject) return;
 
-      const payload: Partial<IIssue> = {
-        ...formData,
-        assignees_list: formData.assignees ?? [],
-        labels_list: formData.labels ?? [],
-        description: formData.description ?? "",
+      // set the fixed issue properties for the payload
+      let payload: Partial<IIssue> = {
         description_html: formData.description_html ?? "<p></p>",
+        entity: formData.entity,
+        name: formData.name,
+        state: formData.state,
       };
+
+      // if entity is null, set the default object entity properties for the payload
+      if (formData.entity === null)
+        payload = {
+          ...payload,
+          ...formData,
+          assignees_list: formData.assignees ?? [],
+          labels_list: formData.labels ?? [],
+        };
 
       let issueResponse: Partial<IIssue> | undefined = {};
 
       if (!data) issueResponse = await createIssue(payload);
       else issueResponse = await updateIssue(payload);
 
-      if (issueResponse && issueResponse.id && Object.keys(customAttributesList).length > 0)
+      // create custom attribute values, if any
+      if (
+        payload.entity !== null &&
+        issueResponse &&
+        issueResponse.id &&
+        Object.keys(customAttributesList).length > 0
+      )
         await createAttributeValue(workspaceSlug.toString(), activeProject, issueResponse.id, {
           issue_properties: customAttributesList,
         });
 
       if (onSubmit) await onSubmit(payload);
+    };
+
+    const handleCustomAttributesChange = (
+      attributeId: string,
+      val: string | string[] | undefined
+    ) => {
+      if (!val) {
+        setCustomAttributesList((prev) => {
+          const newCustomAttributesList = { ...prev };
+          delete newCustomAttributesList[attributeId];
+
+          return newCustomAttributesList;
+        });
+
+        return;
+      }
+
+      setCustomAttributesList((prev) => ({
+        ...prev,
+        [attributeId]: Array.isArray(val) ? val : [val],
+      }));
     };
 
     if (!projects || projects.length === 0) return null;
@@ -471,12 +508,7 @@ export const CreateUpdateIssueModal: React.FC<IssuesModalProps> = observer(
                       status={data ? true : false}
                       user={user}
                       customAttributesList={customAttributesList}
-                      handleCustomAttributesChange={(attributeId: string, val: string[]) => {
-                        setCustomAttributesList((prev) => ({
-                          ...prev,
-                          [attributeId]: val,
-                        }));
-                      }}
+                      handleCustomAttributesChange={handleCustomAttributesChange}
                       fieldsToShow={fieldsToShow}
                       handleFormDirty={handleFormDirty}
                     />

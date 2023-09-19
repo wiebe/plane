@@ -5,21 +5,21 @@ import { Combobox, Transition } from "@headlessui/react";
 // hooks
 import useOutsideClickDetector from "hooks/use-outside-click-detector";
 // icons
-import { Check, Search } from "lucide-react";
+import { Check, Search, XIcon } from "lucide-react";
 // types
 import { ICustomAttribute } from "types";
 
 type Props = {
   attributeDetails: ICustomAttribute;
   issueId: string;
+  onChange: (val: string | string[] | undefined) => void;
   projectId: string;
 } & (
   | {
       multiple?: false;
-      onChange: (val: string | undefined) => void;
       value: string | undefined;
     }
-  | { multiple?: true; onChange: (val: string[] | undefined) => void; value: string[] | undefined }
+  | { multiple?: true; value: string[] | undefined }
 );
 
 export const CustomSelectAttribute: React.FC<Props> = (props) => {
@@ -87,18 +87,33 @@ export const CustomSelectAttribute: React.FC<Props> = (props) => {
                 Array.isArray(value) ? (
                   value.length > 0 ? (
                     <div className="flex items-center gap-1 flex-wrap">
-                      {value.map((v) => {
-                        const optionDetails = options.find((o) => o.id === v);
+                      {value.map((val) => {
+                        const optionDetails = options.find((o) => o.id === val);
 
                         return (
-                          <span
-                            className="px-2.5 py-0.5 rounded text-xs"
+                          <div
+                            key={val}
+                            className="px-2.5 py-0.5 rounded text-xs flex items-center justify-between gap-1"
                             style={{
                               backgroundColor: `${optionDetails?.color}40`,
                             }}
                           >
                             {optionDetails?.display_name}
-                          </span>
+                            {((attributeDetails.is_required && value.length > 1) ||
+                              !attributeDetails.is_required) && (
+                              <button
+                                type="button"
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  e.stopPropagation();
+
+                                  onChange(value.filter((v) => v !== val));
+                                }}
+                              >
+                                <XIcon size={10} strokeWidth={1.5} />
+                              </button>
+                            )}
+                          </div>
                         );
                       })}
                     </div>
@@ -109,14 +124,27 @@ export const CustomSelectAttribute: React.FC<Props> = (props) => {
                   )
                 ) : (
                   <div className="flex items-center gap-2 flex-wrap">
-                    <span
-                      className="px-2.5 py-0.5 rounded text-xs"
+                    <div
+                      className="px-2.5 py-0.5 rounded text-xs flex items-center justify-between gap-1"
                       style={{
                         backgroundColor: `${options.find((o) => o.id === value)?.color}40`,
                       }}
                     >
                       {options.find((o) => o.id === value)?.display_name}
-                    </span>
+                      {!attributeDetails.is_required && (
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+
+                            onChange(undefined);
+                          }}
+                        >
+                          <XIcon size={10} strokeWidth={1.5} />
+                        </button>
+                      )}
+                    </div>
                   </div>
                 )
               ) : (

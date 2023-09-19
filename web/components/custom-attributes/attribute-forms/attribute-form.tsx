@@ -76,6 +76,8 @@ const RenderForm: React.FC<{ type: TCustomAttributeTypes } & FormComponentProps>
   return FormToRender;
 };
 
+const OPTIONAL_FIELDS = ["checkbox", "file"];
+
 export const AttributeForm: React.FC<Props> = observer(({ attributeDetails, objectId, type }) => {
   const [isRemoving, setIsRemoving] = useState(false);
 
@@ -148,7 +150,7 @@ export const AttributeForm: React.FC<Props> = observer(({ attributeDetails, obje
               )}
               <div className="mt-8 flex items-center justify-between">
                 <div className="flex-shrink-0 flex items-center gap-2">
-                  {attributeDetails.type !== "checkbox" && (
+                  {!OPTIONAL_FIELDS.includes(attributeDetails.type ?? "") && (
                     <>
                       <Controller
                         control={control}

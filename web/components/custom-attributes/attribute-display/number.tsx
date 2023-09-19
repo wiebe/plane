@@ -86,7 +86,9 @@ export const CustomNumberAttribute: React.FC<Props> = ({ attributeDetails, onCha
                   />
                 </div>
               ) : (
-                <span className="font-medium truncate">{value}</span>
+                <span className="font-medium truncate bg-custom-background-80 px-2.5 py-0.5 rounded w-min max-w-full whitespace-nowrap">
+                  {value}
+                </span>
               )}
             </>
           ) : (

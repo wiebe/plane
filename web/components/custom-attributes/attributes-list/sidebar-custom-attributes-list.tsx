@@ -127,7 +127,7 @@ export const SidebarCustomAttributesList: React.FC<Props> = observer(({ issue, p
                 <CustomDateTimeAttribute
                   attributeDetails={attribute}
                   issueId={issue.id}
-                  onChange={(val: Date | null) => {
+                  onChange={(val) => {
                     handleAttributeUpdate(attribute.id, val ? [val.toISOString()] : undefined);
                   }}
                   projectId={issue.project}
@@ -169,7 +169,7 @@ export const SidebarCustomAttributesList: React.FC<Props> = observer(({ issue, p
                   attributeDetails={attribute}
                   issueId={issue.id}
                   onChange={(val) => {
-                    handleAttributeUpdate(attribute.id, val ? val.toString() : undefined);
+                    handleAttributeUpdate(attribute.id, val ? [val.toString()] : undefined);
                   }}
                   projectId={issue.project}
                   value={

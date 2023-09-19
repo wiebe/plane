@@ -25,9 +25,7 @@ export const CustomEmailAttribute: React.FC<Props> = ({ attributeDetails, onChan
   };
 
   useEffect(() => {
-    if (isEditing) {
-      setFocus("email");
-    }
+    if (isEditing) setFocus("email");
   }, [isEditing, setFocus]);
 
   useEffect(() => {

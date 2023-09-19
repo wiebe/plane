@@ -111,19 +111,21 @@ export const CustomFileAttribute: React.FC<Props> = (props) => {
   return (
     <div className="flex-shrink-0 truncate space-y-1">
       {value && value !== "" && (
-        <div className="group flex items-center justify-between gap-2 p-1 rounded border border-custom-border-200 text-xs truncate">
+        <div className="group flex items-center justify-between gap-2 p-1 rounded border border-custom-border-200 text-xs truncate w-min max-w-full whitespace-nowrap">
           <a
             href={value}
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-1 flex-grow truncate"
           >
-            <span className="flex-shrink-0 h-6 w-6">{getFileIcon(getFileExtension(value))}</span>
-            <span className="truncate">{getFileName(value)}</span>
+            <span className="flex-shrink-0 h-5 w-5">{getFileIcon(getFileExtension(value))}</span>
+            <span className="truncate">
+              {value.split("/")[value.split("/").length - 1].split("-")[1]}
+            </span>
           </a>
           <button
             type="button"
-            className="hidden group-hover:grid place-items-center flex-shrink-0"
+            className="opacity-0 group-hover:opacity-100 grid place-items-center flex-shrink-0"
             onClick={handleRemoveFile}
           >
             <X size={12} strokeWidth={1.5} />

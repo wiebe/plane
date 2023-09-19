@@ -100,6 +100,8 @@ class CustomAttributeValuesStore {
       runInAction(() => {
         this.error = error;
       });
+
+      this.fetchIssueAttributeValues(workspaceSlug, projectId, issueId);
     }
   };
 
@@ -130,6 +132,8 @@ class CustomAttributeValuesStore {
       runInAction(() => {
         this.error = error;
       });
+
+      this.fetchIssueAttributeValues(workspaceSlug, projectId, issueId);
     }
   };
 }

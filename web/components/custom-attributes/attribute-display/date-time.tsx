@@ -33,14 +33,14 @@ export const CustomDateTimeAttribute: React.FC<Props> = ({ attributeDetails, onC
         attributeDetails.extra_settings.hide_date
           ? ""
           : DATE_FORMATS[attributeDetails.extra_settings.date_format] ?? "dd-MM-yyyy"
-      }${
+      } ${
         attributeDetails.extra_settings.hide_time
           ? ""
-          : ", " + (TIME_FORMATS[attributeDetails.extra_settings.time_format] ?? "HH:mm")
+          : TIME_FORMATS[attributeDetails.extra_settings.time_format] ?? "HH:mm"
       }`}
       showTimeInput={!attributeDetails.extra_settings.hide_time}
       isClearable={!attributeDetails.is_required}
-      placeholderText={`Enter ${attributeDetails.display_name}`}
+      placeholderText={`Select ${attributeDetails.display_name}`}
     />
   </div>
 );
