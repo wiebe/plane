@@ -8,6 +8,7 @@ import ProjectPublishStore, { IProjectPublishStore } from "./project-publish";
 import IssuesStore from "./issues";
 import CustomAttributesStore from "./custom-attributes";
 import CustomAttributeValuesStore from "./custom-attribute-values";
+import DraftIssuesStore from "./draft-issue";
 
 enableStaticRendering(typeof window === "undefined");
 
@@ -19,6 +20,7 @@ export class RootStore {
   issues: IssuesStore;
   customAttributes: CustomAttributesStore;
   customAttributeValues: CustomAttributeValuesStore;
+  draftIssuesStore: DraftIssuesStore;
 
   constructor() {
     this.user = new UserStore(this);
@@ -28,5 +30,6 @@ export class RootStore {
     this.issues = new IssuesStore(this);
     this.customAttributes = new CustomAttributesStore(this);
     this.customAttributeValues = new CustomAttributeValuesStore(this);
+    this.draftIssuesStore = new DraftIssuesStore(this);
   }
 }

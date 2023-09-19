@@ -514,17 +514,14 @@ export const IssueDetailsSidebar: React.FC<Props> = ({
                   <SidebarDuplicateSelect
                     issueId={issueId as string}
                     submitChanges={(data: any) => {
-                      mutate<IIssue>(
-                        ISSUE_DETAILS(issueId as string),
-                        (prevData) => {
-                          if (!prevData) return prevData;
-                          return {
-                            ...prevData,
-                            ...data,
-                          };
-                        },
-                        false
-                      );
+                      if (!data) return mutate(ISSUE_DETAILS(issueId as string));
+                      mutate<IIssue>(ISSUE_DETAILS(issueId as string), (prevData) => {
+                        if (!prevData) return prevData;
+                        return {
+                          ...prevData,
+                          ...data,
+                        };
+                      });
                     }}
                     watch={watchIssue}
                     disabled={memberRole.isGuest || memberRole.isViewer || uneditable}
@@ -534,17 +531,14 @@ export const IssueDetailsSidebar: React.FC<Props> = ({
                   <SidebarRelatesSelect
                     issueId={issueId as string}
                     submitChanges={(data: any) => {
-                      mutate<IIssue>(
-                        ISSUE_DETAILS(issueId as string),
-                        (prevData) => {
-                          if (!prevData) return prevData;
-                          return {
-                            ...prevData,
-                            ...data,
-                          };
-                        },
-                        false
-                      );
+                      if (!data) return mutate(ISSUE_DETAILS(issueId as string));
+                      mutate<IIssue>(ISSUE_DETAILS(issueId as string), (prevData) => {
+                        if (!prevData) return prevData;
+                        return {
+                          ...prevData,
+                          ...data,
+                        };
+                      });
                     }}
                     watch={watchIssue}
                     disabled={memberRole.isGuest || memberRole.isViewer || uneditable}

@@ -70,8 +70,10 @@ export type IssueRelationType = "duplicate" | "relates_to" | "blocked_by";
 export interface IssueRelation {
   id: string;
   issue: string;
-  related_issue: string;
+  issue_detail: BlockeIssueDetail;
   relation_type: IssueRelationType;
+  related_issue: string;
+  relation: "blocking" | null;
 }
 
 export interface IIssue {
@@ -96,6 +98,8 @@ export interface IIssue {
     relation_type: IssueRelationType;
     related_issue: string;
   }[];
+  issue_relations: IssueRelation[];
+  related_issues: IssueRelation[];
   bridge_id?: string | null;
   completed_at: Date;
   created_at: string;

@@ -22,6 +22,7 @@ import useInboxView from "hooks/use-inbox-view";
 import useSpreadsheetIssuesView from "hooks/use-spreadsheet-issues-view";
 import useProjects from "hooks/use-projects";
 import useMyIssues from "hooks/my-issues/use-my-issues";
+import useLocalStorage from "hooks/use-local-storage";
 // components
 import { IssueForm, ConfirmIssueDiscard } from "components/issues";
 // types
@@ -105,10 +106,11 @@ export const CreateUpdateIssueModal: React.FC<IssuesModalProps> = observer(
 
     const { groupedIssues, mutateMyIssues } = useMyIssues(workspaceSlug?.toString());
 
+    const { setValue: setValueInLocalStorage, clearValue: clearLocalStorageValue } =
+      useLocalStorage<any>("draftedIssue", {});
+
     const { setToastAlert } = useToast();
 
-    if (cycleId) prePopulateData = { ...prePopulateData, cycle: cycleId as string };
-    if (moduleId) prePopulateData = { ...prePopulateData, module: moduleId as string };
     if (router.asPath.includes("my-issues") || router.asPath.includes("assigned"))
       prePopulateData = {
         ...prePopulateData,
@@ -116,19 +118,19 @@ export const CreateUpdateIssueModal: React.FC<IssuesModalProps> = observer(
       };
 
     const onClose = () => {
+      if (!showConfirmDiscard) handleClose();
+      if (formDirtyState === null) return setActiveProject(null);
+      const data = JSON.stringify(formDirtyState);
+      setValueInLocalStorage(data);
+    };
+
+    const onDiscardClose = () => {
       if (formDirtyState !== null) {
         setShowConfirmDiscard(true);
       } else {
         handleClose();
         setActiveProject(null);
-        setCustomAttributesList({});
       }
-    };
-
-    const onDiscardClose = () => {
-      handleClose();
-      setActiveProject(null);
-      setCustomAttributesList({});
     };
 
     const handleFormDirty = (data: any) => {
@@ -240,6 +242,27 @@ export const CreateUpdateIssueModal: React.FC<IssuesModalProps> = observer(
           });
         });
     };
+
+    useEffect(() => {
+      // if modal is closed, reset active project to null
+      // and return to avoid activeProject being set to some other project
+      if (!isOpen) {
+        setActiveProject(null);
+        return;
+      }
+
+      // if data is present, set active project to the project of the
+      // issue. This has more priority than the project in the url.
+      if (data && data.project) {
+        setActiveProject(data.project);
+        return;
+      }
+
+      // if data is not present, set active project to the project
+      // in the url. This has the least priority.
+      if (projects && projects.length > 0 && !activeProject)
+        setActiveProject(projects?.find((p) => p.id === projectId)?.id ?? projects?.[0].id ?? null);
+    }, [activeProject, data, projectId, projects, isOpen]);
 
     const calendarFetchKey = cycleId
       ? CYCLE_ISSUES_WITH_PARAMS(cycleId.toString(), calendarParams)
@@ -466,9 +489,9 @@ export const CreateUpdateIssueModal: React.FC<IssuesModalProps> = observer(
             setActiveProject(null);
             setFormDirtyState(null);
             setShowConfirmDiscard(false);
+            clearLocalStorageValue();
           }}
         />
-
         <Transition.Root show={isOpen} as={React.Fragment}>
           <Dialog as="div" className="relative z-20" onClose={onClose}>
             <Transition.Child
@@ -500,16 +523,13 @@ export const CreateUpdateIssueModal: React.FC<IssuesModalProps> = observer(
                       initialData={data ?? prePopulateData}
                       createMore={createMore}
                       setCreateMore={setCreateMore}
-                      handleClose={onClose}
                       handleDiscardClose={onDiscardClose}
-                      setIsConfirmDiscardOpen={setShowConfirmDiscard}
                       projectId={activeProject ?? ""}
                       setActiveProject={setActiveProject}
                       status={data ? true : false}
                       user={user}
-                      customAttributesList={customAttributesList}
-                      handleCustomAttributesChange={handleCustomAttributesChange}
                       fieldsToShow={fieldsToShow}
+                      handleCustomAttributesChange={handleCustomAttributesChange}
                       handleFormDirty={handleFormDirty}
                     />
                   </Dialog.Panel>
