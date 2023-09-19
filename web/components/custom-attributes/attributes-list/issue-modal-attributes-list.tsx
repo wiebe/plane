@@ -77,7 +77,7 @@ export const IssueModalCustomAttributesList: React.FC<Props> = observer((props) 
                 <div className="flex items-center justify-between gap-2">
                   <Disclosure.Button className="font-medium flex items-center gap-2">
                     <ChevronDown
-                      className={`transition-all ${open ? "-rotate-90" : ""}`}
+                      className={`transition-all ${open ? "" : "-rotate-90"}`}
                       size={14}
                       strokeWidth={1.5}
                     />
@@ -119,7 +119,7 @@ export const IssueModalCustomAttributesList: React.FC<Props> = observer((props) 
               </>
             )}
           </Disclosure>
-          <div className="flex items-center gap-1 flex-wrap mt-3.5">
+          <div className="flex items-center gap-2 flex-wrap mt-3.5">
             {Object.entries(nonDescriptionFields).map(([attributeId, attribute]) => (
               <div key={attributeId}>
                 {attribute.type === "checkbox" && (
@@ -134,6 +134,7 @@ export const IssueModalCustomAttributesList: React.FC<Props> = observer((props) 
                 {attribute.type === "datetime" && (
                   <CustomDateTimeAttribute
                     attributeDetails={attribute}
+                    className="bg-transparent border border-custom-border-200 py-1"
                     issueId={issueId}
                     onChange={(val) =>
                       onChange(attribute.id, val ? [val.toISOString()] : undefined)
@@ -147,15 +148,17 @@ export const IssueModalCustomAttributesList: React.FC<Props> = observer((props) 
                 {attribute.type === "file" && (
                   <CustomFileAttribute
                     attributeDetails={attribute}
+                    className="bg-transparent border border-custom-border-200 py-1"
                     issueId={issueId}
                     onChange={(val) => onChange(attribute.id, val)}
                     projectId={projectId}
-                    value={undefined}
+                    value={values[attribute.id]?.[0]}
                   />
                 )}
                 {attribute.type === "multi_select" && (
                   <CustomSelectAttribute
                     attributeDetails={attribute}
+                    className="bg-transparent border border-custom-border-200 py-1"
                     issueId={issueId}
                     onChange={(val) => onChange(attribute.id, val)}
                     projectId={projectId}
@@ -166,6 +169,7 @@ export const IssueModalCustomAttributesList: React.FC<Props> = observer((props) 
                 {attribute.type === "relation" && (
                   <CustomRelationAttribute
                     attributeDetails={attribute}
+                    className="bg-transparent border border-custom-border-200 py-1"
                     issueId={issueId}
                     onChange={(val) => onChange(attribute.id, val)}
                     projectId={projectId}
@@ -175,6 +179,7 @@ export const IssueModalCustomAttributesList: React.FC<Props> = observer((props) 
                 {attribute.type === "select" && (
                   <CustomSelectAttribute
                     attributeDetails={attribute}
+                    className="bg-transparent border border-custom-border-200 py-1"
                     issueId={issueId}
                     onChange={(val) => onChange(attribute.id, val)}
                     projectId={projectId}

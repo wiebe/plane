@@ -19,7 +19,7 @@ export const IssueDateSelect: React.FC<Props> = ({ label, maxDate, minDate, onCh
   <Popover className="relative flex items-center justify-center  rounded-lg">
     {({ close }) => (
       <>
-        <Popover.Button className="flex cursor-pointer items-center rounded-md border border-custom-border-200 text-xs shadow-sm duration-200">
+        <Popover.Button className="flex cursor-pointer items-center rounded border border-custom-border-200 text-xs shadow-sm duration-200">
           <span className="flex items-center justify-center gap-2 px-2 py-1 text-xs text-custom-text-200 hover:bg-custom-background-80">
             {value ? (
               <>

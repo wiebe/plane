@@ -42,17 +42,14 @@ export const ObjectsSelect: React.FC<Props> = observer(({ onChange, projectId, v
 
   return (
     <CustomSearchSelect
-      customButton={
-        <button type="button" className="bg-custom-background-80 rounded text-xs px-2.5 py-0.5">
-          {entities?.find((e) => e.id === value)?.display_name ?? "Default"}
-        </button>
-      }
+      label={entities?.find((e) => e.id === value)?.display_name ?? "Default"}
       value={value}
       maxHeight="md"
       optionsClassName="!min-w-[10rem]"
       onChange={onChange}
       options={options}
       position="right"
+      noChevron
     />
   );
 });

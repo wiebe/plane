@@ -13,12 +13,13 @@ import useWorkspaceDetails from "hooks/use-workspace-details";
 import { getFileIcon } from "components/icons";
 import { X } from "lucide-react";
 // helpers
-import { getFileExtension, getFileName } from "helpers/attachment.helper";
+import { getFileExtension } from "helpers/attachment.helper";
 // types
 import { ICustomAttribute } from "types";
 
 type Props = {
   attributeDetails: ICustomAttribute;
+  className?: string;
   issueId: string;
   projectId: string;
   value: string | undefined;
@@ -28,7 +29,7 @@ type Props = {
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5 MB
 
 export const CustomFileAttribute: React.FC<Props> = (props) => {
-  const { attributeDetails, onChange, value } = props;
+  const { attributeDetails, className = "", onChange, value } = props;
 
   const [isUploading, setIsUploading] = useState(false);
 
@@ -136,7 +137,7 @@ export const CustomFileAttribute: React.FC<Props> = (props) => {
         {...getRootProps()}
         className={`flex items-center bg-custom-background-80 text-xs rounded px-2.5 py-0.5 cursor-pointer truncate w-min max-w-full whitespace-nowrap ${
           isDragActive ? "bg-custom-primary-100/10" : ""
-        } ${isDragReject ? "bg-red-500/10" : ""}`}
+        } ${isDragReject ? "bg-red-500/10" : ""} ${className}`}
       >
         <input className="flex-shrink-0" {...getInputProps()} />
         <span className={`flex-grow truncate text-left ${fileError ? "text-red-500" : ""}`}>

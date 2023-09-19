@@ -11,6 +11,7 @@ import { ICustomAttribute } from "types";
 
 type Props = {
   attributeDetails: ICustomAttribute;
+  className?: string;
   issueId: string;
   onChange: (val: string | string[] | undefined) => void;
   projectId: string;
@@ -23,17 +24,13 @@ type Props = {
 );
 
 export const CustomSelectAttribute: React.FC<Props> = (props) => {
-  const { attributeDetails, multiple = false, onChange, value } = props;
+  const { attributeDetails, className = "", multiple = false, onChange, value } = props;
 
   const [isOpen, setIsOpen] = useState(false);
   const [query, setQuery] = useState("");
 
   const dropdownButtonRef = useRef<HTMLButtonElement>(null);
   const dropdownOptionsRef = useRef<HTMLUListElement>(null);
-
-  const selectedOption =
-    attributeDetails.children.find((option) => option.id === value) ??
-    attributeDetails.children.find((option) => option.is_default);
 
   const options = attributeDetails.children.filter((option) =>
     option.display_name.toLowerCase().includes(query.toLowerCase())
@@ -118,7 +115,9 @@ export const CustomSelectAttribute: React.FC<Props> = (props) => {
                       })}
                     </div>
                   ) : (
-                    <div className="text-xs px-2.5 py-0.5 rounded bg-custom-background-80">
+                    <div
+                      className={`text-xs px-2.5 py-0.5 rounded bg-custom-background-80 ${className}`}
+                    >
                       Select {attributeDetails.display_name}
                     </div>
                   )
@@ -148,7 +147,9 @@ export const CustomSelectAttribute: React.FC<Props> = (props) => {
                   </div>
                 )
               ) : (
-                <div className="cursor-pointer text-xs truncate bg-custom-background-80 px-2.5 py-0.5 rounded">
+                <div
+                  className={`cursor-pointer text-xs truncate bg-custom-background-80 px-2.5 py-0.5 rounded ${className}`}
+                >
                   Select {attributeDetails.display_name}
                 </div>
               )}

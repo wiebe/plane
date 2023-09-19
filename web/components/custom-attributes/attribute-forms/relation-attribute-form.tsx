@@ -28,15 +28,11 @@ export const RelationAttributeForm: React.FC<FormComponentProps> = ({ control })
           optionsClassName="w-full"
           input
         >
-          {CUSTOM_ATTRIBUTE_UNITS.map((unit) => {
-            if (unit.value === "user") return null;
-
-            return (
-              <CustomSelect.Option key={unit.value} value={unit.value}>
-                {unit.label}
-              </CustomSelect.Option>
-            );
-          })}
+          {CUSTOM_ATTRIBUTE_UNITS.map((unit) => (
+            <CustomSelect.Option key={unit.value} value={unit.value}>
+              {unit.label}
+            </CustomSelect.Option>
+          ))}
         </CustomSelect>
       )}
     />

@@ -15,9 +15,12 @@ import { Search } from "lucide-react";
 import { ICustomAttribute } from "types";
 // fetch-keys
 import { CYCLES_LIST, MODULE_LIST } from "constants/fetch-keys";
+import useProjectMembers from "hooks/use-project-members";
+import { Avatar } from "components/ui";
 
 type Props = {
   attributeDetails: ICustomAttribute;
+  className?: string;
   issueId: string;
   projectId: string;
   value: string | undefined;
@@ -26,6 +29,7 @@ type Props = {
 
 export const CustomRelationAttribute: React.FC<Props> = ({
   attributeDetails,
+  className = "",
   onChange,
   projectId,
   value,
@@ -54,17 +58,30 @@ export const CustomRelationAttribute: React.FC<Props> = ({
       : null
   );
 
+  const { members } = useProjectMembers(workspaceSlug?.toString(), projectId);
+
   const optionsList =
     attributeDetails.unit === "cycle"
-      ? cycles?.map((c) => ({ id: c.id, name: c.name }))
+      ? cycles?.map((c) => ({ id: c.id, query: c.name, label: c.name }))
       : attributeDetails.unit === "module"
-      ? modules?.map((m) => ({ id: m.id, name: m.name }))
+      ? modules?.map((m) => ({ id: m.id, query: m.name, label: m.name }))
+      : attributeDetails.unit === "user"
+      ? members?.map((m) => ({
+          id: m.member.id,
+          query: m.member.display_name,
+          label: (
+            <div className="flex items-center gap-2">
+              <Avatar user={m.member} />
+              {m.member.is_bot ? m.member.first_name : m.member.display_name}
+            </div>
+          ),
+        }))
       : [];
 
   const selectedOption = (optionsList ?? []).find((option) => option.id === value);
 
   const options = (optionsList ?? []).filter((option) =>
-    option.name.toLowerCase().includes(query.toLowerCase())
+    option.query.toLowerCase().includes(query.toLowerCase())
   );
 
   return (
@@ -76,8 +93,10 @@ export const CustomRelationAttribute: React.FC<Props> = ({
     >
       {({ open }: { open: boolean }) => (
         <>
-          <Combobox.Button className="flex items-center text-xs rounded px-2.5 py-0.5 truncate w-min max-w-full text-left bg-custom-background-80">
-            {selectedOption?.name ?? `Select ${attributeDetails.unit}`}
+          <Combobox.Button
+            className={`lex items-center text-xs rounded px-2.5 py-0.5 truncate w-min max-w-full text-left bg-custom-background-80 ${className}`}
+          >
+            {selectedOption?.label ?? `Select ${attributeDetails.unit}`}
           </Combobox.Button>
           <Transition
             show={open}
@@ -109,7 +128,7 @@ export const CustomRelationAttribute: React.FC<Props> = ({
                         value={option.id}
                         className="flex items-center gap-1 cursor-pointer select-none truncate rounded px-1 py-1.5 hover:bg-custom-background-80 w-full"
                       >
-                        <span className="px-1 rounded-sm truncate">{option.name}</span>
+                        {option.label}
                       </Combobox.Option>
                     ))
                   ) : (
