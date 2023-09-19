@@ -21,9 +21,7 @@ export interface SidebarProps {
 }
 
 const Sidebar: React.FC<SidebarProps> = observer(({ toggleSidebar, setToggleSidebar }) => {
-  const store: any = useMobxStore();
-  // theme
-  const { collapsed: sidebarCollapse } = useTheme();
+  const store = useMobxStore();
 
   return (
     <div

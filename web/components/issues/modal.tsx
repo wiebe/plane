@@ -118,6 +118,8 @@ export const CreateUpdateIssueModal: React.FC<IssuesModalProps> = observer(
       };
 
     const onClose = () => {
+      setCustomAttributesList({});
+
       if (!showConfirmDiscard) handleClose();
       if (formDirtyState === null) return setActiveProject(null);
       const data = JSON.stringify(formDirtyState);
@@ -125,6 +127,8 @@ export const CreateUpdateIssueModal: React.FC<IssuesModalProps> = observer(
     };
 
     const onDiscardClose = () => {
+      setCustomAttributesList({});
+
       if (formDirtyState !== null) {
         setShowConfirmDiscard(true);
       } else {
