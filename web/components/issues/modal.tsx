@@ -529,6 +529,7 @@ export const CreateUpdateIssueModal: React.FC<IssuesModalProps> = observer(
                       status={data ? true : false}
                       user={user}
                       fieldsToShow={fieldsToShow}
+                      customAttributesList={customAttributesList}
                       handleCustomAttributesChange={handleCustomAttributesChange}
                       handleFormDirty={handleFormDirty}
                     />

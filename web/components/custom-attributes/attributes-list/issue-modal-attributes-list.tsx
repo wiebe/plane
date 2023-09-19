@@ -178,7 +178,7 @@ export const IssueModalCustomAttributesList: React.FC<Props> = observer((props) 
                     issueId={issueId}
                     onChange={(val) => onChange(attribute.id, val)}
                     projectId={projectId}
-                    value={attribute.default_value !== "" ? attribute.default_value : undefined}
+                    value={values[attribute.id]?.[0]}
                     multiple={false}
                   />
                 )}
