@@ -30,19 +30,12 @@ export const ObjectModal: React.FC<Props> = observer(
       description: "",
     });
     const [isCreatingObject, setIsCreatingObject] = useState(false);
+    const [isUpdatingObject, setIsUpdatingObject] = useState(false);
 
     const router = useRouter();
     const { workspaceSlug, projectId } = router.query;
 
-    const { customAttributes: customAttributesStore } = useMobxStore();
-    const {
-      createEntity,
-      createEntityAttribute,
-      createEntityAttributeLoader,
-      entityAttributes,
-      fetchEntityDetails,
-      fetchEntityDetailsLoader,
-    } = customAttributesStore;
+    const { customAttributes } = useMobxStore();
 
     const handleClose = () => {
       onClose();
@@ -52,7 +45,7 @@ export const ObjectModal: React.FC<Props> = observer(
       }, 300);
     };
 
-    const handleCreateEntity = async () => {
+    const handleCreateObject = async () => {
       if (!workspaceSlug || !projectId) return;
 
       setIsCreatingObject(true);
@@ -64,12 +57,28 @@ export const ObjectModal: React.FC<Props> = observer(
         type: "entity",
       };
 
-      await createEntity(workspaceSlug.toString(), payload)
+      await customAttributes
+        .createEntity(workspaceSlug.toString(), payload)
         .then((res) => {
           setObject((prevData) => ({ ...prevData, ...res }));
           if (onSubmit) onSubmit();
         })
         .finally(() => setIsCreatingObject(false));
+    };
+
+    const handleUpdateObject = async () => {
+      if (!workspaceSlug || !object || !object.id) return;
+
+      setIsUpdatingObject(true);
+
+      const payload: Partial<ICustomAttribute> = {
+        description: object.description ?? "",
+        display_name: object.display_name ?? "",
+      };
+
+      await customAttributes
+        .updateEntity(workspaceSlug.toString(), object.id, payload)
+        .finally(() => setIsUpdatingObject(false));
     };
 
     const handleCreateEntityAttribute = async (type: TCustomAttributeTypes) => {
@@ -83,21 +92,24 @@ export const ObjectModal: React.FC<Props> = observer(
         ...typeMetaData.initialPayload,
       };
 
-      await createEntityAttribute(workspaceSlug.toString(), { ...payload, parent: object.id });
+      await customAttributes.createEntityAttribute(workspaceSlug.toString(), {
+        ...payload,
+        parent: object.id,
+      });
     };
 
     // fetch the object details if object state has id
     useEffect(() => {
       if (!object.id || object.id === "") return;
 
-      if (!entityAttributes[object.id]) {
+      if (!customAttributes.entityAttributes[object.id]) {
         if (!workspaceSlug) return;
 
-        fetchEntityDetails(workspaceSlug.toString(), object.id).then((res) => {
+        customAttributes.fetchEntityDetails(workspaceSlug.toString(), object.id).then((res) => {
           setObject({ ...res });
         });
       }
-    }, [object.id, workspaceSlug, fetchEntityDetails, entityAttributes]);
+    }, [customAttributes, object.id, workspaceSlug]);
 
     // update the object state if objectIdToEdit is present
     useEffect(() => {
@@ -163,30 +175,40 @@ export const ObjectModal: React.FC<Props> = observer(
                           setObject((prevData) => ({ ...prevData, description: e.target.value }))
                         }
                       />
+                      {object.id && (
+                        <div className="text-right">
+                          <PrimaryButton onClick={handleUpdateObject} loading={isUpdatingObject}>
+                            {isUpdatingObject ? "Saving..." : "Save changes"}
+                          </PrimaryButton>
+                        </div>
+                      )}
                     </div>
                     {object.id && (
                       <div className="px-6 pb-5">
                         <h4 className="font-medium">Attributes</h4>
                         <div className="mt-2 space-y-2">
-                          {fetchEntityDetailsLoader ? (
+                          {customAttributes.fetchEntityDetailsLoader ? (
                             <Loader>
                               <Loader.Item height="40px" />
                             </Loader>
                           ) : (
-                            Object.keys(entityAttributes[object.id] ?? {})?.map((attributeId) => {
-                              const attribute = entityAttributes[object.id ?? ""][attributeId];
+                            Object.keys(customAttributes.entityAttributes[object.id] ?? {})?.map(
+                              (attributeId) => {
+                                const attribute =
+                                  customAttributes.entityAttributes[object.id ?? ""][attributeId];
 
-                              return (
-                                <AttributeForm
-                                  key={attributeId}
-                                  attributeDetails={attribute}
-                                  objectId={object.id ?? ""}
-                                  type={attribute.type}
-                                />
-                              );
-                            })
+                                return (
+                                  <AttributeForm
+                                    key={attributeId}
+                                    attributeDetails={attribute}
+                                    objectId={object.id ?? ""}
+                                    type={attribute.type}
+                                  />
+                                );
+                              }
+                            )
                           )}
-                          {createEntityAttributeLoader && (
+                          {customAttributes.createEntityAttributeLoader && (
                             <Loader>
                               <Loader.Item height="40px" />
                             </Loader>
@@ -200,13 +222,11 @@ export const ObjectModal: React.FC<Props> = observer(
                   </div>
                   <div className="flex items-center justify-end gap-3 px-6 py-5 border-t border-custom-border-200">
                     <SecondaryButton onClick={handleClose}>Cancel</SecondaryButton>
-                    <PrimaryButton onClick={handleCreateEntity} loading={isCreatingObject}>
-                      {object.id
-                        ? "Save changes"
-                        : isCreatingObject
-                        ? "Creating..."
-                        : "Create Object"}
-                    </PrimaryButton>
+                    {!object.id && (
+                      <PrimaryButton onClick={handleCreateObject} loading={isCreatingObject}>
+                        {isCreatingObject ? "Creating..." : "Create Object"}
+                      </PrimaryButton>
+                    )}
                   </div>
                 </Dialog.Panel>
               </Transition.Child>

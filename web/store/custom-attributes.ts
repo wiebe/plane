@@ -27,6 +27,7 @@ class CustomAttributesStore {
       fetchEntities: action,
       fetchEntityDetails: action,
       createEntity: action,
+      updateEntity: action,
       deleteEntity: action,
       createEntityAttribute: action,
       updateEntityAttribute: action,
@@ -102,6 +103,30 @@ class CustomAttributesStore {
 
       runInAction(() => {
         this.entities = [...(this.entities ?? []), response];
+      });
+
+      return response;
+    } catch (error) {
+      runInAction(() => {
+        this.error = error;
+      });
+    }
+  };
+
+  updateEntity = async (
+    workspaceSlug: string,
+    objectId: string,
+    data: Partial<ICustomAttribute>
+  ) => {
+    try {
+      const response = await customAttributesService.patchProperty(workspaceSlug, objectId, data);
+
+      const newEntities = [...(this.entities ?? [])].map((entity) =>
+        entity.id === objectId ? { ...entity, ...response } : entity
+      );
+
+      runInAction(() => {
+        this.entities = newEntities;
       });
 
       return response;
