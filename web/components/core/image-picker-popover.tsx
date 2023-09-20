@@ -21,6 +21,8 @@ import { Input, Spinner, PrimaryButton, SecondaryButton } from "components/ui";
 // hooks
 import useWorkspaceDetails from "hooks/use-workspace-details";
 import useOutsideClickDetector from "hooks/use-outside-click-detector";
+// constants
+import { MAX_FILE_SIZE } from "constants/workspace";
 
 const unsplashEnabled =
   process.env.NEXT_PUBLIC_UNSPLASH_ENABLED === "true" ||
@@ -81,7 +83,7 @@ export const ImagePickerPopover: React.FC<Props> = ({
     accept: {
       "image/*": [".png", ".jpg", ".jpeg", ".svg", ".webp"],
     },
-    maxSize: 5 * 1024 * 1024,
+    maxSize: MAX_FILE_SIZE,
   });
 
   const handleSubmit = async () => {

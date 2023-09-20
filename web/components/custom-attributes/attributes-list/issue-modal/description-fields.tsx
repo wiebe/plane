@@ -54,7 +54,7 @@ export const CustomAttributesDescriptionFields: React.FC<Props> = observer((prop
                     size={14}
                     strokeWidth={1.5}
                   />
-                  Custom Attributes
+                  Form Attributes
                 </Disclosure.Button>
                 <div className={`flex items-center gap-1 ${open ? "" : "hidden"}`}>
                   <span className="text-xs">Hide optional fields</span>

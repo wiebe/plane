@@ -14,6 +14,8 @@ import useWorkspaceDetails from "hooks/use-workspace-details";
 import { DangerButton, PrimaryButton, SecondaryButton } from "components/ui";
 // icons
 import { UserCircleIcon } from "components/icons";
+// constants
+import { MAX_FILE_SIZE } from "constants/workspace";
 
 type Props = {
   value?: string | null;
@@ -51,7 +53,7 @@ export const ImageUploadModal: React.FC<Props> = ({
     accept: {
       "image/*": [".png", ".jpg", ".jpeg", ".svg", ".webp"],
     },
-    maxSize: 5 * 1024 * 1024,
+    maxSize: MAX_FILE_SIZE,
   });
 
   const handleSubmit = async () => {

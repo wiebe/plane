@@ -77,13 +77,14 @@ export const CreateUpdateIssueModal: React.FC<IssuesModalProps> = observer(
     isOpen,
     isUpdatingSingleIssue = false,
     onSubmit,
-    prePopulateData,
+    prePopulateData: prePopulateDataProps,
   }) => {
     // states
     const [createMore, setCreateMore] = useState(false);
     const [formDirtyState, setFormDirtyState] = useState<any>(null);
     const [showConfirmDiscard, setShowConfirmDiscard] = useState(false);
     const [activeProject, setActiveProject] = useState<string | null>(null);
+    const [prePopulateData, setPreloadedData] = useState<Partial<IIssue>>({});
 
     const [customAttributesList, setCustomAttributesList] = useState<{ [key: string]: string[] }>(
       {}
@@ -110,11 +111,40 @@ export const CreateUpdateIssueModal: React.FC<IssuesModalProps> = observer(
 
     const { setToastAlert } = useToast();
 
-    if (router.asPath.includes("my-issues") || router.asPath.includes("assigned"))
-      prePopulateData = {
-        ...prePopulateData,
-        assignees: [...(prePopulateData?.assignees ?? []), user?.id ?? ""],
-      };
+    useEffect(() => {
+      setPreloadedData(prePopulateDataProps ?? {});
+
+      if (cycleId && !prePopulateDataProps?.cycle) {
+        setPreloadedData((prevData) => ({
+          ...(prevData ?? {}),
+          ...prePopulateDataProps,
+          cycle: cycleId.toString(),
+        }));
+      }
+      if (moduleId && !prePopulateDataProps?.module) {
+        setPreloadedData((prevData) => ({
+          ...(prevData ?? {}),
+          ...prePopulateDataProps,
+          module: moduleId.toString(),
+        }));
+      }
+      if (
+        (router.asPath.includes("my-issues") || router.asPath.includes("assigned")) &&
+        !prePopulateDataProps?.assignees
+      ) {
+        setPreloadedData((prevData) => ({
+          ...(prevData ?? {}),
+          ...prePopulateDataProps,
+          assignees: prePopulateDataProps?.assignees ?? [user?.id ?? ""],
+        }));
+      }
+    }, [prePopulateDataProps, cycleId, moduleId, router.asPath, user?.id]);
+
+    /**
+     *
+     * @description This function is used to close the modals. This function will show a confirm discard modal if the form is dirty.
+     * @returns void
+     */
 
     const onClose = () => {
       setCustomAttributesList({});
@@ -125,12 +155,27 @@ export const CreateUpdateIssueModal: React.FC<IssuesModalProps> = observer(
       setValueInLocalStorage(data);
     };
 
+    /**
+     * @description This function is used to close the modals. This function is to be used when the form is submitted,
+     * meaning we don't need to show the confirm discard modal or store the form data in local storage.
+     */
+
+    const onFormSubmitClose = () => {
+      setFormDirtyState(null);
+      handleClose();
+    };
+
+    /**
+     * @description This function is used to close the modals. This function is to be used when we click outside the modal,
+     * meaning we don't need to show the confirm discard modal but will store the form data in local storage.
+     * Use this function when you want to store the form data in local storage.
+     */
+
     const onDiscardClose = () => {
       setCustomAttributesList({});
 
-      if (formDirtyState !== null) {
-        setShowConfirmDiscard(true);
-      } else {
+      if (formDirtyState !== null) setShowConfirmDiscard(true);
+      else {
         handleClose();
         setActiveProject(null);
       }
@@ -246,27 +291,6 @@ export const CreateUpdateIssueModal: React.FC<IssuesModalProps> = observer(
         });
     };
 
-    useEffect(() => {
-      // if modal is closed, reset active project to null
-      // and return to avoid activeProject being set to some other project
-      if (!isOpen) {
-        setActiveProject(null);
-        return;
-      }
-
-      // if data is present, set active project to the project of the
-      // issue. This has more priority than the project in the url.
-      if (data && data.project) {
-        setActiveProject(data.project);
-        return;
-      }
-
-      // if data is not present, set active project to the project
-      // in the url. This has the least priority.
-      if (projects && projects.length > 0 && !activeProject)
-        setActiveProject(projects?.find((p) => p.id === projectId)?.id ?? projects?.[0].id ?? null);
-    }, [activeProject, data, projectId, projects, isOpen]);
-
     const calendarFetchKey = cycleId
       ? CYCLE_ISSUES_WITH_PARAMS(cycleId.toString(), calendarParams)
       : moduleId
@@ -335,7 +359,7 @@ export const CreateUpdateIssueModal: React.FC<IssuesModalProps> = observer(
             });
           });
 
-      if (!createMore) onDiscardClose();
+      if (!createMore) onFormSubmitClose();
 
       return issueToReturn;
     };
@@ -388,9 +412,9 @@ export const CreateUpdateIssueModal: React.FC<IssuesModalProps> = observer(
         .then((res) => {
           issueToReturn = res;
 
-          if (isUpdatingSingleIssue) {
+          if (isUpdatingSingleIssue)
             mutate<IIssue>(PROJECT_ISSUES_DETAILS, (prevData) => ({ ...prevData, ...res }), false);
-          } else {
+          else {
             if (displayFilters.layout === "calendar") mutate(calendarFetchKey);
             if (displayFilters.layout === "spreadsheet") mutate(spreadsheetFetchKey);
             if (payload.parent) mutate(SUB_ISSUES(payload.parent.toString()));
@@ -400,7 +424,7 @@ export const CreateUpdateIssueModal: React.FC<IssuesModalProps> = observer(
           if (payload.cycle && payload.cycle !== "") addIssueToCycle(res.id, payload.cycle);
           if (payload.module && payload.module !== "") addIssueToModule(res.id, payload.module);
 
-          if (!createMore) onDiscardClose();
+          if (!createMore) onFormSubmitClose();
 
           setToastAlert({
             type: "success",

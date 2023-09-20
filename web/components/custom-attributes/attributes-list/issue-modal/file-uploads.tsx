@@ -7,6 +7,8 @@ import { useMobxStore } from "lib/mobx/store-provider";
 import { observer } from "mobx-react-lite";
 // react-dropzone
 import { useDropzone } from "react-dropzone";
+// headless ui
+import { Disclosure } from "@headlessui/react";
 // services
 import fileService from "services/file.service";
 // hooks
@@ -14,14 +16,16 @@ import useWorkspaceDetails from "hooks/use-workspace-details";
 import useToast from "hooks/use-toast";
 // components
 // ui
-import { Loader, Tooltip } from "components/ui";
+import { Loader, ToggleSwitch, Tooltip } from "components/ui";
 // icons
-import { Plus, Trash2, X } from "lucide-react";
+import { ChevronDown, Plus, Trash2 } from "lucide-react";
 import { getFileIcon } from "components/icons";
 // helpers
 import { getFileExtension } from "helpers/attachment.helper";
 // types
 import { ICustomAttribute } from "types";
+// constants
+import { MAX_FILE_SIZE } from "constants/workspace";
 
 type Props = {
   entityId: string;
@@ -39,8 +43,6 @@ type FileUploadProps = {
   value: string | undefined;
   onChange: (val: string | undefined) => void;
 };
-
-const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5 MB
 
 const UploadFile: React.FC<FileUploadProps> = (props) => {
   const { attributeDetails, className = "", onChange, value } = props;
@@ -198,27 +200,49 @@ export const CustomAttributesFileUploads: React.FC<Props> = observer((props) => 
           <Loader.Item height="35px" />
         </Loader>
       ) : (
-        <div>
-          <h5 className="text-sm">File uploads</h5>
-          <div className="mt-3.5 grid grid-cols-3 gap-4">
-            {Object.entries(fileUploadFields).map(([attributeId, attribute]) => (
-              <div key={attributeId}>
-                <Tooltip tooltipContent={attribute.display_name} position="top-left">
-                  <p className="text-xs text-custom-text-300 truncate">{attribute.display_name}</p>
-                </Tooltip>
-                <div className="flex-shrink-0 mt-2">
-                  <UploadFile
-                    attributeDetails={attribute}
-                    issueId={issueId}
-                    onChange={(val) => onChange(attribute.id, val)}
-                    projectId={projectId}
-                    value={values[attribute.id]?.[0] ? values[attribute.id]?.[0] : undefined}
+        <Disclosure defaultOpen>
+          {({ open }) => (
+            <>
+              <div className="flex items-center justify-between gap-2">
+                <Disclosure.Button className="font-medium flex items-center gap-2">
+                  <ChevronDown
+                    className={`transition-all ${open ? "" : "-rotate-90"}`}
+                    size={14}
+                    strokeWidth={1.5}
                   />
-                </div>
+                  Attachment attributes
+                </Disclosure.Button>
+                {/* <div className={`flex items-center gap-1 ${open ? "" : "hidden"}`}>
+                  <span className="text-xs">Hide optional fields</span>
+                  <ToggleSwitch
+                    value={hideOptionalFields}
+                    onChange={() => setHideOptionalFields((prev) => !prev)}
+                  />
+                </div> */}
               </div>
-            ))}
-          </div>
-        </div>
+              <Disclosure.Panel className="mt-2 grid grid-cols-3 gap-4">
+                {Object.entries(fileUploadFields).map(([attributeId, attribute]) => (
+                  <div key={attributeId}>
+                    <Tooltip tooltipContent={attribute.display_name} position="top-left">
+                      <p className="text-xs text-custom-text-300 truncate">
+                        {attribute.display_name}
+                      </p>
+                    </Tooltip>
+                    <div className="flex-shrink-0 mt-2">
+                      <UploadFile
+                        attributeDetails={attribute}
+                        issueId={issueId}
+                        onChange={(val) => onChange(attribute.id, val)}
+                        projectId={projectId}
+                        value={values[attribute.id]?.[0] ? values[attribute.id]?.[0] : undefined}
+                      />
+                    </div>
+                  </div>
+                ))}
+              </Disclosure.Panel>
+            </>
+          )}
+        </Disclosure>
       )}
     </>
   );

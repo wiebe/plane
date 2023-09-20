@@ -14,8 +14,8 @@ import useToast from "hooks/use-toast";
 import { IIssueAttachment } from "types";
 // fetch-keys
 import { ISSUE_ATTACHMENTS, PROJECT_ISSUES_ACTIVITY } from "constants/fetch-keys";
-
-const maxFileSize = 5 * 1024 * 1024; // 5 MB
+// constants
+import { MAX_FILE_SIZE } from "constants/workspace";
 
 type Props = {
   disabled?: boolean;
@@ -64,7 +64,7 @@ export const IssueAttachmentUpload: React.FC<Props> = ({ disabled = false }) => 
         });
         setIsLoading(false);
       })
-      .catch((err) => {
+      .catch(() => {
         setIsLoading(false);
         setToastAlert({
           type: "error",
@@ -77,14 +77,14 @@ export const IssueAttachmentUpload: React.FC<Props> = ({ disabled = false }) => 
 
   const { getRootProps, getInputProps, isDragActive, isDragReject, fileRejections } = useDropzone({
     onDrop,
-    maxSize: maxFileSize,
+    maxSize: MAX_FILE_SIZE,
     multiple: false,
     disabled: isLoading || disabled,
   });
 
   const fileError =
     fileRejections.length > 0
-      ? `Invalid file type or size (max ${maxFileSize / 1024 / 1024} MB)`
+      ? `Invalid file type or size (max ${MAX_FILE_SIZE / 1024 / 1024} MB)`
       : null;
 
   return (

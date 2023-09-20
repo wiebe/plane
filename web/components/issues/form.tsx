@@ -135,6 +135,8 @@ export const IssueForm: FC<IssueFormProps> = observer((props) => {
     target_date: getValues("target_date"),
     project: getValues("project"),
     parent: getValues("parent"),
+    cycle: getValues("cycle"),
+    module: getValues("module"),
   };
 
   const entityId = watch("entity");

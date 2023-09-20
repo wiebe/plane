@@ -16,6 +16,8 @@ import { X } from "lucide-react";
 import { getFileExtension } from "helpers/attachment.helper";
 // types
 import { ICustomAttribute } from "types";
+// constants
+import { MAX_FILE_SIZE } from "constants/workspace";
 
 type Props = {
   attributeDetails: ICustomAttribute;
@@ -25,8 +27,6 @@ type Props = {
   value: string | undefined;
   onChange: (val: string | undefined) => void;
 };
-
-const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5 MB
 
 export const CustomFileAttribute: React.FC<Props> = (props) => {
   const { attributeDetails, className = "", onChange, value } = props;

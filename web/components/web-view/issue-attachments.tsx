@@ -26,6 +26,8 @@ import { DeleteAttachmentModal } from "components/issues";
 
 // types
 import type { IIssueAttachment } from "types";
+// constants
+import { MAX_FILE_SIZE } from "constants/workspace";
 
 type Props = {
   allowed: boolean;
@@ -102,7 +104,7 @@ export const IssueAttachments: React.FC<Props> = (props) => {
 
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
-    maxSize: 5 * 1024 * 1024,
+    maxSize: MAX_FILE_SIZE,
     disabled: !allowed || isLoading,
   });
 
