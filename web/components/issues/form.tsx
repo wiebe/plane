@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 
 // mobx
 import { observer } from "mobx-react-lite";
+import { useMobxStore } from "lib/mobx/store-provider";
 // react-hook-form
 import { Controller, useForm } from "react-hook-form";
 // services
@@ -27,6 +28,7 @@ import { CreateLabelModal } from "components/labels";
 import {
   CustomAttributesCheckboxes,
   CustomAttributesDescriptionFields,
+  CustomAttributesFileUploads,
   CustomAttributesSelectFields,
   ObjectsSelect,
 } from "components/custom-attributes";
@@ -103,6 +105,8 @@ export const IssueForm: FC<IssueFormProps> = observer((props) => {
 
   const { setToastAlert } = useToast();
 
+  const { customAttributes, customAttributeValues } = useMobxStore();
+
   const {
     register,
     formState: { errors, isSubmitting, isDirty },
@@ -132,6 +136,8 @@ export const IssueForm: FC<IssueFormProps> = observer((props) => {
     project: getValues("project"),
     parent: getValues("parent"),
   };
+
+  const entityId = watch("entity");
 
   useEffect(() => {
     if (isDirty) handleFormDirty(payload);
@@ -233,6 +239,59 @@ export const IssueForm: FC<IssueFormProps> = observer((props) => {
 
   const maxDate = targetDate ? new Date(targetDate) : null;
   maxDate?.setDate(maxDate.getDate());
+
+  // fetch entity/object details, including the list of attributes
+  useEffect(() => {
+    if (!entityId) return;
+
+    if (!customAttributes.entityAttributes[entityId]) {
+      if (!workspaceSlug) return;
+
+      customAttributes.fetchEntityDetails(workspaceSlug.toString(), entityId);
+    }
+  }, [customAttributes, entityId, workspaceSlug]);
+
+  // fetch issue attribute values
+  useEffect(() => {
+    if (!initialData || !initialData.id) return;
+
+    if (
+      !customAttributeValues.issueAttributeValues ||
+      !customAttributeValues.issueAttributeValues[initialData.id]
+    ) {
+      if (!workspaceSlug) return;
+
+      customAttributeValues
+        .fetchIssueAttributeValues(workspaceSlug.toString(), projectId, initialData.id)
+        .then(() => {
+          const issueAttributeValues =
+            customAttributeValues.issueAttributeValues?.[initialData.id ?? ""];
+
+          if (!issueAttributeValues || issueAttributeValues.length === 0) return;
+
+          issueAttributeValues.forEach((attributeValue) => {
+            if (attributeValue.prop_value)
+              handleCustomAttributesChange(
+                attributeValue.id,
+                attributeValue.prop_value.map((val) => val.value)
+              );
+          });
+        });
+    } else {
+      const issueAttributeValues =
+        customAttributeValues.issueAttributeValues?.[initialData.id ?? ""];
+
+      if (!issueAttributeValues || issueAttributeValues.length === 0) return;
+
+      issueAttributeValues.forEach((attributeValue) => {
+        if (attributeValue.prop_value)
+          handleCustomAttributesChange(
+            attributeValue.id,
+            attributeValue.prop_value.map((val) => val.value)
+          );
+      });
+    }
+  }, [customAttributeValues, handleCustomAttributesChange, initialData, projectId, workspaceSlug]);
 
   return (
     <>
@@ -414,17 +473,24 @@ export const IssueForm: FC<IssueFormProps> = observer((props) => {
                   />
                 </div>
               )}
-              {watch("entity") !== null && (
+              {entityId !== null && (
                 <div className="space-y-5">
                   <CustomAttributesDescriptionFields
-                    entityId={watch("entity") ?? ""}
+                    entityId={entityId ?? ""}
                     issueId={watch("id") ?? ""}
                     onChange={handleCustomAttributesChange}
                     projectId={projectId}
                     values={customAttributesList}
                   />
                   <CustomAttributesCheckboxes
-                    entityId={watch("entity") ?? ""}
+                    entityId={entityId ?? ""}
+                    issueId={watch("id") ?? ""}
+                    onChange={handleCustomAttributesChange}
+                    projectId={projectId}
+                    values={customAttributesList}
+                  />
+                  <CustomAttributesFileUploads
+                    entityId={entityId ?? ""}
                     issueId={watch("id") ?? ""}
                     onChange={handleCustomAttributesChange}
                     projectId={projectId}
@@ -452,7 +518,7 @@ export const IssueForm: FC<IssueFormProps> = observer((props) => {
               />
             )}
             {/* default object properties */}
-            {watch("entity") === null ? (
+            {entityId === null ? (
               <>
                 {(fieldsToShow.includes("all") || fieldsToShow.includes("priority")) && (
                   <Controller
@@ -580,7 +646,7 @@ export const IssueForm: FC<IssueFormProps> = observer((props) => {
               </>
             ) : (
               <CustomAttributesSelectFields
-                entityId={watch("entity") ?? ""}
+                entityId={entityId ?? ""}
                 issueId={watch("id") ?? ""}
                 onChange={handleCustomAttributesChange}
                 projectId={projectId}

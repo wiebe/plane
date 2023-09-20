@@ -1,7 +1,3 @@
-import { useEffect } from "react";
-
-import { useRouter } from "next/router";
-
 // mobx
 import { useMobxStore } from "lib/mobx/store-provider";
 import { observer } from "mobx-react-lite";
@@ -30,28 +26,15 @@ const SELECT_FIELDS: TCustomAttributeTypes[] = ["datetime", "multi_select", "rel
 export const CustomAttributesSelectFields: React.FC<Props> = observer((props) => {
   const { entityId, issueId, onChange, projectId, values } = props;
 
-  const router = useRouter();
-  const { workspaceSlug } = router.query;
+  const { customAttributes } = useMobxStore();
 
-  const { customAttributes: customAttributesStore } = useMobxStore();
-  const { entityAttributes, fetchEntityDetails, fetchEntityDetailsLoader } = customAttributesStore;
-
-  const attributes = entityAttributes[entityId] ?? {};
-
-  // fetch entity details
-  useEffect(() => {
-    if (!entityAttributes[entityId]) {
-      if (!workspaceSlug) return;
-
-      fetchEntityDetails(workspaceSlug.toString(), entityId);
-    }
-  }, [entityAttributes, entityId, fetchEntityDetails, workspaceSlug]);
+  const attributes = customAttributes.entityAttributes[entityId] ?? {};
 
   const selectFields = Object.values(attributes).filter((a) => SELECT_FIELDS.includes(a.type));
 
   return (
     <>
-      {fetchEntityDetailsLoader ? (
+      {customAttributes.fetchEntityDetailsLoader ? (
         <Loader className="flex items-center gap-2">
           <Loader.Item height="27px" width="90px" />
           <Loader.Item height="27px" width="90px" />

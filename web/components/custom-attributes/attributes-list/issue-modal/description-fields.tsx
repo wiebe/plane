@@ -1,6 +1,4 @@
-import { useEffect, useState } from "react";
-
-import { useRouter } from "next/router";
+import { useState } from "react";
 
 // mobx
 import { useMobxStore } from "lib/mobx/store-provider";
@@ -25,26 +23,13 @@ type Props = {
 const DESCRIPTION_FIELDS: TCustomAttributeTypes[] = ["email", "number", "text", "url"];
 
 export const CustomAttributesDescriptionFields: React.FC<Props> = observer((props) => {
-  const { entityId, issueId, onChange, projectId, values } = props;
+  const { entityId, onChange, values } = props;
 
   const [hideOptionalFields, setHideOptionalFields] = useState(false);
 
-  const router = useRouter();
-  const { workspaceSlug } = router.query;
+  const { customAttributes } = useMobxStore();
 
-  const { customAttributes: customAttributesStore } = useMobxStore();
-  const { entityAttributes, fetchEntityDetails, fetchEntityDetailsLoader } = customAttributesStore;
-
-  const attributes = entityAttributes[entityId] ?? {};
-
-  // fetch entity details
-  useEffect(() => {
-    if (!entityAttributes[entityId]) {
-      if (!workspaceSlug) return;
-
-      fetchEntityDetails(workspaceSlug.toString(), entityId);
-    }
-  }, [entityAttributes, entityId, fetchEntityDetails, workspaceSlug]);
+  const attributes = customAttributes.entityAttributes[entityId] ?? {};
 
   const descriptionFields = Object.values(attributes).filter((a) =>
     DESCRIPTION_FIELDS.includes(a.type)
@@ -52,11 +37,11 @@ export const CustomAttributesDescriptionFields: React.FC<Props> = observer((prop
 
   return (
     <>
-      {fetchEntityDetailsLoader ? (
-        <Loader className="flex items-center gap-2">
-          <Loader.Item height="27px" width="90px" />
-          <Loader.Item height="27px" width="90px" />
-          <Loader.Item height="27px" width="90px" />
+      {customAttributes.fetchEntityDetailsLoader ? (
+        <Loader className="space-y-3.5">
+          <Loader.Item height="35px" />
+          <Loader.Item height="35px" />
+          <Loader.Item height="35px" />
         </Loader>
       ) : (
         <Disclosure defaultOpen>

@@ -92,8 +92,7 @@ export const CreateUpdateIssueModal: React.FC<IssuesModalProps> = observer(
     const router = useRouter();
     const { workspaceSlug, projectId, cycleId, moduleId, viewId, inboxId } = router.query;
 
-    const { customAttributeValues: customAttributeValuesStore } = useMobxStore();
-    const { createAttributeValue } = customAttributeValuesStore;
+    const { customAttributeValues } = useMobxStore();
 
     const { displayFilters, params } = useIssuesView();
     const { params: calendarParams } = useCalendarIssuesView();
@@ -452,9 +451,14 @@ export const CreateUpdateIssueModal: React.FC<IssuesModalProps> = observer(
         issueResponse.id &&
         Object.keys(customAttributesList).length > 0
       )
-        await createAttributeValue(workspaceSlug.toString(), activeProject, issueResponse.id, {
-          issue_properties: customAttributesList,
-        });
+        await customAttributeValues.createAttributeValue(
+          workspaceSlug.toString(),
+          activeProject,
+          issueResponse.id,
+          {
+            issue_properties: customAttributesList,
+          }
+        );
 
       if (onSubmit) await onSubmit(payload);
     };
