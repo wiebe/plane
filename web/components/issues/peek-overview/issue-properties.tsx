@@ -3,11 +3,9 @@ import { Disclosure } from "@headlessui/react";
 import { StateGroupIcon } from "components/icons";
 // hooks
 import useToast from "hooks/use-toast";
-import useUser from "hooks/use-user";
 // components
 import {
   SidebarAssigneeSelect,
-  SidebarEstimateSelect,
   SidebarPrioritySelect,
   SidebarStateSelect,
   TPeekOverviewModes,

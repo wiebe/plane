@@ -10,7 +10,7 @@ class CustomAttributesService extends APIService {
     super(NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000");
   }
 
-  async getEntitiesList(
+  async getObjectsList(
     workspaceSlug: string,
     params: { project: string }
   ): Promise<ICustomAttribute[]> {

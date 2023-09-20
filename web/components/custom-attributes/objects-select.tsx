@@ -28,13 +28,13 @@ export const ObjectsSelect: React.FC<Props> = observer(({ onChange, projectId, v
         query: string;
         content: JSX.Element;
       }[]
-    | undefined = customAttributes.entities?.map((entity) => ({
-    value: entity.id,
-    query: entity.display_name,
+    | undefined = customAttributes.objects?.map((object) => ({
+    value: object.id,
+    query: object.display_name,
     content: (
       <div className="flex items-center gap-2 text-xs">
-        {entity.icon ? renderEmoji(entity.icon) : <TableProperties size={14} strokeWidth={1.5} />}
-        <span>{entity.display_name}</span>
+        {object.icon ? renderEmoji(object.icon) : <TableProperties size={14} strokeWidth={1.5} />}
+        <span>{object.display_name}</span>
       </div>
     ),
   }));
@@ -52,23 +52,23 @@ export const ObjectsSelect: React.FC<Props> = observer(({ onChange, projectId, v
   useEffect(() => {
     if (!workspaceSlug) return;
 
-    if (!customAttributes.entities)
-      customAttributes.fetchEntities(workspaceSlug.toString(), projectId);
+    if (!customAttributes.objects)
+      customAttributes.fetchObjects(workspaceSlug.toString(), projectId);
   }, [customAttributes, projectId, workspaceSlug]);
 
-  const selectedEntity = customAttributes.entities?.find((e) => e.id === value);
+  const selectedObject = customAttributes.objects?.find((o) => o.id === value);
 
   return (
     <CustomSearchSelect
       label={
         <span className="flex items-center gap-2">
           <div className="flex items-center gap-2 text-xs">
-            {selectedEntity?.icon ? (
-              renderEmoji(selectedEntity.icon)
+            {selectedObject?.icon ? (
+              renderEmoji(selectedObject.icon)
             ) : (
               <TableProperties size={14} strokeWidth={1.5} />
             )}
-            <span>{selectedEntity?.display_name ?? "Default"}</span>
+            <span>{selectedObject?.display_name ?? "Default"}</span>
           </div>
         </span>
       }

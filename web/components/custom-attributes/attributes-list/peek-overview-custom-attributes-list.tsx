@@ -67,10 +67,10 @@ export const PeekOverviewCustomAttributesList: React.FC<Props> = observer(
     useEffect(() => {
       if (!issue?.entity) return;
 
-      if (!customAttributes.entityAttributes[issue.entity]) {
+      if (!customAttributes.objectAttributes[issue.entity]) {
         if (!workspaceSlug) return;
 
-        customAttributes.fetchEntityDetails(workspaceSlug.toString(), issue.entity);
+        customAttributes.fetchObjectDetails(workspaceSlug.toString(), issue.entity);
       }
     }, [customAttributes, issue?.entity, workspaceSlug]);
 
@@ -95,7 +95,7 @@ export const PeekOverviewCustomAttributesList: React.FC<Props> = observer(
     if (!issue || !issue?.entity) return null;
 
     if (
-      !customAttributes.entityAttributes[issue.entity] ||
+      !customAttributes.objectAttributes[issue.entity] ||
       !customAttributeValues.issueAttributeValues?.[issue.id]
     )
       return (
@@ -109,7 +109,7 @@ export const PeekOverviewCustomAttributesList: React.FC<Props> = observer(
 
     return (
       <>
-        {Object.values(customAttributes.entityAttributes?.[issue.entity] ?? {}).map((attribute) => {
+        {Object.values(customAttributes.objectAttributes?.[issue.entity] ?? {}).map((attribute) => {
           const typeMetaData = CUSTOM_ATTRIBUTES_LIST[attribute.type];
           const attributeValue = customAttributeValues.issueAttributeValues?.[issue.id].find(
             (a) => a.id === attribute.id

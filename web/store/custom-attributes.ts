@@ -6,14 +6,14 @@ import customAttributesService from "services/custom-attributes.service";
 import type { ICustomAttribute } from "types";
 
 class CustomAttributesStore {
-  entities: ICustomAttribute[] | null = null;
-  entityAttributes: {
-    [entityId: string]: { [entityAttributeId: string]: ICustomAttribute };
+  objects: ICustomAttribute[] | null = null;
+  objectAttributes: {
+    [objectId: string]: { [objectAttributeId: string]: ICustomAttribute };
   } = {};
   // loaders
-  fetchEntitiesLoader = false;
-  fetchEntityDetailsLoader = false;
-  createEntityAttributeLoader = false;
+  fetchObjectsLoader = false;
+  fetchObjectDetailsLoader = false;
+  createObjectAttributeLoader = false;
   createAttributeOptionLoader = false;
   // errors
   attributesFetchError: any | null = null;
@@ -22,16 +22,16 @@ class CustomAttributesStore {
 
   constructor(_rootStore: any | null = null) {
     makeAutoObservable(this, {
-      entities: observable.ref,
-      entityAttributes: observable.ref,
-      fetchEntities: action,
-      fetchEntityDetails: action,
-      createEntity: action,
-      updateEntity: action,
-      deleteEntity: action,
-      createEntityAttribute: action,
-      updateEntityAttribute: action,
-      deleteEntityAttribute: action,
+      objects: observable.ref,
+      objectAttributes: observable.ref,
+      fetchObjects: action,
+      fetchObjectDetails: action,
+      createObject: action,
+      updateObject: action,
+      deleteObject: action,
+      createObjectAttribute: action,
+      updateObjectAttribute: action,
+      deleteObjectAttribute: action,
       createAttributeOption: action,
       updateAttributeOption: action,
       deleteAttributeOption: action,
@@ -40,39 +40,39 @@ class CustomAttributesStore {
     this.rootStore = _rootStore;
   }
 
-  fetchEntities = async (workspaceSlug: string, projectId: string) => {
+  fetchObjects = async (workspaceSlug: string, projectId: string) => {
     try {
       runInAction(() => {
-        this.fetchEntitiesLoader = true;
+        this.fetchObjectsLoader = true;
       });
 
-      const response = await customAttributesService.getEntitiesList(workspaceSlug, {
+      const response = await customAttributesService.getObjectsList(workspaceSlug, {
         project: projectId,
       });
 
       if (response) {
         runInAction(() => {
-          this.entities = response;
-          this.fetchEntitiesLoader = false;
+          this.objects = response;
+          this.fetchObjectsLoader = false;
         });
       }
     } catch (error) {
       runInAction(() => {
-        this.fetchEntitiesLoader = false;
+        this.fetchObjectsLoader = false;
         this.attributesFetchError = error;
       });
     }
   };
 
-  fetchEntityDetails = async (workspaceSlug: string, propertyId: string) => {
+  fetchObjectDetails = async (workspaceSlug: string, propertyId: string) => {
     try {
       runInAction(() => {
-        this.fetchEntityDetailsLoader = true;
+        this.fetchObjectDetailsLoader = true;
       });
 
       const response = await customAttributesService.getPropertyDetails(workspaceSlug, propertyId);
 
-      const entityChildren: { [key: string]: ICustomAttribute } = response.children.reduce(
+      const objectChildren: { [key: string]: ICustomAttribute } = response.children.reduce(
         (acc, child) => ({
           ...acc,
           [child.id]: child,
@@ -81,28 +81,28 @@ class CustomAttributesStore {
       );
 
       runInAction(() => {
-        this.entityAttributes = {
-          ...this.entityAttributes,
-          [propertyId]: entityChildren,
+        this.objectAttributes = {
+          ...this.objectAttributes,
+          [propertyId]: objectChildren,
         };
-        this.fetchEntityDetailsLoader = false;
+        this.fetchObjectDetailsLoader = false;
       });
 
       return response;
     } catch (error) {
       runInAction(() => {
-        this.fetchEntityDetailsLoader = false;
+        this.fetchObjectDetailsLoader = false;
         this.error = error;
       });
     }
   };
 
-  createEntity = async (workspaceSlug: string, data: Partial<ICustomAttribute>) => {
+  createObject = async (workspaceSlug: string, data: Partial<ICustomAttribute>) => {
     try {
       const response = await customAttributesService.createProperty(workspaceSlug, data);
 
       runInAction(() => {
-        this.entities = [...(this.entities ?? []), response];
+        this.objects = [...(this.objects ?? []), response];
       });
 
       return response;
@@ -113,7 +113,7 @@ class CustomAttributesStore {
     }
   };
 
-  updateEntity = async (
+  updateObject = async (
     workspaceSlug: string,
     objectId: string,
     data: Partial<ICustomAttribute>
@@ -121,12 +121,12 @@ class CustomAttributesStore {
     try {
       const response = await customAttributesService.patchProperty(workspaceSlug, objectId, data);
 
-      const newEntities = [...(this.entities ?? [])].map((entity) =>
-        entity.id === objectId ? { ...entity, ...response } : entity
+      const newObjects = [...(this.objects ?? [])].map((object) =>
+        object.id === objectId ? { ...object, ...response } : object
       );
 
       runInAction(() => {
-        this.entities = newEntities;
+        this.objects = newObjects;
       });
 
       return response;
@@ -137,14 +137,14 @@ class CustomAttributesStore {
     }
   };
 
-  deleteEntity = async (workspaceSlug: string, propertyId: string) => {
+  deleteObject = async (workspaceSlug: string, propertyId: string) => {
     try {
       await customAttributesService.deleteProperty(workspaceSlug, propertyId);
 
-      const newEntities = this.entities?.filter((entity) => entity.id !== propertyId);
+      const newObjects = this.objects?.filter((object) => object.id !== propertyId);
 
       runInAction(() => {
-        this.entities = [...(newEntities ?? [])];
+        this.objects = [...(newObjects ?? [])];
       });
     } catch (error) {
       runInAction(() => {
@@ -153,38 +153,38 @@ class CustomAttributesStore {
     }
   };
 
-  createEntityAttribute = async (
+  createObjectAttribute = async (
     workspaceSlug: string,
     data: Partial<ICustomAttribute> & { parent: string }
   ) => {
     try {
       runInAction(() => {
-        this.createEntityAttributeLoader = true;
+        this.createObjectAttributeLoader = true;
       });
 
       const response = await customAttributesService.createProperty(workspaceSlug, data);
 
       runInAction(() => {
-        this.entityAttributes = {
-          ...this.entityAttributes,
+        this.objectAttributes = {
+          ...this.objectAttributes,
           [data.parent]: {
-            ...this.entityAttributes[data.parent],
+            ...this.objectAttributes[data.parent],
             [response.id]: response,
           },
         };
-        this.createEntityAttributeLoader = false;
+        this.createObjectAttributeLoader = false;
       });
 
       return response;
     } catch (error) {
       runInAction(() => {
         this.error = error;
-        this.createEntityAttributeLoader = false;
+        this.createObjectAttributeLoader = false;
       });
     }
   };
 
-  updateEntityAttribute = async (
+  updateObjectAttribute = async (
     workspaceSlug: string,
     parentId: string,
     propertyId: string,
@@ -193,16 +193,16 @@ class CustomAttributesStore {
     try {
       await customAttributesService.patchProperty(workspaceSlug, propertyId, data);
 
-      const newEntities = this.entityAttributes[parentId];
-      newEntities[propertyId] = {
-        ...newEntities[propertyId],
+      const newObjects = this.objectAttributes[parentId];
+      newObjects[propertyId] = {
+        ...newObjects[propertyId],
         ...data,
       };
 
       runInAction(() => {
-        this.entityAttributes = {
-          ...this.entityAttributes,
-          [parentId]: newEntities,
+        this.objectAttributes = {
+          ...this.objectAttributes,
+          [parentId]: newObjects,
         };
       });
     } catch (error) {
@@ -212,17 +212,17 @@ class CustomAttributesStore {
     }
   };
 
-  deleteEntityAttribute = async (workspaceSlug: string, parentId: string, propertyId: string) => {
+  deleteObjectAttribute = async (workspaceSlug: string, parentId: string, propertyId: string) => {
     try {
       await customAttributesService.deleteProperty(workspaceSlug, propertyId);
 
-      const newEntities = this.entityAttributes[parentId];
-      delete newEntities[propertyId];
+      const newObjects = this.objectAttributes[parentId];
+      delete newObjects[propertyId];
 
       runInAction(() => {
-        this.entityAttributes = {
-          ...this.entityAttributes,
-          [parentId]: newEntities,
+        this.objectAttributes = {
+          ...this.objectAttributes,
+          [parentId]: newObjects,
         };
       });
     } catch (error) {
@@ -245,13 +245,13 @@ class CustomAttributesStore {
       const response = await customAttributesService.createProperty(workspaceSlug, data);
 
       runInAction(() => {
-        this.entityAttributes = {
-          ...this.entityAttributes,
+        this.objectAttributes = {
+          ...this.objectAttributes,
           [objectId]: {
-            ...this.entityAttributes[objectId],
+            ...this.objectAttributes[objectId],
             [data.parent]: {
-              ...this.entityAttributes[objectId][data.parent],
-              children: [...this.entityAttributes[objectId][data.parent].children, response],
+              ...this.objectAttributes[objectId][data.parent],
+              children: [...this.objectAttributes[objectId][data.parent].children, response],
             },
           },
         };
@@ -277,18 +277,18 @@ class CustomAttributesStore {
     try {
       const response = await customAttributesService.patchProperty(workspaceSlug, propertyId, data);
 
-      const newOptions = this.entityAttributes[objectId][parentId].children.map((option) => ({
+      const newOptions = this.objectAttributes[objectId][parentId].children.map((option) => ({
         ...option,
         ...(option.id === propertyId ? response : {}),
       }));
 
       runInAction(() => {
-        this.entityAttributes = {
-          ...this.entityAttributes,
+        this.objectAttributes = {
+          ...this.objectAttributes,
           [objectId]: {
-            ...this.entityAttributes[objectId],
+            ...this.objectAttributes[objectId],
             [parentId]: {
-              ...this.entityAttributes[objectId][parentId],
+              ...this.objectAttributes[objectId][parentId],
               children: newOptions,
             },
           },
@@ -312,17 +312,17 @@ class CustomAttributesStore {
     try {
       const response = await customAttributesService.deleteProperty(workspaceSlug, propertyId);
 
-      const newOptions = this.entityAttributes[objectId][parentId].children.filter(
+      const newOptions = this.objectAttributes[objectId][parentId].children.filter(
         (option) => option.id !== propertyId
       );
 
       runInAction(() => {
-        this.entityAttributes = {
-          ...this.entityAttributes,
+        this.objectAttributes = {
+          ...this.objectAttributes,
           [objectId]: {
-            ...this.entityAttributes[objectId],
+            ...this.objectAttributes[objectId],
             [parentId]: {
-              ...this.entityAttributes[objectId][parentId],
+              ...this.objectAttributes[objectId][parentId],
               children: newOptions,
             },
           },

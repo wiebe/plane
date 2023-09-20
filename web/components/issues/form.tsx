@@ -253,10 +253,10 @@ export const IssueForm: FC<IssueFormProps> = observer((props) => {
   useEffect(() => {
     if (!entityId) return;
 
-    if (!customAttributes.entityAttributes[entityId]) {
+    if (!customAttributes.objectAttributes[entityId]) {
       if (!workspaceSlug) return;
 
-      customAttributes.fetchEntityDetails(workspaceSlug.toString(), entityId);
+      customAttributes.fetchObjectDetails(workspaceSlug.toString(), entityId);
     }
   }, [customAttributes, entityId, workspaceSlug]);
 
@@ -264,12 +264,12 @@ export const IssueForm: FC<IssueFormProps> = observer((props) => {
   useEffect(() => {
     if (
       !entityId ||
-      !customAttributes.entityAttributes[entityId] ||
+      !customAttributes.objectAttributes[entityId] ||
       Object.keys(customAttributesList).length > 0
     )
       return;
 
-    Object.values(customAttributes.entityAttributes[entityId]).forEach((attribute) => {
+    Object.values(customAttributes.objectAttributes[entityId]).forEach((attribute) => {
       handleCustomAttributesChange(attribute.id, attribute.default_value);
     });
   }, [customAttributes, customAttributesList, entityId, handleCustomAttributesChange]);
@@ -498,7 +498,7 @@ export const IssueForm: FC<IssueFormProps> = observer((props) => {
               )}
               {entityId !== null && (
                 <>
-                  {customAttributes.fetchEntityDetailsLoader ? (
+                  {customAttributes.fetchObjectDetailsLoader ? (
                     <Loader className="space-y-3.5">
                       <Loader.Item height="35px" />
                       <Loader.Item height="35px" />
@@ -507,21 +507,21 @@ export const IssueForm: FC<IssueFormProps> = observer((props) => {
                   ) : (
                     <div className="space-y-5">
                       <CustomAttributesDescriptionFields
-                        entityId={entityId ?? ""}
+                        objectId={entityId ?? ""}
                         issueId={watch("id") ?? ""}
                         onChange={handleCustomAttributesChange}
                         projectId={projectId}
                         values={customAttributesList}
                       />
                       <CustomAttributesCheckboxes
-                        entityId={entityId ?? ""}
+                        objectId={entityId ?? ""}
                         issueId={watch("id") ?? ""}
                         onChange={handleCustomAttributesChange}
                         projectId={projectId}
                         values={customAttributesList}
                       />
                       <CustomAttributesFileUploads
-                        entityId={entityId ?? ""}
+                        objectId={entityId ?? ""}
                         issueId={watch("id") ?? ""}
                         onChange={handleCustomAttributesChange}
                         projectId={projectId}
@@ -679,7 +679,7 @@ export const IssueForm: FC<IssueFormProps> = observer((props) => {
               </>
             ) : (
               <CustomAttributesSelectFields
-                entityId={entityId ?? ""}
+                objectId={entityId ?? ""}
                 issueId={watch("id") ?? ""}
                 onChange={handleCustomAttributesChange}
                 projectId={projectId}

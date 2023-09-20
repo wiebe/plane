@@ -7,7 +7,7 @@ import { CustomCheckboxAttribute } from "components/custom-attributes";
 import { Tooltip } from "components/ui";
 
 type Props = {
-  entityId: string;
+  objectId: string;
   issueId: string;
   onChange: (attributeId: string, val: string | string[] | undefined) => void;
   projectId: string;
@@ -15,11 +15,11 @@ type Props = {
 };
 
 export const CustomAttributesCheckboxes: React.FC<Props> = observer((props) => {
-  const { entityId, issueId, onChange, projectId, values } = props;
+  const { objectId, issueId, onChange, projectId, values } = props;
 
   const { customAttributes } = useMobxStore();
 
-  const attributes = customAttributes.entityAttributes[entityId] ?? {};
+  const attributes = customAttributes.objectAttributes[objectId] ?? {};
 
   const checkboxFields = Object.values(attributes).filter((a) => a.type === "checkbox");
 

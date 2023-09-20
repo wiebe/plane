@@ -40,7 +40,7 @@ export const DeleteObjectModal: React.FC<Props> = observer(
       setIsDeleting(true);
 
       await customAttributes
-        .deleteEntity(workspaceSlug.toString(), objectToDelete.id)
+        .deleteObject(workspaceSlug.toString(), objectToDelete.id)
         .then(async () => {
           if (onSubmit) await onSubmit();
           handleClose();

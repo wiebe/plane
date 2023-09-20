@@ -28,7 +28,7 @@ import { ICustomAttribute } from "types";
 import { MAX_FILE_SIZE } from "constants/workspace";
 
 type Props = {
-  entityId: string;
+  objectId: string;
   issueId: string;
   onChange: (attributeId: string, val: string | string[] | undefined) => void;
   projectId: string;
@@ -183,17 +183,17 @@ const UploadFile: React.FC<FileUploadProps> = (props) => {
 };
 
 export const CustomAttributesFileUploads: React.FC<Props> = observer((props) => {
-  const { entityId, onChange, issueId, projectId, values } = props;
+  const { objectId, onChange, issueId, projectId, values } = props;
 
   const { customAttributes } = useMobxStore();
 
-  const attributes = customAttributes.entityAttributes[entityId] ?? {};
+  const attributes = customAttributes.objectAttributes[objectId] ?? {};
 
   const fileUploadFields = Object.values(attributes).filter((a) => a.type === "file");
 
   return (
     <>
-      {customAttributes.fetchEntityDetailsLoader ? (
+      {customAttributes.fetchObjectDetailsLoader ? (
         <Loader className="space-y-3.5">
           <Loader.Item height="35px" />
           <Loader.Item height="35px" />

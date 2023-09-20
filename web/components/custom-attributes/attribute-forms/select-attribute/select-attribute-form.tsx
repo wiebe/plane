@@ -16,7 +16,7 @@ export const SelectAttributeForm: React.FC<FormComponentProps & { multiple?: boo
 
     const { customAttributes } = useMobxStore();
 
-    const options = customAttributes.entityAttributes?.[objectId]?.[watch("id") ?? ""]?.children;
+    const options = customAttributes.objectAttributes?.[objectId]?.[watch("id") ?? ""]?.children;
 
     return (
       <div className="space-y-3">

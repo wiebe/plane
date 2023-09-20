@@ -13,7 +13,7 @@ import { ChevronDown } from "lucide-react";
 import { TCustomAttributeTypes } from "types";
 
 type Props = {
-  entityId: string;
+  objectId: string;
   issueId: string;
   onChange: (attributeId: string, val: string | string[] | undefined) => void;
   projectId: string;
@@ -23,13 +23,13 @@ type Props = {
 const DESCRIPTION_FIELDS: TCustomAttributeTypes[] = ["email", "number", "text", "url"];
 
 export const CustomAttributesDescriptionFields: React.FC<Props> = observer((props) => {
-  const { entityId, onChange, values } = props;
+  const { objectId, onChange, values } = props;
 
   const [hideOptionalFields, setHideOptionalFields] = useState(false);
 
   const { customAttributes } = useMobxStore();
 
-  const attributes = customAttributes.entityAttributes[entityId] ?? {};
+  const attributes = customAttributes.objectAttributes[objectId] ?? {};
 
   const descriptionFields = Object.values(attributes).filter((a) =>
     DESCRIPTION_FIELDS.includes(a.type)

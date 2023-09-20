@@ -454,7 +454,7 @@ export const CreateUpdateIssueModal: React.FC<IssuesModalProps> = observer(
         state: formData.state,
       };
 
-      // if entity is null, set the default object entity properties for the payload
+      // if entity is null, set the default object properties for the payload
       if (formData.entity === null)
         payload = {
           ...payload,

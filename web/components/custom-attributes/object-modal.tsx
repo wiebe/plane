@@ -61,7 +61,7 @@ export const ObjectModal: React.FC<Props> = observer(
       };
 
       await customAttributes
-        .createEntity(workspaceSlug.toString(), payload)
+        .createObject(workspaceSlug.toString(), payload)
         .then((res) => {
           setObject((prevData) => ({ ...prevData, ...res }));
           if (onSubmit) onSubmit();
@@ -81,11 +81,11 @@ export const ObjectModal: React.FC<Props> = observer(
       };
 
       await customAttributes
-        .updateEntity(workspaceSlug.toString(), object.id, payload)
+        .updateObject(workspaceSlug.toString(), object.id, payload)
         .finally(() => setIsUpdatingObject(false));
     };
 
-    const handleCreateEntityAttribute = async (type: TCustomAttributeTypes) => {
+    const handleCreateObjectAttribute = async (type: TCustomAttributeTypes) => {
       if (!workspaceSlug || !object || !object.id) return;
 
       const typeMetaData = CUSTOM_ATTRIBUTES_LIST[type];
@@ -96,7 +96,7 @@ export const ObjectModal: React.FC<Props> = observer(
         ...typeMetaData.initialPayload,
       };
 
-      await customAttributes.createEntityAttribute(workspaceSlug.toString(), {
+      await customAttributes.createObjectAttribute(workspaceSlug.toString(), {
         ...payload,
         parent: object.id,
       });
@@ -106,16 +106,16 @@ export const ObjectModal: React.FC<Props> = observer(
     useEffect(() => {
       if (!object.id || object.id === "") return;
 
-      if (!customAttributes.entityAttributes[object.id]) {
+      if (!customAttributes.objectAttributes[object.id]) {
         if (!workspaceSlug) return;
 
-        customAttributes.fetchEntityDetails(workspaceSlug.toString(), object.id).then((res) => {
+        customAttributes.fetchObjectDetails(workspaceSlug.toString(), object.id).then((res) => {
           setObject((prev) => ({ ...prev, ...res }));
         });
       } else {
         setObject((prev) => ({
           ...prev,
-          ...customAttributes.entities?.find((e) => e.id === object.id),
+          ...customAttributes.objects?.find((e) => e.id === object.id),
         }));
       }
     }, [customAttributes, object.id, workspaceSlug]);
@@ -204,15 +204,15 @@ export const ObjectModal: React.FC<Props> = observer(
                       <div className="px-6 pb-5">
                         <h4 className="font-medium">Attributes</h4>
                         <div className="mt-2 space-y-2">
-                          {customAttributes.fetchEntityDetailsLoader ? (
+                          {customAttributes.fetchObjectDetailsLoader ? (
                             <Loader>
                               <Loader.Item height="40px" />
                             </Loader>
                           ) : (
-                            Object.keys(customAttributes.entityAttributes[object.id] ?? {})?.map(
+                            Object.keys(customAttributes.objectAttributes[object.id] ?? {})?.map(
                               (attributeId) => {
                                 const attribute =
-                                  customAttributes.entityAttributes[object.id ?? ""][attributeId];
+                                  customAttributes.objectAttributes[object.id ?? ""][attributeId];
 
                                 return (
                                   <AttributeForm
@@ -225,7 +225,7 @@ export const ObjectModal: React.FC<Props> = observer(
                               }
                             )
                           )}
-                          {customAttributes.createEntityAttributeLoader && (
+                          {customAttributes.createObjectAttributeLoader && (
                             <Loader>
                               <Loader.Item height="40px" />
                             </Loader>
@@ -241,7 +241,7 @@ export const ObjectModal: React.FC<Props> = observer(
                   >
                     {object.id && (
                       <div className="flex-shrink-0">
-                        <TypesDropdown onClick={handleCreateEntityAttribute} />
+                        <TypesDropdown onClick={handleCreateObjectAttribute} />
                       </div>
                     )}
                     <div className="flex items-center gap-3">

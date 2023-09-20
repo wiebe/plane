@@ -14,7 +14,7 @@ import { Loader } from "components/ui";
 import { TCustomAttributeTypes } from "types";
 
 type Props = {
-  entityId: string;
+  objectId: string;
   issueId: string;
   onChange: (attributeId: string, val: string | string[] | undefined) => void;
   projectId: string;
@@ -24,17 +24,17 @@ type Props = {
 const SELECT_FIELDS: TCustomAttributeTypes[] = ["datetime", "multi_select", "relation", "select"];
 
 export const CustomAttributesSelectFields: React.FC<Props> = observer((props) => {
-  const { entityId, issueId, onChange, projectId, values } = props;
+  const { objectId, issueId, onChange, projectId, values } = props;
 
   const { customAttributes } = useMobxStore();
 
-  const attributes = customAttributes.entityAttributes[entityId] ?? {};
+  const attributes = customAttributes.objectAttributes[objectId] ?? {};
 
   const selectFields = Object.values(attributes).filter((a) => SELECT_FIELDS.includes(a.type));
 
   return (
     <>
-      {customAttributes.fetchEntityDetailsLoader ? (
+      {customAttributes.fetchObjectDetailsLoader ? (
         <Loader className="flex items-center gap-2">
           <Loader.Item height="27px" width="90px" />
           <Loader.Item height="27px" width="90px" />

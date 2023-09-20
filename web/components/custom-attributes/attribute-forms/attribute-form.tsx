@@ -99,7 +99,7 @@ export const AttributeForm: React.FC<Props> = observer(({ attributeDetails, obje
   const handleUpdateAttribute = async (data: Partial<ICustomAttribute>) => {
     if (!workspaceSlug || !attributeDetails.id || !objectId) return;
 
-    await customAttributes.updateEntityAttribute(
+    await customAttributes.updateObjectAttribute(
       workspaceSlug.toString(),
       objectId,
       attributeDetails.id,
@@ -113,7 +113,7 @@ export const AttributeForm: React.FC<Props> = observer(({ attributeDetails, obje
     setIsRemoving(true);
 
     await customAttributes
-      .deleteEntityAttribute(workspaceSlug.toString(), objectId, attributeDetails.id)
+      .deleteObjectAttribute(workspaceSlug.toString(), objectId, attributeDetails.id)
       .finally(() => setIsRemoving(false));
   };
 

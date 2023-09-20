@@ -36,8 +36,8 @@ export const ObjectsList: React.FC<Props> = observer(({ handleEditObject, projec
   useEffect(() => {
     if (!workspaceSlug) return;
 
-    if (!customAttributes.entities)
-      customAttributes.fetchEntities(workspaceSlug.toString(), projectId);
+    if (!customAttributes.objects)
+      customAttributes.fetchObjects(workspaceSlug.toString(), projectId);
   }, [customAttributes, projectId, workspaceSlug]);
 
   return (
@@ -54,14 +54,14 @@ export const ObjectsList: React.FC<Props> = observer(({ handleEditObject, projec
         }}
       />
       <div className="divide-y divide-custom-border-100">
-        {customAttributes.entities ? (
-          customAttributes.entities.length > 0 ? (
-            customAttributes.entities.map((entity) => (
+        {customAttributes.objects ? (
+          customAttributes.objects.length > 0 ? (
+            customAttributes.objects.map((object) => (
               <SingleObject
-                key={entity.id}
-                object={entity}
-                handleDeleteObject={() => handleDeleteObject(entity)}
-                handleEditObject={() => handleEditObject(entity)}
+                key={object.id}
+                object={object}
+                handleDeleteObject={() => handleDeleteObject(object)}
+                handleEditObject={() => handleEditObject(object)}
               />
             ))
           ) : (
