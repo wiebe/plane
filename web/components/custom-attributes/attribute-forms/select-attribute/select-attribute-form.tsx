@@ -14,10 +14,9 @@ export const SelectAttributeForm: React.FC<FormComponentProps & { multiple?: boo
   ({ control, multiple = false, objectId = "", watch }) => {
     const [optionToEdit, setOptionToEdit] = useState<ICustomAttribute | null>(null);
 
-    const { customAttributes: customAttributesStore } = useMobxStore();
-    const { entityAttributes } = customAttributesStore;
+    const { customAttributes } = useMobxStore();
 
-    const options = entityAttributes?.[objectId]?.[watch("id") ?? ""]?.children;
+    const options = customAttributes.entityAttributes?.[objectId]?.[watch("id") ?? ""]?.children;
 
     return (
       <div className="space-y-3">

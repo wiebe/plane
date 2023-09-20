@@ -28,8 +28,7 @@ export const DeleteObjectModal: React.FC<Props> = observer(
     const router = useRouter();
     const { workspaceSlug } = router.query;
 
-    const { customAttributes: customAttributesStore } = useMobxStore();
-    const { deleteEntity } = customAttributesStore;
+    const { customAttributes } = useMobxStore();
 
     const handleClose = () => {
       onClose();
@@ -40,7 +39,8 @@ export const DeleteObjectModal: React.FC<Props> = observer(
 
       setIsDeleting(true);
 
-      await deleteEntity(workspaceSlug.toString(), objectToDelete.id)
+      await customAttributes
+        .deleteEntity(workspaceSlug.toString(), objectToDelete.id)
         .then(async () => {
           if (onSubmit) await onSubmit();
           handleClose();

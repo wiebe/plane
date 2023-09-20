@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 import useSWR from "swr";
 
 // headless ui
-import { Combobox, Transition } from "@headlessui/react";
+import { Combobox } from "@headlessui/react";
 // services
 import cyclesService from "services/cycles.service";
 import modulesService from "services/modules.service";

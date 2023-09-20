@@ -86,8 +86,7 @@ export const AttributeForm: React.FC<Props> = observer(({ attributeDetails, obje
 
   const typeMetaData = CUSTOM_ATTRIBUTES_LIST[type];
 
-  const { customAttributes: customAttributesStore } = useMobxStore();
-  const { deleteEntityAttribute, updateEntityAttribute } = customAttributesStore;
+  const { customAttributes } = useMobxStore();
 
   const {
     control,
@@ -100,7 +99,12 @@ export const AttributeForm: React.FC<Props> = observer(({ attributeDetails, obje
   const handleUpdateAttribute = async (data: Partial<ICustomAttribute>) => {
     if (!workspaceSlug || !attributeDetails.id || !objectId) return;
 
-    await updateEntityAttribute(workspaceSlug.toString(), objectId, attributeDetails.id, data);
+    await customAttributes.updateEntityAttribute(
+      workspaceSlug.toString(),
+      objectId,
+      attributeDetails.id,
+      data
+    );
   };
 
   const handleDeleteAttribute = async () => {
@@ -108,9 +112,9 @@ export const AttributeForm: React.FC<Props> = observer(({ attributeDetails, obje
 
     setIsRemoving(true);
 
-    await deleteEntityAttribute(workspaceSlug.toString(), objectId, attributeDetails.id).finally(
-      () => setIsRemoving(false)
-    );
+    await customAttributes
+      .deleteEntityAttribute(workspaceSlug.toString(), objectId, attributeDetails.id)
+      .finally(() => setIsRemoving(false));
   };
 
   useEffect(() => {

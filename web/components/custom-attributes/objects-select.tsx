@@ -20,8 +20,7 @@ export const ObjectsSelect: React.FC<Props> = observer(({ onChange, projectId, v
   const router = useRouter();
   const { workspaceSlug } = router.query;
 
-  const { customAttributes: customAttributesStore } = useMobxStore();
-  const { entities, fetchEntities } = customAttributesStore;
+  const { customAttributes } = useMobxStore();
 
   const options:
     | {
@@ -29,7 +28,7 @@ export const ObjectsSelect: React.FC<Props> = observer(({ onChange, projectId, v
         query: string;
         content: JSX.Element;
       }[]
-    | undefined = entities?.map((entity) => ({
+    | undefined = customAttributes.entities?.map((entity) => ({
     value: entity.id,
     query: entity.display_name,
     content: (
@@ -53,10 +52,11 @@ export const ObjectsSelect: React.FC<Props> = observer(({ onChange, projectId, v
   useEffect(() => {
     if (!workspaceSlug) return;
 
-    if (!entities) fetchEntities(workspaceSlug.toString(), projectId);
-  }, [entities, fetchEntities, projectId, workspaceSlug]);
+    if (!customAttributes.entities)
+      customAttributes.fetchEntities(workspaceSlug.toString(), projectId);
+  }, [customAttributes, projectId, workspaceSlug]);
 
-  const selectedEntity = entities?.find((e) => e.id === value);
+  const selectedEntity = customAttributes.entities?.find((e) => e.id === value);
 
   return (
     <CustomSearchSelect

@@ -26,8 +26,7 @@ export const ObjectsList: React.FC<Props> = observer(({ handleEditObject, projec
   const router = useRouter();
   const { workspaceSlug } = router.query;
 
-  const { customAttributes: customAttributesStore } = useMobxStore();
-  const { entities, fetchEntities } = customAttributesStore;
+  const { customAttributes } = useMobxStore();
 
   const handleDeleteObject = async (object: ICustomAttribute) => {
     setObjectToDelete(object);
@@ -37,8 +36,9 @@ export const ObjectsList: React.FC<Props> = observer(({ handleEditObject, projec
   useEffect(() => {
     if (!workspaceSlug) return;
 
-    if (!entities) fetchEntities(workspaceSlug.toString(), projectId);
-  }, [entities, fetchEntities, projectId, workspaceSlug]);
+    if (!customAttributes.entities)
+      customAttributes.fetchEntities(workspaceSlug.toString(), projectId);
+  }, [customAttributes, projectId, workspaceSlug]);
 
   return (
     <>
@@ -54,9 +54,9 @@ export const ObjectsList: React.FC<Props> = observer(({ handleEditObject, projec
         }}
       />
       <div className="divide-y divide-custom-border-100">
-        {entities ? (
-          entities.length > 0 ? (
-            entities.map((entity) => (
+        {customAttributes.entities ? (
+          customAttributes.entities.length > 0 ? (
+            customAttributes.entities.map((entity) => (
               <SingleObject
                 key={entity.id}
                 object={entity}

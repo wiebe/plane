@@ -33,19 +33,18 @@ export const SidebarCustomAttributesList: React.FC<Props> = observer(({ issue, p
   const router = useRouter();
   const { workspaceSlug } = router.query;
 
-  const {
-    customAttributes: customAttributesStore,
-    customAttributeValues: customAttributeValuesStore,
-  } = useMobxStore();
-  const { entityAttributes, fetchEntityDetails } = customAttributesStore;
-  const { issueAttributeValues, fetchIssueAttributeValues, deleteAttributeValue } =
-    customAttributeValuesStore;
+  const { customAttributes, customAttributeValues } = useMobxStore();
 
   const handleAttributeUpdate = (attributeId: string, value: string | string[] | undefined) => {
     if (!issue || !workspaceSlug) return;
 
     if (!value) {
-      deleteAttributeValue(workspaceSlug.toString(), projectId, issue.id, attributeId);
+      customAttributeValues.deleteAttributeValue(
+        workspaceSlug.toString(),
+        projectId,
+        issue.id,
+        attributeId
+      );
       return;
     }
 
@@ -55,7 +54,7 @@ export const SidebarCustomAttributesList: React.FC<Props> = observer(({ issue, p
       },
     };
 
-    customAttributeValuesStore.createAttributeValue(
+    customAttributeValues.createAttributeValue(
       workspaceSlug.toString(),
       issue.project,
       issue.id,
@@ -67,27 +66,37 @@ export const SidebarCustomAttributesList: React.FC<Props> = observer(({ issue, p
   useEffect(() => {
     if (!issue?.entity) return;
 
-    if (!entityAttributes[issue.entity]) {
+    if (!customAttributes.entityAttributes[issue.entity]) {
       if (!workspaceSlug) return;
 
-      fetchEntityDetails(workspaceSlug.toString(), issue.entity);
+      customAttributes.fetchEntityDetails(workspaceSlug.toString(), issue.entity);
     }
-  }, [issue?.entity, entityAttributes, fetchEntityDetails, workspaceSlug]);
+  }, [customAttributes, issue?.entity, workspaceSlug]);
 
   // fetch issue attribute values
   useEffect(() => {
     if (!issue) return;
 
-    if (!issueAttributeValues || !issueAttributeValues[issue.id]) {
+    if (
+      !customAttributeValues.issueAttributeValues ||
+      !customAttributeValues.issueAttributeValues[issue.id]
+    ) {
       if (!workspaceSlug) return;
 
-      fetchIssueAttributeValues(workspaceSlug.toString(), issue.project, issue.id);
+      customAttributeValues.fetchIssueAttributeValues(
+        workspaceSlug.toString(),
+        issue.project,
+        issue.id
+      );
     }
-  }, [fetchIssueAttributeValues, issue, issueAttributeValues, workspaceSlug]);
+  }, [customAttributeValues, issue, workspaceSlug]);
 
   if (!issue || !issue?.entity) return null;
 
-  if (!entityAttributes[issue.entity] || !issueAttributeValues?.[issue.id])
+  if (
+    !customAttributes.entityAttributes[issue.entity] ||
+    !customAttributeValues.issueAttributeValues?.[issue.id]
+  )
     return (
       <Loader className="space-y-4">
         <Loader.Item height="30px" />
@@ -99,9 +108,9 @@ export const SidebarCustomAttributesList: React.FC<Props> = observer(({ issue, p
 
   return (
     <div>
-      {Object.values(entityAttributes?.[issue.entity] ?? {}).map((attribute) => {
+      {Object.values(customAttributes.entityAttributes?.[issue.entity] ?? {}).map((attribute) => {
         const typeMetaData = CUSTOM_ATTRIBUTES_LIST[attribute.type];
-        const attributeValue = issueAttributeValues?.[issue.id].find(
+        const attributeValue = customAttributeValues.issueAttributeValues?.[issue.id].find(
           (a) => a.id === attribute.id
         )?.prop_value;
 
