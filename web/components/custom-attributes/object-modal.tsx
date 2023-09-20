@@ -145,18 +145,18 @@ export const ObjectModal: React.FC<Props> = observer(
             <div className="fixed inset-0 bg-custom-backdrop bg-opacity-50 transition-opacity" />
           </Transition.Child>
 
-          <div className="fixed inset-0 h-full w-full z-20">
-            <div className="flex items-center justify-center h-full w-full p-4 sm:p-0">
-              <Transition.Child
-                as={React.Fragment}
-                enter="ease-out duration-300"
-                enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-                enterTo="opacity-100 translate-y-0 sm:scale-100"
-                leave="ease-in duration-200"
-                leaveFrom="opacity-100 translate-y-0 sm:scale-100"
-                leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-              >
-                <Dialog.Panel className="bg-custom-background-100 w-1/2 max-h-[85%] flex flex-col rounded-xl">
+          <Transition.Child
+            as={React.Fragment}
+            enter="ease-out duration-300"
+            enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+            enterTo="opacity-100 translate-y-0 sm:scale-100"
+            leave="ease-in duration-200"
+            leaveFrom="opacity-100 translate-y-0 sm:scale-100"
+            leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+          >
+            <Dialog.Panel className="fixed inset-0 h-full w-full z-20">
+              <div className="flex items-center justify-center h-full w-full p-4 sm:p-0">
+                <div className="bg-custom-background-100 w-1/2 max-h-[85%] flex flex-col rounded-xl">
                   <h3 className="text-2xl font-semibold px-6 pt-5">New Object</h3>
                   <div className="mt-5 space-y-5 h-full overflow-y-auto">
                     <div className="space-y-4 px-6">
@@ -253,10 +253,10 @@ export const ObjectModal: React.FC<Props> = observer(
                       )}
                     </div>
                   </div>
-                </Dialog.Panel>
-              </Transition.Child>
-            </div>
-          </div>
+                </div>
+              </div>
+            </Dialog.Panel>
+          </Transition.Child>
         </Dialog>
       </Transition.Root>
     );

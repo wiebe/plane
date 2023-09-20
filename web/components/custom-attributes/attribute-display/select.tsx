@@ -125,7 +125,9 @@ export const CustomSelectAttribute: React.FC<Props> = (props) => {
                 </div>
               )}
             </Combobox.Button>
-            <div className={`${open ? "fixed z-20 top-0 left-0 h-full w-full cursor-auto" : ""}`}>
+            <div
+              className={`${open ? "fixed z-20 top-0 left-0 h-screen w-screen cursor-auto" : ""}`}
+            >
               <Combobox.Options
                 ref={dropdownOptionsRef}
                 className="fixed z-10 border border-custom-border-300 px-2 py-2.5 rounded bg-custom-background-100 text-xs shadow-custom-shadow-rg focus:outline-none w-48 whitespace-nowrap mt-1"

@@ -538,18 +538,18 @@ export const CreateUpdateIssueModal: React.FC<IssuesModalProps> = observer(
               <div className="fixed inset-0 bg-custom-backdrop bg-opacity-50 transition-opacity" />
             </Transition.Child>
 
-            <div className="fixed inset-0 z-20 overflow-y-auto">
-              <div className="my-10 flex items-center justify-center p-4 text-center sm:p-0 md:my-20">
-                <Transition.Child
-                  as={React.Fragment}
-                  enter="ease-out duration-300"
-                  enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-                  enterTo="opacity-100 translate-y-0 sm:scale-100"
-                  leave="ease-in duration-200"
-                  leaveFrom="opacity-100 translate-y-0 sm:scale-100"
-                  leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-                >
-                  <Dialog.Panel className="relative transform rounded-lg border border-custom-border-200 bg-custom-background-100 text-left shadow-xl transition-all sm:w-full sm:max-w-2xl">
+            <Transition.Child
+              as={React.Fragment}
+              enter="ease-out duration-300"
+              enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+              enterTo="opacity-100 translate-y-0 sm:scale-100"
+              leave="ease-in duration-200"
+              leaveFrom="opacity-100 translate-y-0 sm:scale-100"
+              leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+            >
+              <Dialog.Panel className="fixed inset-0 h-full w-full z-20 overflow-y-auto">
+                <div className="my-10 flex items-center justify-center p-4 text-center sm:p-0 md:my-20">
+                  <div className="relative rounded-lg border border-custom-border-200 bg-custom-background-100 text-left shadow-xl transition-all sm:w-full sm:max-w-2xl">
                     <IssueForm
                       handleFormSubmit={handleFormSubmit}
                       initialData={data ?? prePopulateData}
@@ -565,10 +565,10 @@ export const CreateUpdateIssueModal: React.FC<IssuesModalProps> = observer(
                       handleCustomAttributesChange={handleCustomAttributesChange}
                       handleFormDirty={handleFormDirty}
                     />
-                  </Dialog.Panel>
-                </Transition.Child>
-              </div>
-            </div>
+                  </div>
+                </div>
+              </Dialog.Panel>
+            </Transition.Child>
           </Dialog>
         </Transition.Root>
       </>
