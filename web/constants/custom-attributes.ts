@@ -11,6 +11,8 @@ import {
   Link2,
   LucideIcon,
 } from "lucide-react";
+// helpers
+import { getRandomColor } from "helpers/color.helper";
 // types
 import { ICustomAttribute, TCustomAttributeTypes, TCustomAttributeUnits } from "types";
 
@@ -93,7 +95,7 @@ export const CUSTOM_ATTRIBUTES_LIST: {
   },
   number: {
     defaultFormValues: {
-      color: "#000000",
+      color: getRandomColor(),
       default_value: "",
       display_name: "",
       extra_settings: {
@@ -106,6 +108,7 @@ export const CUSTOM_ATTRIBUTES_LIST: {
     icon: Hash,
     label: "Number",
     initialPayload: {
+      color: getRandomColor(),
       extra_settings: {
         representation: "numerical",
       },

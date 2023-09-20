@@ -17,3 +17,32 @@ export const rgbToHex = (rgb: TRgb): string => {
 
   return `#${hexR}${hexG}${hexB}`;
 };
+
+/**
+ * @returns {string} random hex color code
+ * @description function to generate a random vibrant hex color code
+ */
+
+export const getRandomColor = (): string => {
+  // Generate random RGB values
+  const r = Math.floor(Math.random() * 256);
+  const g = Math.floor(Math.random() * 256);
+  const b = Math.floor(Math.random() * 256);
+
+  // Calculate the luminance
+  const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+
+  // Define thresholds for luminance (adjust as needed)
+  const minLuminance = 0.3;
+  const maxLuminance = 0.7;
+
+  // Check if the luminance is within the desired range
+  if (luminance >= minLuminance && luminance <= maxLuminance) {
+    // Convert RGB to hex format
+    const hexColor = `#${((1 << 24) | (r << 16) | (g << 8) | b).toString(16).slice(1)}`;
+    return hexColor;
+  } else {
+    // Recurse to find a suitable color
+    return getRandomColor();
+  }
+};

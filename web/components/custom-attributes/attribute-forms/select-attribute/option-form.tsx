@@ -9,6 +9,8 @@ import { useMobxStore } from "lib/mobx/store-provider";
 import { ColorPicker } from "components/custom-attributes";
 // ui
 import { PrimaryButton } from "components/ui";
+// helpers
+import { getRandomColor } from "helpers/color.helper";
 // types
 import { ICustomAttribute } from "types";
 
@@ -24,7 +26,7 @@ export const OptionForm: React.FC<Props> = observer((props) => {
 
   const [option, setOption] = useState<Partial<ICustomAttribute>>({
     display_name: "",
-    color: "#000000",
+    color: getRandomColor(),
   });
   const [isEditing, setIsEditing] = useState(false);
 
@@ -73,7 +75,7 @@ export const OptionForm: React.FC<Props> = observer((props) => {
 
     setOption({
       display_name: "",
-      color: "#000000",
+      color: getRandomColor(),
     });
 
     if (onSubmit) onSubmit();
@@ -97,7 +99,7 @@ export const OptionForm: React.FC<Props> = observer((props) => {
         />
         <ColorPicker
           onChange={(val) => setOption((prev) => ({ ...prev, color: val }))}
-          selectedColor={option.color ?? "#000000"}
+          selectedColor={option.color ?? getRandomColor()}
         />
       </div>
       <div className="flex-shrink-0">

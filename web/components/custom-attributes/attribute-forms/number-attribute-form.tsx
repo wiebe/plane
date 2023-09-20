@@ -114,6 +114,7 @@ export const NumberAttributeForm: React.FC<FormComponentProps> = ({ control, wat
                     className="hide-arrows"
                     min={0}
                     step={1}
+                    defaultValue={100}
                     required
                   />
                 )}
@@ -128,23 +129,6 @@ export const NumberAttributeForm: React.FC<FormComponentProps> = ({ control, wat
                 name="color"
                 render={({ field: { onChange, value } }) => (
                   <ColorPicker onChange={onChange} selectedColor={value ?? "#000000"} size={18} />
-                  // <label htmlFor="numberColorPicker" className="relative block cursor-pointer">
-                  //   <Input
-                  //     type="color"
-                  //     id="numberColorPicker"
-                  //     placeholder="Accent color"
-                  //     className="hide-color cursor-pointer"
-                  //     value={value}
-                  //     onChange={(e) => onChange(e.target.value)}
-                  //     required
-                  //   />
-                  //   <span
-                  //     className="absolute top-1/2 -translate-y-[65%] left-2 h-5 w-5 rounded pointer-events-none"
-                  //     style={{
-                  //       backgroundColor: value,
-                  //     }}
-                  //   />
-                  // </label>
                 )}
               />
             </div>
