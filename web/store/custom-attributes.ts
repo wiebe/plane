@@ -64,13 +64,13 @@ class CustomAttributesStore {
     }
   };
 
-  fetchObjectDetails = async (workspaceSlug: string, propertyId: string) => {
+  fetchObjectDetails = async (workspaceSlug: string, objectId: string) => {
     try {
       runInAction(() => {
         this.fetchObjectDetailsLoader = true;
       });
 
-      const response = await customAttributesService.getPropertyDetails(workspaceSlug, propertyId);
+      const response = await customAttributesService.getPropertyDetails(workspaceSlug, objectId);
 
       const objectChildren: { [key: string]: ICustomAttribute } = response.children.reduce(
         (acc, child) => ({
@@ -83,7 +83,7 @@ class CustomAttributesStore {
       runInAction(() => {
         this.objectAttributes = {
           ...this.objectAttributes,
-          [propertyId]: objectChildren,
+          [objectId]: objectChildren,
         };
         this.fetchObjectDetailsLoader = false;
       });
@@ -137,11 +137,11 @@ class CustomAttributesStore {
     }
   };
 
-  deleteObject = async (workspaceSlug: string, propertyId: string) => {
+  deleteObject = async (workspaceSlug: string, objectId: string) => {
     try {
-      await customAttributesService.deleteProperty(workspaceSlug, propertyId);
+      await customAttributesService.deleteProperty(workspaceSlug, objectId);
 
-      const newObjects = this.objects?.filter((object) => object.id !== propertyId);
+      const newObjects = this.objects?.filter((object) => object.id !== objectId);
 
       runInAction(() => {
         this.objects = [...(newObjects ?? [])];
@@ -309,13 +309,11 @@ class CustomAttributesStore {
     parentId: string,
     propertyId: string
   ) => {
+    const newOptions = this.objectAttributes[objectId][parentId].children.filter(
+      (option) => option.id !== propertyId
+    );
+
     try {
-      const response = await customAttributesService.deleteProperty(workspaceSlug, propertyId);
-
-      const newOptions = this.objectAttributes[objectId][parentId].children.filter(
-        (option) => option.id !== propertyId
-      );
-
       runInAction(() => {
         this.objectAttributes = {
           ...this.objectAttributes,
@@ -329,11 +327,13 @@ class CustomAttributesStore {
         };
       });
 
-      return response;
+      await customAttributesService.deleteProperty(workspaceSlug, propertyId);
     } catch (error) {
       runInAction(() => {
         this.error = error;
       });
+
+      this.fetchObjectDetails(workspaceSlug, objectId);
     }
   };
 }

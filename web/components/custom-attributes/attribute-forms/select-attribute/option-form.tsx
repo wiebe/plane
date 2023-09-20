@@ -92,7 +92,7 @@ export const OptionForm: React.FC<Props> = observer((props) => {
       <div className="bg-custom-background-100 rounded border border-custom-border-200 flex items-center gap-2 px-3 py-2 flex-grow">
         <input
           type="text"
-          className="flex-grow border-none outline-none placeholder:text-custom-text-400 text-xs"
+          className="flex-grow border-none outline-none placeholder:text-custom-text-400 text-xs bg-transparent"
           value={option.display_name}
           onChange={(e) => setOption((prev) => ({ ...prev, display_name: e.target.value }))}
           placeholder="Enter new option"

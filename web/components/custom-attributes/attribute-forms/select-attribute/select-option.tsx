@@ -57,7 +57,7 @@ export const SelectOption: React.FC<Props> = observer((props) => {
       </button> */}
         <Tooltip tooltipContent={option.display_name}>
           <p
-            className="text-custom-text-300 text-xs p-1 rounded inline truncate"
+            className="text-custom-text-200 text-xs p-1 rounded inline truncate"
             style={{
               backgroundColor: `${option.color}40`,
             }}
