@@ -6,14 +6,13 @@ import { useRouter } from "next/router";
 import { observer } from "mobx-react-lite";
 import { useMobxStore } from "lib/mobx/store-provider";
 // components
-import { DeleteObjectModal } from "components/custom-attributes";
+import { DeleteObjectModal, SingleObject } from "components/custom-attributes";
 // ui
-import { CustomMenu, Loader } from "components/ui";
-// icons
-import { TableProperties } from "lucide-react";
+import { EmptyState, Loader } from "components/ui";
+// assets
+import emptyCustomObjects from "public/empty-state/custom-objects.svg";
 // types
 import { ICustomAttribute } from "types";
-import { renderEmoji } from "helpers/emoji.helper";
 
 type Props = {
   handleEditObject: (object: ICustomAttribute) => void;
@@ -54,36 +53,26 @@ export const ObjectsList: React.FC<Props> = observer(({ handleEditObject, projec
           }, 300);
         }}
       />
-      <div className="space-y-4 divide-y divide-custom-border-100">
+      <div className="divide-y divide-custom-border-100">
         {entities ? (
           entities.length > 0 ? (
             entities.map((entity) => (
-              <div key={entity.id} className="p-4 flex items-center justify-between gap-4">
-                <div className="flex gap-4">
-                  <div className="bg-custom-background-80 h-10 w-10 grid place-items-center rounded">
-                    {entity.icon ? (
-                      renderEmoji(entity.icon)
-                    ) : (
-                      <TableProperties size={20} strokeWidth={1.5} />
-                    )}
-                  </div>
-                  <div>
-                    <h5 className="text-sm font-medium">{entity.display_name}</h5>
-                    <p className="text-custom-text-300 text-xs">{entity.description}</p>
-                  </div>
-                </div>
-                <CustomMenu ellipsis>
-                  <CustomMenu.MenuItem renderAs="button" onClick={() => handleEditObject(entity)}>
-                    Edit
-                  </CustomMenu.MenuItem>
-                  <CustomMenu.MenuItem renderAs="button" onClick={() => handleDeleteObject(entity)}>
-                    Delete
-                  </CustomMenu.MenuItem>
-                </CustomMenu>
-              </div>
+              <SingleObject
+                key={entity.id}
+                object={entity}
+                handleDeleteObject={() => handleDeleteObject(entity)}
+                handleEditObject={() => handleEditObject(entity)}
+              />
             ))
           ) : (
-            <p className="text-sm text-custom-text-200 text-center">No objects present</p>
+            <div className="bg-custom-background-90 border border-custom-border-100 rounded max-w-3xl mt-10 mx-auto">
+              <EmptyState
+                title="No custom objects yet"
+                description="You can think of Pages as an AI-powered notepad."
+                image={emptyCustomObjects}
+                isFullScreen={false}
+              />
+            </div>
           )
         ) : (
           <Loader className="space-y-4">

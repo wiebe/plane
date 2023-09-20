@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import { observer } from "mobx-react-lite";
 import { useMobxStore } from "lib/mobx/store-provider";
 // ui
-import { Tooltip } from "components/ui";
+import { CustomMenu, Tooltip } from "components/ui";
 // icons
 import { MoreHorizontal } from "lucide-react";
 // types
@@ -19,15 +19,31 @@ export const SelectOption: React.FC<Props> = observer(({ objectId, option }) => 
   const router = useRouter();
   const { workspaceSlug } = router.query;
 
-  const { customAttributes: customAttributesStore } = useMobxStore();
-  const { updateAttributeOption } = customAttributesStore;
+  const { customAttributes } = useMobxStore();
 
   const handleSetAsDefault = async () => {
     if (!workspaceSlug || !option.parent) return;
 
-    await updateAttributeOption(workspaceSlug.toString(), objectId, option.parent, option.id, {
-      is_default: true,
-    });
+    await customAttributes.updateAttributeOption(
+      workspaceSlug.toString(),
+      objectId,
+      option.parent,
+      option.id,
+      {
+        is_default: true,
+      }
+    );
+  };
+
+  const handleDeleteOption = async () => {
+    if (!workspaceSlug || !option.parent) return;
+
+    await customAttributes.deleteAttributeOption(
+      workspaceSlug.toString(),
+      objectId,
+      option.parent,
+      option.id
+    );
   };
 
   return (
@@ -59,9 +75,16 @@ export const SelectOption: React.FC<Props> = observer(({ objectId, option }) => 
             Set as default
           </button>
         )}
-        <button type="button">
-          <MoreHorizontal className="text-custom-text-400" size={14} />
-        </button>
+        <CustomMenu
+          customButton={
+            <div className="grid place-items-center">
+              <MoreHorizontal className="text-custom-text-400" size={14} />
+            </div>
+          }
+        >
+          <CustomMenu.MenuItem>Edit</CustomMenu.MenuItem>
+          <CustomMenu.MenuItem onClick={handleDeleteOption}>Delete</CustomMenu.MenuItem>
+        </CustomMenu>
       </div>
     </div>
   );

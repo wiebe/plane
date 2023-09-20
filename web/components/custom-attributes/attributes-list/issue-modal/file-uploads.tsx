@@ -200,7 +200,7 @@ export const CustomAttributesFileUploads: React.FC<Props> = observer((props) => 
           <Loader.Item height="35px" />
         </Loader>
       ) : (
-        <Disclosure defaultOpen>
+        <Disclosure as="div" defaultOpen>
           {({ open }) => (
             <>
               <Disclosure.Button className="font-medium flex items-center gap-2">
@@ -211,7 +211,7 @@ export const CustomAttributesFileUploads: React.FC<Props> = observer((props) => 
                 />
                 Attachment attributes
               </Disclosure.Button>
-              <Disclosure.Panel className="mt-2 grid grid-cols-3 gap-4">
+              <Disclosure.Panel className="grid grid-cols-3 gap-4 mt-2">
                 {Object.entries(fileUploadFields).map(([attributeId, attribute]) => (
                   <div key={attributeId}>
                     <Tooltip tooltipContent={attribute.display_name} position="top-left">

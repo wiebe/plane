@@ -5,7 +5,6 @@ import { useRouter } from "next/router";
 // layouts
 import { ProjectAuthorizationWrapper } from "layouts/auth-layout";
 // hooks
-import useToast from "hooks/use-toast";
 import useProjectDetails from "hooks/use-project-details";
 // components
 import { SettingsSidebar } from "components/project";
@@ -25,8 +24,6 @@ const CustomObjectSettings: NextPage = () => {
 
   const router = useRouter();
   const { workspaceSlug, projectId } = router.query;
-
-  const { setToastAlert } = useToast();
 
   const { projectDetails } = useProjectDetails();
 
@@ -68,7 +65,7 @@ const CustomObjectSettings: NextPage = () => {
             </PrimaryButton>
           </div>
           <div>
-            <div className="mt-4 border-y border-custom-border-100">
+            <div className="mt-4">
               <ObjectsList
                 handleEditObject={handleEditObject}
                 projectId={projectId?.toString() ?? ""}

@@ -8,7 +8,7 @@ import { TwitterPicker } from "react-color";
 type Props = {
   onChange: (hexValue: string) => void;
   selectedColor: string;
-  size: number;
+  size?: number;
 };
 
 export const ColorPicker: React.FC<Props> = ({ onChange, selectedColor, size = 14 }) => (

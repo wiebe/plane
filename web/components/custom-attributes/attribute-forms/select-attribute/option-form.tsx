@@ -24,8 +24,7 @@ export const OptionForm: React.FC<Props> = observer(({ objectId, parentId }) => 
   const router = useRouter();
   const { workspaceSlug } = router.query;
 
-  const { customAttributes: customAttributesStore } = useMobxStore();
-  const { createAttributeOption, createAttributeOptionLoader } = customAttributesStore;
+  const { customAttributes } = useMobxStore();
 
   const handleCreateOption = async () => {
     if (!workspaceSlug) return;
@@ -38,13 +37,15 @@ export const OptionForm: React.FC<Props> = observer(({ objectId, parentId }) => 
       type: "option",
     };
 
-    await createAttributeOption(workspaceSlug.toString(), objectId, {
-      ...payload,
-      parent: parentId,
-    }).then(() => {
-      setOptionName("");
-      setOptionColor("#000000");
-    });
+    await customAttributes
+      .createAttributeOption(workspaceSlug.toString(), objectId, {
+        ...payload,
+        parent: parentId,
+      })
+      .then(() => {
+        setOptionName("");
+        setOptionColor("#000000");
+      });
   };
 
   return (
@@ -65,9 +66,9 @@ export const OptionForm: React.FC<Props> = observer(({ objectId, parentId }) => 
           onClick={handleCreateOption}
           size="sm"
           className="!py-1.5 !px-2"
-          loading={createAttributeOptionLoader}
+          loading={customAttributes.createAttributeOptionLoader}
         >
-          {createAttributeOptionLoader ? "Adding..." : "Add"}
+          {customAttributes.createAttributeOptionLoader ? "Adding..." : "Add"}
         </PrimaryButton>
       </div>
     </div>

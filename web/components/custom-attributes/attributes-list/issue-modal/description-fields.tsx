@@ -36,7 +36,7 @@ export const CustomAttributesDescriptionFields: React.FC<Props> = observer((prop
   );
 
   return (
-    <Disclosure defaultOpen>
+    <Disclosure as="div" defaultOpen>
       {({ open }) => (
         <>
           <div className="flex items-center justify-between gap-2">
