@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 // mobx
 import { observer } from "mobx-react-lite";
@@ -7,9 +7,13 @@ import { useMobxStore } from "lib/mobx/store-provider";
 import { Controller } from "react-hook-form";
 // components
 import { FormComponentProps, Input, OptionForm, SelectOption } from "components/custom-attributes";
+// types
+import { ICustomAttribute } from "types";
 
 export const SelectAttributeForm: React.FC<FormComponentProps & { multiple?: boolean }> = observer(
   ({ control, multiple = false, objectId = "", watch }) => {
+    const [optionToEdit, setOptionToEdit] = useState<ICustomAttribute | null>(null);
+
     const { customAttributes: customAttributesStore } = useMobxStore();
     const { entityAttributes } = customAttributesStore;
 
@@ -28,11 +32,21 @@ export const SelectAttributeForm: React.FC<FormComponentProps & { multiple?: boo
           <p className="text-xs">Options</p>
           <div className="mt-3 space-y-2 w-3/5">
             {options?.map((option) => (
-              <SelectOption key={option.id} objectId={objectId} option={option} />
+              <SelectOption
+                key={option.id}
+                handleEditOption={() => setOptionToEdit(option)}
+                objectId={objectId}
+                option={option}
+              />
             ))}
           </div>
           <div className="mt-2 w-3/5">
-            <OptionForm objectId={objectId} parentId={watch("id") ?? ""} />
+            <OptionForm
+              data={optionToEdit}
+              objectId={objectId}
+              onSubmit={() => setOptionToEdit(null)}
+              parentId={watch("id") ?? ""}
+            />
           </div>
         </div>
       </div>

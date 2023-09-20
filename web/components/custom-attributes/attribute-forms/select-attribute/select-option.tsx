@@ -11,11 +11,14 @@ import { MoreHorizontal } from "lucide-react";
 import { ICustomAttribute } from "types";
 
 type Props = {
+  handleEditOption: () => void;
   objectId: string;
   option: ICustomAttribute;
 };
 
-export const SelectOption: React.FC<Props> = observer(({ objectId, option }) => {
+export const SelectOption: React.FC<Props> = observer((props) => {
+  const { handleEditOption, objectId, option } = props;
+
   const router = useRouter();
   const { workspaceSlug } = router.query;
 
@@ -82,7 +85,7 @@ export const SelectOption: React.FC<Props> = observer(({ objectId, option }) => 
             </div>
           }
         >
-          <CustomMenu.MenuItem>Edit</CustomMenu.MenuItem>
+          <CustomMenu.MenuItem onClick={handleEditOption}>Edit</CustomMenu.MenuItem>
           <CustomMenu.MenuItem onClick={handleDeleteOption}>Delete</CustomMenu.MenuItem>
         </CustomMenu>
       </div>
