@@ -39,7 +39,11 @@ export const TypesDropdown: React.FC<Props> = ({ onClick }) => {
               <Plus size={14} strokeWidth={1.5} />
               Add Attribute
             </Menu.Button>
-            <div className={`${open ? "fixed z-20 top-0 left-0 h-full w-full cursor-auto" : ""}`}>
+            <div
+              className={`${
+                open ? "" : "hidden"
+              } fixed z-20 top-0 left-0 h-full w-full cursor-auto`}
+            >
               <Menu.Items
                 ref={optionsRef}
                 className="fixed z-10 border-[0.5px] border-custom-border-300 p-1 min-w-[10rem] max-h-60 rounded bg-custom-background-100 text-xs shadow-custom-shadow-rg focus:outline-none overflow-y-auto"

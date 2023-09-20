@@ -110,8 +110,13 @@ export const ObjectModal: React.FC<Props> = observer(
         if (!workspaceSlug) return;
 
         customAttributes.fetchEntityDetails(workspaceSlug.toString(), object.id).then((res) => {
-          setObject({ ...res });
+          setObject((prev) => ({ ...prev, ...res }));
         });
+      } else {
+        setObject((prev) => ({
+          ...prev,
+          ...customAttributes.entities?.find((e) => e.id === object.id),
+        }));
       }
     }, [customAttributes, object.id, workspaceSlug]);
 
@@ -119,8 +124,8 @@ export const ObjectModal: React.FC<Props> = observer(
     useEffect(() => {
       if (!objectIdToEdit) return;
 
-      setObject((prevData) => ({
-        ...prevData,
+      setObject((prev) => ({
+        ...prev,
         id: objectIdToEdit,
       }));
     }, [objectIdToEdit]);

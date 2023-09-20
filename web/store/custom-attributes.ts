@@ -8,7 +8,7 @@ import type { ICustomAttribute } from "types";
 class CustomAttributesStore {
   entities: ICustomAttribute[] | null = null;
   entityAttributes: {
-    [key: string]: { [key: string]: ICustomAttribute };
+    [entityId: string]: { [entityAttributeId: string]: ICustomAttribute };
   } = {};
   // loaders
   fetchEntitiesLoader = false;
