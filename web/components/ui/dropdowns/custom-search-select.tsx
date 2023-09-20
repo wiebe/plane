@@ -78,7 +78,7 @@ export const CustomSearchSelect = ({
             ) : (
               <Combobox.Button
                 type="button"
-                className={`flex items-center justify-between gap-1 w-full rounded shadow-sm border border-custom-border-200 duration-300 focus:outline-none ${
+                className={`flex items-center justify-between gap-1 w-full rounded shadow-custom-shadow-2xs border border-custom-border-200 duration-300 focus:outline-none ${
                   input ? "px-3 py-2 text-sm" : "px-2.5 py-1 text-xs"
                 } ${
                   disabled

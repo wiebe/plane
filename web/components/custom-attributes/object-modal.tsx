@@ -226,19 +226,27 @@ export const ObjectModal: React.FC<Props> = observer(
                             </Loader>
                           )}
                         </div>
-                        <div className="mt-3">
-                          <TypesDropdown onClick={handleCreateEntityAttribute} />
-                        </div>
                       </div>
                     )}
                   </div>
-                  <div className="flex items-center justify-end gap-3 px-6 py-5 border-t border-custom-border-200">
-                    <SecondaryButton onClick={handleClose}>Cancel</SecondaryButton>
-                    {!object.id && (
-                      <PrimaryButton onClick={handleCreateObject} loading={isCreatingObject}>
-                        {isCreatingObject ? "Creating..." : "Create Object"}
-                      </PrimaryButton>
+                  <div
+                    className={`flex items-center gap-3 px-6 py-5 border-t border-custom-border-200 ${
+                      object.id ? "justify-between" : "justify-end"
+                    }`}
+                  >
+                    {object.id && (
+                      <div className="flex-shrink-0">
+                        <TypesDropdown onClick={handleCreateEntityAttribute} />
+                      </div>
                     )}
+                    <div className="flex items-center gap-3">
+                      <SecondaryButton onClick={handleClose}>Close</SecondaryButton>
+                      {!object.id && (
+                        <PrimaryButton onClick={handleCreateObject} loading={isCreatingObject}>
+                          {isCreatingObject ? "Creating..." : "Create Object"}
+                        </PrimaryButton>
+                      )}
+                    </div>
                   </div>
                 </Dialog.Panel>
               </Transition.Child>
