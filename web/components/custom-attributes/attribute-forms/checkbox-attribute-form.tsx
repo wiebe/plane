@@ -26,7 +26,6 @@ const checkboxAttributeRepresentations = [
 export const CheckboxAttributeForm: React.FC<FormComponentProps> = ({ control }) => (
   <>
     <div className="space-y-3">
-      {" "}
       <Controller
         control={control}
         name="display_name"
@@ -36,30 +35,39 @@ export const CheckboxAttributeForm: React.FC<FormComponentProps> = ({ control })
       />
       <div>
         <p className="text-xs">Default value</p>
-        <div className="mt-2 flex items-center gap-6 accent-custom-primary-100">
-          <div className="flex items-center gap-1 text-xs">
-            <input
-              type="radio"
-              name="default_value"
-              value="true"
-              id="checked"
-              className="scale-75"
-              defaultChecked
-            />
-            <label htmlFor="checked">Checked</label>
-          </div>
+        <Controller
+          control={control}
+          name="default_value"
+          render={({ field: { onChange, value } }) => (
+            <div className="mt-2 flex items-center gap-6 accent-custom-primary-100">
+              <div className="flex items-center gap-1 text-xs">
+                <input
+                  type="radio"
+                  name="default_value"
+                  value="true"
+                  id="checked"
+                  className="scale-75"
+                  defaultChecked={value === "true"}
+                  onChange={(e) => onChange(e.target.value)}
+                />
+                <label htmlFor="checked">Checked</label>
+              </div>
 
-          <div className="flex items-center gap-1 text-xs">
-            <input
-              type="radio"
-              name="default_value"
-              value="false"
-              id="unchecked"
-              className="scale-75"
-            />
-            <label htmlFor="unchecked">Unchecked</label>
-          </div>
-        </div>
+              <div className="flex items-center gap-1 text-xs">
+                <input
+                  type="radio"
+                  name="default_value"
+                  value="false"
+                  id="unchecked"
+                  className="scale-75"
+                  defaultChecked={value === "false"}
+                  onChange={(e) => onChange(e.target.value)}
+                />
+                <label htmlFor="unchecked">Unchecked</label>
+              </div>
+            </div>
+          )}
+        />
       </div>
     </div>
     <div className="my-3 border-t-[0.5px] border-custom-border-200" />

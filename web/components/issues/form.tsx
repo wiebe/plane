@@ -33,7 +33,14 @@ import {
   ObjectsSelect,
 } from "components/custom-attributes";
 // ui
-import { CustomMenu, Input, PrimaryButton, SecondaryButton, ToggleSwitch } from "components/ui";
+import {
+  CustomMenu,
+  Input,
+  Loader,
+  PrimaryButton,
+  SecondaryButton,
+  ToggleSwitch,
+} from "components/ui";
 import { TipTapEditor } from "components/tiptap";
 // icons
 import { SparklesIcon, XMarkIcon } from "@heroicons/react/24/outline";
@@ -252,6 +259,20 @@ export const IssueForm: FC<IssueFormProps> = observer((props) => {
       customAttributes.fetchEntityDetails(workspaceSlug.toString(), entityId);
     }
   }, [customAttributes, entityId, workspaceSlug]);
+
+  // assign default values to attributes
+  useEffect(() => {
+    if (
+      !entityId ||
+      !customAttributes.entityAttributes[entityId] ||
+      Object.keys(customAttributesList).length > 0
+    )
+      return;
+
+    Object.values(customAttributes.entityAttributes[entityId]).forEach((attribute) => {
+      handleCustomAttributesChange(attribute.id, attribute.default_value);
+    });
+  }, [customAttributes, customAttributesList, entityId, handleCustomAttributesChange]);
 
   // fetch issue attribute values
   useEffect(() => {
@@ -476,29 +497,39 @@ export const IssueForm: FC<IssueFormProps> = observer((props) => {
                 </div>
               )}
               {entityId !== null && (
-                <div className="space-y-5">
-                  <CustomAttributesDescriptionFields
-                    entityId={entityId ?? ""}
-                    issueId={watch("id") ?? ""}
-                    onChange={handleCustomAttributesChange}
-                    projectId={projectId}
-                    values={customAttributesList}
-                  />
-                  <CustomAttributesCheckboxes
-                    entityId={entityId ?? ""}
-                    issueId={watch("id") ?? ""}
-                    onChange={handleCustomAttributesChange}
-                    projectId={projectId}
-                    values={customAttributesList}
-                  />
-                  <CustomAttributesFileUploads
-                    entityId={entityId ?? ""}
-                    issueId={watch("id") ?? ""}
-                    onChange={handleCustomAttributesChange}
-                    projectId={projectId}
-                    values={customAttributesList}
-                  />
-                </div>
+                <>
+                  {customAttributes.fetchEntityDetailsLoader ? (
+                    <Loader className="space-y-3.5">
+                      <Loader.Item height="35px" />
+                      <Loader.Item height="35px" />
+                      <Loader.Item height="35px" />
+                    </Loader>
+                  ) : (
+                    <div className="space-y-5">
+                      <CustomAttributesDescriptionFields
+                        entityId={entityId ?? ""}
+                        issueId={watch("id") ?? ""}
+                        onChange={handleCustomAttributesChange}
+                        projectId={projectId}
+                        values={customAttributesList}
+                      />
+                      <CustomAttributesCheckboxes
+                        entityId={entityId ?? ""}
+                        issueId={watch("id") ?? ""}
+                        onChange={handleCustomAttributesChange}
+                        projectId={projectId}
+                        values={customAttributesList}
+                      />
+                      <CustomAttributesFileUploads
+                        entityId={entityId ?? ""}
+                        issueId={watch("id") ?? ""}
+                        onChange={handleCustomAttributesChange}
+                        projectId={projectId}
+                        values={customAttributesList}
+                      />
+                    </div>
+                  )}
+                </>
               )}
             </div>
           </div>

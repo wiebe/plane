@@ -16,7 +16,7 @@ import useWorkspaceDetails from "hooks/use-workspace-details";
 import useToast from "hooks/use-toast";
 // components
 // ui
-import { Loader, ToggleSwitch, Tooltip } from "components/ui";
+import { Loader, Tooltip } from "components/ui";
 // icons
 import { ChevronDown, Plus, Trash2 } from "lucide-react";
 import { getFileIcon } from "components/icons";
@@ -203,23 +203,14 @@ export const CustomAttributesFileUploads: React.FC<Props> = observer((props) => 
         <Disclosure defaultOpen>
           {({ open }) => (
             <>
-              <div className="flex items-center justify-between gap-2">
-                <Disclosure.Button className="font-medium flex items-center gap-2">
-                  <ChevronDown
-                    className={`transition-all ${open ? "" : "-rotate-90"}`}
-                    size={14}
-                    strokeWidth={1.5}
-                  />
-                  Attachment attributes
-                </Disclosure.Button>
-                {/* <div className={`flex items-center gap-1 ${open ? "" : "hidden"}`}>
-                  <span className="text-xs">Hide optional fields</span>
-                  <ToggleSwitch
-                    value={hideOptionalFields}
-                    onChange={() => setHideOptionalFields((prev) => !prev)}
-                  />
-                </div> */}
-              </div>
+              <Disclosure.Button className="font-medium flex items-center gap-2">
+                <ChevronDown
+                  className={`transition-all ${open ? "" : "-rotate-90"}`}
+                  size={14}
+                  strokeWidth={1.5}
+                />
+                Attachment attributes
+              </Disclosure.Button>
               <Disclosure.Panel className="mt-2 grid grid-cols-3 gap-4">
                 {Object.entries(fileUploadFields).map(([attributeId, attribute]) => (
                   <div key={attributeId}>

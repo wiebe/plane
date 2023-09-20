@@ -33,7 +33,7 @@ export const CUSTOM_ATTRIBUTES_LIST: {
     },
     icon: CheckCircle,
     initialPayload: {
-      default_value: "checked",
+      default_value: "true",
       extra_settings: {
         representation: "check",
       },

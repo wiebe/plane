@@ -41,66 +41,62 @@ export const CustomAttributesSelectFields: React.FC<Props> = observer((props) =>
           <Loader.Item height="27px" width="90px" />
         </Loader>
       ) : (
-        <div className="flex items-center gap-2 flex-wrap">
-          {Object.entries(selectFields).map(([attributeId, attribute]) => (
-            <div key={attributeId}>
-              {attribute.type === "datetime" && (
-                <CustomDateTimeAttribute
-                  attributeDetails={attribute}
-                  className="bg-transparent border border-custom-border-200 py-1 shadow-custom-shadow-2xs"
-                  issueId={issueId}
-                  onChange={(val) => onChange(attribute.id, val ? [val.toISOString()] : undefined)}
-                  projectId={projectId}
-                  value={
-                    values[attribute.id]?.[0] ? new Date(values[attribute.id]?.[0]) : undefined
-                  }
-                />
-              )}
-              {attribute.type === "file" && (
-                <CustomFileAttribute
-                  attributeDetails={attribute}
-                  className="bg-transparent border border-custom-border-200 py-1 shadow-custom-shadow-2xs"
-                  issueId={issueId}
-                  onChange={(val) => onChange(attribute.id, val)}
-                  projectId={projectId}
-                  value={values[attribute.id]?.[0]}
-                />
-              )}
-              {attribute.type === "multi_select" && (
-                <CustomSelectAttribute
-                  attributeDetails={attribute}
-                  className="bg-transparent border border-custom-border-200 py-1 shadow-custom-shadow-2xs"
-                  issueId={issueId}
-                  onChange={(val) => onChange(attribute.id, val)}
-                  projectId={projectId}
-                  value={values[attribute.id] ?? []}
-                  multiple
-                />
-              )}
-              {attribute.type === "relation" && (
-                <CustomRelationAttribute
-                  attributeDetails={attribute}
-                  className="bg-transparent border border-custom-border-200 py-1 shadow-custom-shadow-2xs"
-                  issueId={issueId}
-                  onChange={(val) => onChange(attribute.id, val)}
-                  projectId={projectId}
-                  value={values[attribute.id]?.[0]}
-                />
-              )}
-              {attribute.type === "select" && (
-                <CustomSelectAttribute
-                  attributeDetails={attribute}
-                  className="bg-transparent border border-custom-border-200 py-1 shadow-custom-shadow-2xs"
-                  issueId={issueId}
-                  onChange={(val) => onChange(attribute.id, val)}
-                  projectId={projectId}
-                  value={values[attribute.id]?.[0]}
-                  multiple={false}
-                />
-              )}
-            </div>
-          ))}
-        </div>
+        Object.entries(selectFields).map(([attributeId, attribute]) => (
+          <div key={attributeId}>
+            {attribute.type === "datetime" && (
+              <CustomDateTimeAttribute
+                attributeDetails={attribute}
+                className="bg-transparent border border-custom-border-200 py-1 shadow-custom-shadow-2xs"
+                issueId={issueId}
+                onChange={(val) => onChange(attribute.id, val ? [val.toISOString()] : undefined)}
+                projectId={projectId}
+                value={values[attribute.id]?.[0] ? new Date(values[attribute.id]?.[0]) : undefined}
+              />
+            )}
+            {attribute.type === "file" && (
+              <CustomFileAttribute
+                attributeDetails={attribute}
+                className="bg-transparent border border-custom-border-200 py-1 shadow-custom-shadow-2xs"
+                issueId={issueId}
+                onChange={(val) => onChange(attribute.id, val)}
+                projectId={projectId}
+                value={values[attribute.id]?.[0]}
+              />
+            )}
+            {attribute.type === "multi_select" && (
+              <CustomSelectAttribute
+                attributeDetails={attribute}
+                className="bg-transparent border border-custom-border-200 py-1 shadow-custom-shadow-2xs"
+                issueId={issueId}
+                onChange={(val) => onChange(attribute.id, val)}
+                projectId={projectId}
+                value={values[attribute.id] ?? []}
+                multiple
+              />
+            )}
+            {attribute.type === "relation" && (
+              <CustomRelationAttribute
+                attributeDetails={attribute}
+                className="bg-transparent border border-custom-border-200 py-1 shadow-custom-shadow-2xs"
+                issueId={issueId}
+                onChange={(val) => onChange(attribute.id, val)}
+                projectId={projectId}
+                value={values[attribute.id]?.[0]}
+              />
+            )}
+            {attribute.type === "select" && (
+              <CustomSelectAttribute
+                attributeDetails={attribute}
+                className="bg-transparent border border-custom-border-200 py-1 shadow-custom-shadow-2xs"
+                issueId={issueId}
+                onChange={(val) => onChange(attribute.id, val)}
+                projectId={projectId}
+                value={values[attribute.id]?.[0]}
+                multiple={false}
+              />
+            )}
+          </div>
+        ))
       )}
     </>
   );
