@@ -125,9 +125,7 @@ export const PeekOverviewCustomAttributesList: React.FC<Props> = observer(
                 {attribute.type === "checkbox" && (
                   <CustomCheckboxAttribute
                     attributeDetails={attribute}
-                    issueId={issue.id}
                     onChange={(val) => handleAttributeUpdate(attribute.id, [`${val}`])}
-                    projectId={issue.project}
                     value={
                       attributeValue
                         ? attributeValue?.[0]?.value === "true"
@@ -140,40 +138,32 @@ export const PeekOverviewCustomAttributesList: React.FC<Props> = observer(
                 {attribute.type === "datetime" && (
                   <CustomDateTimeAttribute
                     attributeDetails={attribute}
-                    issueId={issue.id}
                     onChange={(val) => {
                       handleAttributeUpdate(attribute.id, val ? [val.toISOString()] : undefined);
                     }}
-                    projectId={issue.project}
                     value={attributeValue ? new Date(attributeValue?.[0]?.value ?? "") : undefined}
                   />
                 )}
                 {attribute.type === "email" && (
                   <CustomEmailAttribute
                     attributeDetails={attribute}
-                    issueId={issue.id}
                     onChange={(val) => {
                       handleAttributeUpdate(attribute.id, val && val !== "" ? [val] : undefined);
                     }}
-                    projectId={issue.project}
                     value={attributeValue ? attributeValue?.[0]?.value : undefined}
                   />
                 )}
                 {attribute.type === "file" && (
                   <CustomFileAttribute
                     attributeDetails={attribute}
-                    issueId={issue.id}
                     onChange={(val) => handleAttributeUpdate(attribute.id, val)}
-                    projectId={issue.project}
                     value={attributeValue ? attributeValue?.[0]?.value : undefined}
                   />
                 )}
                 {attribute.type === "multi_select" && (
                   <CustomSelectAttribute
                     attributeDetails={attribute}
-                    issueId={issue.id}
                     onChange={(val) => handleAttributeUpdate(attribute.id, val)}
-                    projectId={issue.project}
                     value={Array.isArray(attributeValue) ? attributeValue.map((v) => v.value) : []}
                     multiple
                   />
@@ -181,11 +171,9 @@ export const PeekOverviewCustomAttributesList: React.FC<Props> = observer(
                 {attribute.type === "number" && (
                   <CustomNumberAttribute
                     attributeDetails={attribute}
-                    issueId={issue.id}
                     onChange={(val) => {
                       handleAttributeUpdate(attribute.id, val ? [val.toString()] : undefined);
                     }}
-                    projectId={issue.project}
                     value={
                       attributeValue ? parseInt(attributeValue?.[0]?.value ?? "0", 10) : undefined
                     }
@@ -194,7 +182,6 @@ export const PeekOverviewCustomAttributesList: React.FC<Props> = observer(
                 {attribute.type === "relation" && (
                   <CustomRelationAttribute
                     attributeDetails={attribute}
-                    issueId={issue.id}
                     onChange={(val) => handleAttributeUpdate(attribute.id, val)}
                     projectId={issue.project}
                     value={attributeValue ? attributeValue?.[0]?.value : undefined}
@@ -203,9 +190,7 @@ export const PeekOverviewCustomAttributesList: React.FC<Props> = observer(
                 {attribute.type === "select" && (
                   <CustomSelectAttribute
                     attributeDetails={attribute}
-                    issueId={issue.id}
                     onChange={(val) => handleAttributeUpdate(attribute.id, val)}
-                    projectId={issue.project}
                     value={attributeValue ? attributeValue?.[0]?.value : undefined}
                     multiple={false}
                   />
@@ -213,22 +198,18 @@ export const PeekOverviewCustomAttributesList: React.FC<Props> = observer(
                 {attribute.type === "text" && (
                   <CustomTextAttribute
                     attributeDetails={attribute}
-                    issueId={issue.id}
                     onChange={(val) =>
                       handleAttributeUpdate(attribute.id, val && val !== "" ? [val] : undefined)
                     }
-                    projectId={issue.project}
                     value={attributeValue ? attributeValue?.[0].value : undefined}
                   />
                 )}
                 {attribute.type === "url" && (
                   <CustomUrlAttribute
                     attributeDetails={attribute}
-                    issueId={issue.id}
                     onChange={(val) =>
                       handleAttributeUpdate(attribute.id, val && val !== "" ? [val] : undefined)
                     }
-                    projectId={issue.project}
                     value={attributeValue ? attributeValue?.[0]?.value : undefined}
                   />
                 )}

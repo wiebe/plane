@@ -33,9 +33,7 @@ export const CustomAttributesCheckboxes: React.FC<Props> = observer((props) => {
           <div className="w-3/5 flex-shrink-0">
             <CustomCheckboxAttribute
               attributeDetails={attribute}
-              issueId={issueId}
               onChange={(val) => onChange(attribute.id, [`${val}`])}
-              projectId={projectId}
               value={values[attribute.id]?.[0] === "true" ? true : false}
             />
           </div>

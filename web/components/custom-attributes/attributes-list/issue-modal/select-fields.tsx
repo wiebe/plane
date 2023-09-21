@@ -47,9 +47,7 @@ export const CustomAttributesSelectFields: React.FC<Props> = observer((props) =>
               <CustomDateTimeAttribute
                 attributeDetails={attribute}
                 className="bg-transparent border border-custom-border-200 py-1 shadow-custom-shadow-2xs"
-                issueId={issueId}
                 onChange={(val) => onChange(attribute.id, val ? [val.toISOString()] : undefined)}
-                projectId={projectId}
                 value={values[attribute.id]?.[0] ? new Date(values[attribute.id]?.[0]) : undefined}
               />
             )}
@@ -57,9 +55,7 @@ export const CustomAttributesSelectFields: React.FC<Props> = observer((props) =>
               <CustomFileAttribute
                 attributeDetails={attribute}
                 className="bg-transparent border border-custom-border-200 py-1 shadow-custom-shadow-2xs"
-                issueId={issueId}
                 onChange={(val) => onChange(attribute.id, val)}
-                projectId={projectId}
                 value={values[attribute.id]?.[0]}
               />
             )}
@@ -67,9 +63,7 @@ export const CustomAttributesSelectFields: React.FC<Props> = observer((props) =>
               <CustomSelectAttribute
                 attributeDetails={attribute}
                 className="bg-transparent border border-custom-border-200 py-1 shadow-custom-shadow-2xs"
-                issueId={issueId}
                 onChange={(val) => onChange(attribute.id, val)}
-                projectId={projectId}
                 value={values[attribute.id] ?? []}
                 multiple
               />
@@ -78,7 +72,6 @@ export const CustomAttributesSelectFields: React.FC<Props> = observer((props) =>
               <CustomRelationAttribute
                 attributeDetails={attribute}
                 className="bg-transparent border border-custom-border-200 py-1 shadow-custom-shadow-2xs"
-                issueId={issueId}
                 onChange={(val) => onChange(attribute.id, val)}
                 projectId={projectId}
                 value={values[attribute.id]?.[0]}
@@ -88,9 +81,7 @@ export const CustomAttributesSelectFields: React.FC<Props> = observer((props) =>
               <CustomSelectAttribute
                 attributeDetails={attribute}
                 className="bg-transparent border border-custom-border-200 py-1 shadow-custom-shadow-2xs"
-                issueId={issueId}
                 onChange={(val) => onChange(attribute.id, val)}
-                projectId={projectId}
                 value={values[attribute.id]?.[0]}
                 multiple={false}
               />

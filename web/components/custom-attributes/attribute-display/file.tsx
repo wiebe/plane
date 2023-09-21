@@ -22,8 +22,6 @@ import { MAX_FILE_SIZE } from "constants/workspace";
 type Props = {
   attributeDetails: ICustomAttribute;
   className?: string;
-  issueId: string;
-  projectId: string;
   value: string | undefined;
   onChange: (val: string | undefined) => void;
 };

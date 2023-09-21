@@ -6,8 +6,6 @@ import { ICustomAttribute } from "types";
 type Props = {
   attributeDetails: ICustomAttribute;
   className?: string;
-  issueId: string;
-  projectId: string;
   value: Date | undefined;
   onChange: (val: Date | null) => void;
 };

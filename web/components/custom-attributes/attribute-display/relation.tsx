@@ -24,7 +24,6 @@ import { CYCLES_LIST, MODULE_LIST } from "constants/fetch-keys";
 type Props = {
   attributeDetails: ICustomAttribute;
   className?: string;
-  issueId: string;
   projectId: string;
   value: string | undefined;
   onChange: (val: string | undefined) => void;

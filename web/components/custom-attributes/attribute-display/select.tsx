@@ -12,9 +12,7 @@ import { ICustomAttribute } from "types";
 type Props = {
   attributeDetails: ICustomAttribute;
   className?: string;
-  issueId: string;
   onChange: (val: string | string[] | undefined) => void;
-  projectId: string;
 } & (
   | {
       multiple?: false;
