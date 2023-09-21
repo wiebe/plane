@@ -48,10 +48,16 @@ export const CustomEmailAttribute: React.FC<Props> = ({ attributeDetails, onChan
     <div className="flex-shrink-0">
       {!isEditing && (
         <div
-          className="cursor-pointer text-xs truncate bg-custom-background-80 px-2.5 py-0.5 w-min max-w-full whitespace-nowrap"
+          className="cursor-pointer text-xs truncate bg-custom-background-80 px-2.5 py-0.5 w-min max-w-full whitespace-nowrap rounded"
           onClick={() => setIsEditing(true)}
         >
-          {value && value !== "" ? value : "Empty"}
+          {value && value !== "" ? (
+            <a href={`mailto:${value}`} target="_blank" rel="noopener noreferrer">
+              {value}
+            </a>
+          ) : (
+            "Empty"
+          )}
         </div>
       )}
       {isEditing && (
