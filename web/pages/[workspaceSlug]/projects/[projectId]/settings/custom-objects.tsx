@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-
 import { useRouter } from "next/router";
 
 // layouts
@@ -16,21 +15,14 @@ import { PrimaryButton } from "components/ui";
 import { truncateText } from "helpers/string.helper";
 // types
 import type { NextPage } from "next";
-import { ICustomAttribute } from "types";
 
 const CustomObjectSettings: NextPage = () => {
   const [isCreateObjectModalOpen, setIsCreateObjectModalOpen] = useState(false);
-  const [objectToEdit, setObjectToEdit] = useState<ICustomAttribute | null>(null);
 
   const router = useRouter();
   const { workspaceSlug, projectId } = router.query;
 
   const { projectDetails } = useProjectDetails();
-
-  const handleEditObject = (object: ICustomAttribute) => {
-    setObjectToEdit(object);
-    setIsCreateObjectModalOpen(true);
-  };
 
   return (
     <ProjectAuthorizationWrapper
@@ -46,12 +38,8 @@ const CustomObjectSettings: NextPage = () => {
       }
     >
       <ObjectModal
-        objectIdToEdit={objectToEdit?.id}
         isOpen={isCreateObjectModalOpen}
-        onClose={() => {
-          setIsCreateObjectModalOpen(false);
-          setObjectToEdit(null);
-        }}
+        onClose={() => setIsCreateObjectModalOpen(false)}
       />
       <div className="flex flex-row gap-2">
         <div className="w-80 py-8">
@@ -66,10 +54,7 @@ const CustomObjectSettings: NextPage = () => {
           </div>
           <div>
             <div className="mt-4">
-              <ObjectsList
-                handleEditObject={handleEditObject}
-                projectId={projectId?.toString() ?? ""}
-              />
+              <ObjectsList projectId={projectId?.toString() ?? ""} />
             </div>
           </div>
         </section>

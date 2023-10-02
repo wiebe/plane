@@ -191,6 +191,8 @@ export const CustomAttributesFileUploads: React.FC<Props> = observer((props) => 
 
   const fileUploadFields = Object.values(attributes).filter((a) => a.type === "file");
 
+  if (fileUploadFields.length === 0) return null;
+
   return (
     <>
       {customAttributes.fetchObjectDetailsLoader ? (

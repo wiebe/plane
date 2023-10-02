@@ -23,6 +23,8 @@ export const CustomAttributesCheckboxes: React.FC<Props> = observer((props) => {
 
   const checkboxFields = Object.values(attributes).filter((a) => a.type === "checkbox");
 
+  if (checkboxFields.length === 0) return null;
+
   return (
     <div className="space-y-4">
       {Object.entries(checkboxFields).map(([attributeId, attribute]) => (

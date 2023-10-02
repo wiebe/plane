@@ -35,6 +35,8 @@ export const CustomAttributesDescriptionFields: React.FC<Props> = observer((prop
     DESCRIPTION_FIELDS.includes(a.type)
   );
 
+  if (descriptionFields.length === 0) return null;
+
   return (
     <Disclosure as="div" defaultOpen>
       {({ open }) => (
