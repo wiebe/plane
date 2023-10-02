@@ -23,6 +23,7 @@ import useSpreadsheetIssuesView from "hooks/use-spreadsheet-issues-view";
 import useProjects from "hooks/use-projects";
 import useMyIssues from "hooks/my-issues/use-my-issues";
 import useLocalStorage from "hooks/use-local-storage";
+import { useWorkspaceView } from "hooks/use-workspace-view";
 // components
 import { IssueForm, ConfirmIssueDiscard } from "components/issues";
 // types
@@ -40,6 +41,7 @@ import {
   VIEW_ISSUES,
   INBOX_ISSUES,
   PROJECT_DRAFT_ISSUES_LIST_WITH_PARAMS,
+  WORKSPACE_VIEW_ISSUES,
 } from "constants/fetch-keys";
 // constants
 import { INBOX_ISSUE_SOURCE } from "constants/inbox";
@@ -89,9 +91,9 @@ export const CreateUpdateIssueModal: React.FC<IssuesModalProps> = observer(
     const [customAttributesList, setCustomAttributesList] = useState<{ [key: string]: string[] }>(
       {}
     );
-
     const router = useRouter();
-    const { workspaceSlug, projectId, cycleId, moduleId, viewId, inboxId } = router.query;
+    const { workspaceSlug, projectId, cycleId, moduleId, viewId, globalViewId, inboxId } =
+      router.query;
 
     const { customAttributeValues } = useMobxStore();
 
@@ -105,6 +107,8 @@ export const CreateUpdateIssueModal: React.FC<IssuesModalProps> = observer(
     const { projects } = useProjects();
 
     const { groupedIssues, mutateMyIssues } = useMyIssues(workspaceSlug?.toString());
+
+    const { params: globalViewParams } = useWorkspaceView();
 
     const { setValue: setValueInLocalStorage, clearValue: clearLocalStorageValue } =
       useLocalStorage<any>("draftedIssue", {});
@@ -291,6 +295,40 @@ export const CreateUpdateIssueModal: React.FC<IssuesModalProps> = observer(
         });
     };
 
+    const workspaceIssuesPath = [
+      {
+        params: {
+          sub_issue: false,
+        },
+        path: "workspace-views/all-issues",
+      },
+      {
+        params: {
+          assignees: user?.id ?? undefined,
+          sub_issue: false,
+        },
+        path: "workspace-views/assigned",
+      },
+      {
+        params: {
+          created_by: user?.id ?? undefined,
+          sub_issue: false,
+        },
+        path: "workspace-views/created",
+      },
+      {
+        params: {
+          subscriber: user?.id ?? undefined,
+          sub_issue: false,
+        },
+        path: "workspace-views/subscribed",
+      },
+    ];
+
+    const currentWorkspaceIssuePath = workspaceIssuesPath.find((path) =>
+      router.pathname.includes(path.path)
+    );
+
     const calendarFetchKey = cycleId
       ? CYCLE_ISSUES_WITH_PARAMS(cycleId.toString(), calendarParams)
       : moduleId
@@ -392,6 +430,14 @@ export const CreateUpdateIssueModal: React.FC<IssuesModalProps> = observer(
             mutate(USER_ISSUE(workspaceSlug as string));
 
           if (payload.parent && payload.parent !== "") mutate(SUB_ISSUES(payload.parent));
+
+          if (globalViewId)
+            mutate(WORKSPACE_VIEW_ISSUES(globalViewId.toString(), globalViewParams));
+
+          if (currentWorkspaceIssuePath)
+            mutate(
+              WORKSPACE_VIEW_ISSUES(workspaceSlug.toString(), currentWorkspaceIssuePath?.params)
+            );
         })
         .catch(() => {
           setToastAlert({
