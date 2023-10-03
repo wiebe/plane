@@ -23,7 +23,7 @@ class CustomAttributesService extends APIService {
       });
   }
 
-  async getPropertyDetails(workspaceSlug: string, propertyId: string): Promise<ICustomAttribute> {
+  async getAttributeDetails(workspaceSlug: string, propertyId: string): Promise<ICustomAttribute> {
     return this.get(`/api/workspaces/${workspaceSlug}/properties/${propertyId}/`)
       .then((response) => response?.data)
       .catch((error) => {
@@ -31,7 +31,7 @@ class CustomAttributesService extends APIService {
       });
   }
 
-  async createProperty(
+  async createAttribute(
     workspaceSlug: string,
     data: Partial<ICustomAttribute>
   ): Promise<ICustomAttribute> {
@@ -42,7 +42,7 @@ class CustomAttributesService extends APIService {
       });
   }
 
-  async patchProperty(
+  async patchAttribute(
     workspaceSlug: string,
     propertyId: string,
     data: Partial<ICustomAttribute>
@@ -54,7 +54,7 @@ class CustomAttributesService extends APIService {
       });
   }
 
-  async deleteProperty(workspaceSlug: string, propertyId: string): Promise<any> {
+  async deleteAttribute(workspaceSlug: string, propertyId: string): Promise<any> {
     return this.delete(`/api/workspaces/${workspaceSlug}/properties/${propertyId}/`)
       .then((response) => response?.data)
       .catch((error) => {
@@ -76,7 +76,7 @@ class CustomAttributesService extends APIService {
       });
   }
 
-  async createPropertyValues(
+  async createAttributeValues(
     workspaceSlug: string,
     projectId: string,
     issueId: string,
@@ -92,7 +92,7 @@ class CustomAttributesService extends APIService {
       });
   }
 
-  async deletePropertyValue(
+  async deleteAttributeValue(
     workspaceSlug: string,
     projectId: string,
     issueId: string,

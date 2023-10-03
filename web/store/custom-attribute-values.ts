@@ -83,7 +83,7 @@ class CustomAttributeValuesStore {
       const date = new Date();
       const unixEpochTimeInSeconds = Math.floor(date.getTime() / 1000);
 
-      const response = await customAttributesService.createPropertyValues(
+      const response = await customAttributesService.createAttributeValues(
         workspaceSlug,
         projectId,
         issueId,
@@ -122,7 +122,7 @@ class CustomAttributeValuesStore {
         };
       });
 
-      await customAttributesService.deletePropertyValue(
+      await customAttributesService.deleteAttributeValue(
         workspaceSlug,
         projectId,
         issueId,

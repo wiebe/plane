@@ -386,3 +386,6 @@ export const COMMENT_REACTION_LIST = (
   commendId: string
 ) =>
   `COMMENT_REACTION_LIST_${workspaceSlug.toUpperCase()}_${projectId.toUpperCase()}_${commendId.toUpperCase()}`;
+
+export const CUSTOM_OBJECTS_LIST = (projectId: string) =>
+  `CUSTOM_OBJECTS_LIST_${projectId.toUpperCase()}`;

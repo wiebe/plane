@@ -70,7 +70,7 @@ class CustomAttributesStore {
         this.fetchObjectDetailsLoader = true;
       });
 
-      const response = await customAttributesService.getPropertyDetails(workspaceSlug, objectId);
+      const response = await customAttributesService.getAttributeDetails(workspaceSlug, objectId);
 
       const objectChildren: { [key: string]: ICustomAttribute } = response.children.reduce(
         (acc, child) => ({
@@ -99,7 +99,7 @@ class CustomAttributesStore {
 
   createObject = async (workspaceSlug: string, data: Partial<ICustomAttribute>) => {
     try {
-      const response = await customAttributesService.createProperty(workspaceSlug, data);
+      const response = await customAttributesService.createAttribute(workspaceSlug, data);
 
       runInAction(() => {
         this.objects = [...(this.objects ?? []), response];
@@ -119,7 +119,7 @@ class CustomAttributesStore {
     data: Partial<ICustomAttribute>
   ) => {
     try {
-      const response = await customAttributesService.patchProperty(workspaceSlug, objectId, data);
+      const response = await customAttributesService.patchAttribute(workspaceSlug, objectId, data);
 
       const newObjects = [...(this.objects ?? [])].map((object) =>
         object.id === objectId ? { ...object, ...response } : object
@@ -139,7 +139,7 @@ class CustomAttributesStore {
 
   deleteObject = async (workspaceSlug: string, objectId: string) => {
     try {
-      await customAttributesService.deleteProperty(workspaceSlug, objectId);
+      await customAttributesService.deleteAttribute(workspaceSlug, objectId);
 
       const newObjects = this.objects?.filter((object) => object.id !== objectId);
 
@@ -162,7 +162,7 @@ class CustomAttributesStore {
         this.createObjectAttributeLoader = true;
       });
 
-      const response = await customAttributesService.createProperty(workspaceSlug, data);
+      const response = await customAttributesService.createAttribute(workspaceSlug, data);
 
       runInAction(() => {
         this.objectAttributes = {
@@ -191,7 +191,7 @@ class CustomAttributesStore {
     data: Partial<ICustomAttribute>
   ) => {
     try {
-      await customAttributesService.patchProperty(workspaceSlug, propertyId, data);
+      await customAttributesService.patchAttribute(workspaceSlug, propertyId, data);
 
       const newObjects = this.objectAttributes[parentId];
       newObjects[propertyId] = {
@@ -214,7 +214,7 @@ class CustomAttributesStore {
 
   deleteObjectAttribute = async (workspaceSlug: string, parentId: string, propertyId: string) => {
     try {
-      await customAttributesService.deleteProperty(workspaceSlug, propertyId);
+      await customAttributesService.deleteAttribute(workspaceSlug, propertyId);
 
       const newObjects = this.objectAttributes[parentId];
       delete newObjects[propertyId];
@@ -242,7 +242,7 @@ class CustomAttributesStore {
         this.createAttributeOptionLoader = true;
       });
 
-      const response = await customAttributesService.createProperty(workspaceSlug, data);
+      const response = await customAttributesService.createAttribute(workspaceSlug, data);
 
       runInAction(() => {
         this.objectAttributes = {
@@ -275,7 +275,11 @@ class CustomAttributesStore {
     data: Partial<ICustomAttribute>
   ) => {
     try {
-      const response = await customAttributesService.patchProperty(workspaceSlug, propertyId, data);
+      const response = await customAttributesService.patchAttribute(
+        workspaceSlug,
+        propertyId,
+        data
+      );
 
       const newOptions = this.objectAttributes[objectId][parentId].children.map((option) => ({
         ...option,
@@ -327,7 +331,7 @@ class CustomAttributesStore {
         };
       });
 
-      await customAttributesService.deleteProperty(workspaceSlug, propertyId);
+      await customAttributesService.deleteAttribute(workspaceSlug, propertyId);
     } catch (error) {
       runInAction(() => {
         this.error = error;
