@@ -221,7 +221,7 @@ export const ObjectModal: React.FC<Props> = observer((props) => {
                           <SecondaryButton onClick={handleClose}>Close</SecondaryButton>
                         )}
                         <PrimaryButton type="submit" loading={isSubmitting}>
-                          {data
+                          {objectId
                             ? isSubmitting
                               ? "Saving..."
                               : "Save changes"
@@ -234,7 +234,7 @@ export const ObjectModal: React.FC<Props> = observer((props) => {
                   </form>
                   {objectId && (
                     <>
-                      <div className="px-6 pb-5">
+                      <div className="px-6">
                         <h4 className="font-medium">Attributes</h4>
                         <div className="mt-2 space-y-2">
                           {customAttributes.fetchObjectDetailsLoader ? (
