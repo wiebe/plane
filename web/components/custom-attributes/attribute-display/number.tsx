@@ -59,9 +59,12 @@ export const CustomNumberAttribute: React.FC<Props> = ({ attributeDetails, onCha
   const extraSettings = attributeDetails.extra_settings;
 
   return (
-    <div className="flex-shrink-0">
+    <div className="flex-shrink-0 flex">
       {!isEditing && (
-        <div className="cursor-pointer text-xs truncate flex" onClick={() => setIsEditing(true)}>
+        <div
+          className="cursor-pointer text-xs truncate flex w-full"
+          onClick={() => setIsEditing(true)}
+        >
           {value ? (
             <>
               {extraSettings?.representation === "bar" ? (
@@ -91,14 +94,14 @@ export const CustomNumberAttribute: React.FC<Props> = ({ attributeDetails, onCha
                   />
                 </div>
               ) : (
-                <span className="font-medium truncate bg-custom-background-80 px-2.5 py-0.5 rounded w-min max-w-full whitespace-nowrap">
+                <span className="font-medium truncate bg-custom-background-80 px-2.5 py-0.5 rounded">
                   {value}
                 </span>
               )}
             </>
           ) : (
             <div
-              className="text-xs truncate bg-custom-background-80 px-2.5 py-0.5 w-min max-w-full whitespace-nowrap"
+              className="text-xs truncate bg-custom-background-80 px-2.5 py-0.5"
               onClick={() => setIsEditing(true)}
             >
               {value ?? "Empty"}
@@ -107,7 +110,11 @@ export const CustomNumberAttribute: React.FC<Props> = ({ attributeDetails, onCha
         </div>
       )}
       {isEditing && (
-        <form onSubmit={handleSubmit(handleFormSubmit)} className="flex items-center" ref={formRef}>
+        <form
+          onSubmit={handleSubmit(handleFormSubmit)}
+          className="flex items-center flex-grow"
+          ref={formRef}
+        >
           <Controller
             control={control}
             name="number"

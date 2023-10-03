@@ -54,10 +54,10 @@ export const CustomUrlAttribute: React.FC<Props & { value: string | undefined }>
   });
 
   return (
-    <div className="flex-shrink-0">
+    <div className="flex-shrink-0 flex">
       {!isEditing && (
         <div
-          className="cursor-pointer text-xs truncate bg-custom-background-80 px-2.5 py-0.5 w-min max-w-full whitespace-nowrap rounded"
+          className="cursor-pointer text-xs truncate bg-custom-background-80 px-2.5 py-0.5 rounded"
           onClick={() => setIsEditing(true)}
         >
           {value && value !== "" ? (
@@ -70,7 +70,11 @@ export const CustomUrlAttribute: React.FC<Props & { value: string | undefined }>
         </div>
       )}
       {isEditing && (
-        <form onSubmit={handleSubmit(handleFormSubmit)} className="flex items-center" ref={formRef}>
+        <form
+          onSubmit={handleSubmit(handleFormSubmit)}
+          className="flex items-center flex-grow"
+          ref={formRef}
+        >
           <Controller
             control={control}
             name="url"

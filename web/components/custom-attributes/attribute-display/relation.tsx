@@ -1,17 +1,14 @@
-import React, { useRef, useState } from "react";
-
+import React, { useState } from "react";
 import { useRouter } from "next/router";
-
 import useSWR from "swr";
-
-// headless ui
+import { usePopper } from "react-popper";
 import { Combobox } from "@headlessui/react";
+
 // services
 import cyclesService from "services/cycles.service";
 import modulesService from "services/modules.service";
 // hooks
 import useProjectMembers from "hooks/use-project-members";
-import useDynamicDropdownPosition from "hooks/use-dynamic-dropdown";
 // ui
 import { Avatar } from "components/ui";
 // icons
@@ -39,11 +36,14 @@ export const CustomRelationAttribute: React.FC<Props> = ({
   const router = useRouter();
   const { workspaceSlug } = router.query;
 
-  const [isOpen, setIsOpen] = useState(false);
   const [query, setQuery] = useState("");
 
-  const dropdownButtonRef = useRef<HTMLButtonElement>(null);
-  const dropdownOptionsRef = useRef<HTMLUListElement>(null);
+  const [referenceElement, setReferenceElement] = useState<HTMLButtonElement | null>(null);
+  const [popperElement, setPopperElement] = useState<HTMLDivElement | null>(null);
+
+  const { styles, attributes } = usePopper(referenceElement, popperElement, {
+    placement: "bottom-start",
+  });
 
   const { data: cycles } = useSWR(
     workspaceSlug && projectId && attributeDetails.unit === "cycle"
@@ -90,8 +90,6 @@ export const CustomRelationAttribute: React.FC<Props> = ({
     option.query.toLowerCase().includes(query.toLowerCase())
   );
 
-  useDynamicDropdownPosition(isOpen, () => setIsOpen(false), dropdownButtonRef, dropdownOptionsRef);
-
   return (
     <Combobox
       as="div"
@@ -99,52 +97,54 @@ export const CustomRelationAttribute: React.FC<Props> = ({
       onChange={(val) => onChange(val)}
       className="flex-shrink-0 text-left flex items-center"
     >
-      {({ open }: { open: boolean }) => (
-        <>
-          <Combobox.Button
-            ref={dropdownButtonRef}
-            className={`flex items-center text-xs rounded px-2.5 py-0.5 truncate w-min max-w-full text-left bg-custom-background-80 ${className}`}
-          >
-            {selectedOption?.label ?? `Select ${attributeDetails.unit}`}
-          </Combobox.Button>
-          <Combobox.Options
-            ref={dropdownOptionsRef}
-            className="fixed z-10 border border-custom-border-300 px-2 py-2.5 rounded bg-custom-background-100 text-xs shadow-custom-shadow-rg focus:outline-none w-48 whitespace-nowrap mt-1"
-          >
-            <div className="flex w-full items-center justify-start rounded-sm border-[0.6px] border-custom-border-200 bg-custom-background-90 px-2 mb-1">
-              <Search className="text-custom-text-400" size={12} strokeWidth={1.5} />
-              <Combobox.Input
-                className="w-full bg-transparent py-1 px-2 text-xs text-custom-text-200 placeholder:text-custom-text-400 focus:outline-none"
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                placeholder="Type to search..."
-                displayValue={(assigned: any) => assigned?.name}
-              />
-            </div>
-            <div className="mt-1 overflow-y-auto">
-              {options ? (
-                options.length > 0 ? (
-                  options.map((option) => (
-                    <Combobox.Option
-                      key={option.id}
-                      value={option.id}
-                      className="flex items-center gap-1 cursor-pointer select-none truncate rounded px-1 py-1.5 hover:bg-custom-background-80 w-full"
-                    >
-                      {option.label}
-                    </Combobox.Option>
-                  ))
-                ) : (
-                  <p className="text-custom-text-300 text-center py-1">
-                    No {attributeDetails.unit}s found
-                  </p>
-                )
+      <Combobox.Button as={React.Fragment}>
+        <button
+          ref={setReferenceElement}
+          className={`flex items-center text-xs rounded px-2.5 py-0.5 truncate w-min max-w-full text-left bg-custom-background-80 ${className}`}
+        >
+          {selectedOption?.label ?? `Select ${attributeDetails.unit}`}
+        </button>
+      </Combobox.Button>
+      <Combobox.Options>
+        <div
+          className="fixed z-10 border border-custom-border-300 px-2 py-2.5 rounded bg-custom-background-100 text-xs shadow-custom-shadow-rg focus:outline-none w-48 whitespace-nowrap mt-1"
+          ref={setPopperElement}
+          style={styles.popper}
+          {...attributes.popper}
+        >
+          <div className="flex w-full items-center justify-start rounded-sm border-[0.6px] border-custom-border-200 bg-custom-background-90 px-2 mb-1">
+            <Search className="text-custom-text-400" size={12} strokeWidth={1.5} />
+            <Combobox.Input
+              className="w-full bg-transparent py-1 px-2 text-xs text-custom-text-200 placeholder:text-custom-text-400 focus:outline-none"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Type to search..."
+              displayValue={(assigned: any) => assigned?.name}
+            />
+          </div>
+          <div className="mt-1 overflow-y-auto">
+            {options ? (
+              options.length > 0 ? (
+                options.map((option) => (
+                  <Combobox.Option
+                    key={option.id}
+                    value={option.id}
+                    className="flex items-center gap-1 cursor-pointer select-none truncate rounded px-1 py-1.5 hover:bg-custom-background-80 w-full"
+                  >
+                    {option.label}
+                  </Combobox.Option>
+                ))
               ) : (
-                <p className="text-custom-text-300 text-center py-1">Loading...</p>
-              )}
-            </div>
-          </Combobox.Options>
-        </>
-      )}
+                <p className="text-custom-text-300 text-center py-1">
+                  No {attributeDetails.unit}s found
+                </p>
+              )
+            ) : (
+              <p className="text-custom-text-300 text-center py-1">Loading...</p>
+            )}
+          </div>
+        </div>
+      </Combobox.Options>
     </Combobox>
   );
 };
