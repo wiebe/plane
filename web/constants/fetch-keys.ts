@@ -389,3 +389,5 @@ export const COMMENT_REACTION_LIST = (
 
 export const CUSTOM_OBJECTS_LIST = (projectId: string) =>
   `CUSTOM_OBJECTS_LIST_${projectId.toUpperCase()}`;
+export const CUSTOM_ATTRIBUTE_DETAILS = (attributeId: string) =>
+  `CUSTOM_ATTRIBUTE_DETAILS_${attributeId.toUpperCase()}`;

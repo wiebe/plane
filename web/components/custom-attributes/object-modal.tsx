@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import { observer } from "mobx-react-lite";
 import { Controller, useForm } from "react-hook-form";
 import { Dialog, Transition } from "@headlessui/react";
+import useSWR from "swr";
 
 // mobx store
 import { useMobxStore } from "lib/mobx/store-provider";
@@ -15,6 +16,8 @@ import { Loader, PrimaryButton, SecondaryButton } from "components/ui";
 import { renderEmoji } from "helpers/emoji.helper";
 // types
 import { ICustomAttribute, TCustomAttributeTypes } from "types";
+// fetch-keys
+import { CUSTOM_ATTRIBUTE_DETAILS } from "constants/fetch-keys";
 // constants
 import { CUSTOM_ATTRIBUTES_LIST } from "constants/custom-attributes";
 
@@ -48,7 +51,7 @@ export const ObjectModal: React.FC<Props> = observer((props) => {
 
   const objectId = watch("id") && watch("id") !== "" ? watch("id") : null;
 
-  const { customAttributes } = useMobxStore();
+  const { customAttributes: customAttributesStore } = useMobxStore();
 
   const handleClose = () => {
     onClose();
@@ -69,7 +72,7 @@ export const ObjectModal: React.FC<Props> = observer((props) => {
       type: "entity",
     };
 
-    await customAttributes
+    await customAttributesStore
       .createObject(workspaceSlug.toString(), payload)
       .then((res) => setValue("id", res?.id ?? ""));
   };
@@ -83,7 +86,7 @@ export const ObjectModal: React.FC<Props> = observer((props) => {
       icon: formData.icon ?? "",
     };
 
-    await customAttributes.updateObject(workspaceSlug.toString(), data.id, payload);
+    await customAttributesStore.updateObject(workspaceSlug.toString(), data.id, payload);
   };
 
   const handleObjectFormSubmit = async (formData: Partial<ICustomAttribute>) => {
@@ -104,28 +107,19 @@ export const ObjectModal: React.FC<Props> = observer((props) => {
       ...typeMetaData.initialPayload,
     };
 
-    await customAttributes.createObjectAttribute(workspaceSlug.toString(), {
+    await customAttributesStore.createObjectAttribute(workspaceSlug.toString(), {
       ...payload,
       parent: objectId,
     });
   };
 
-  // fetch the object details if object state has id
-  useEffect(() => {
-    if (!objectId) return;
-
-    if (!customAttributes.objectAttributes[objectId]) {
-      if (!workspaceSlug) return;
-
-      customAttributes.fetchObjectDetails(workspaceSlug.toString(), objectId).then((res) => {
-        reset({ ...res });
-      });
-    } else {
-      reset({
-        ...customAttributes.objects?.find((e) => e.id === objectId),
-      });
-    }
-  }, [customAttributes, objectId, reset, workspaceSlug]);
+  useSWR(
+    workspaceSlug && objectId ? CUSTOM_ATTRIBUTE_DETAILS(objectId.toString()) : null,
+    workspaceSlug && objectId
+      ? () =>
+          customAttributesStore.fetchObjectDetails(workspaceSlug.toString(), objectId.toString())
+      : null
+  );
 
   // update the form if data is present
   useEffect(() => {
@@ -237,28 +231,28 @@ export const ObjectModal: React.FC<Props> = observer((props) => {
                       <div className="px-6">
                         <h4 className="font-medium">Attributes</h4>
                         <div className="mt-2 space-y-2">
-                          {customAttributes.fetchObjectDetailsLoader ? (
+                          {customAttributesStore.fetchObjectDetailsLoader ? (
                             <Loader>
                               <Loader.Item height="40px" />
                             </Loader>
                           ) : (
-                            Object.keys(customAttributes.objectAttributes[objectId] ?? {})?.map(
-                              (attributeId) => {
-                                const attribute =
-                                  customAttributes.objectAttributes[objectId][attributeId];
+                            Object.keys(
+                              customAttributesStore.objectAttributes[objectId] ?? {}
+                            )?.map((attributeId) => {
+                              const attribute =
+                                customAttributesStore.objectAttributes[objectId][attributeId];
 
-                                return (
-                                  <AttributeForm
-                                    key={attributeId}
-                                    attributeDetails={attribute}
-                                    objectId={objectId}
-                                    type={attribute.type}
-                                  />
-                                );
-                              }
-                            )
+                              return (
+                                <AttributeForm
+                                  key={attributeId}
+                                  attributeDetails={attribute}
+                                  objectId={objectId}
+                                  type={attribute.type}
+                                />
+                              );
+                            })
                           )}
-                          {customAttributes.createObjectAttributeLoader && (
+                          {customAttributesStore.createObjectAttributeLoader && (
                             <Loader>
                               <Loader.Item height="40px" />
                             </Loader>
