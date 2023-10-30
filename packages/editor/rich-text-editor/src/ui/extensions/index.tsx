@@ -8,6 +8,7 @@ import ts from "highlight.js/lib/languages/typescript";
 
 import SlashCommand from "./slash-command";
 import { UploadImage } from "../";
+import { EmbedExtension } from "./embed";
 
 const lowlight = createLowlight(common)
 lowlight.register("ts", ts);
@@ -39,6 +40,7 @@ export const RichTextEditorExtensions = (
         class: "mb-6 border-t border-custom-border-300",
       },
     }),
+    EmbedExtension,
     SlashCommand(uploadFile, setIsSubmitting),
     CodeBlockLowlight.configure({
       lowlight,
