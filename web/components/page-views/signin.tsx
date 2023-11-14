@@ -77,9 +77,14 @@ export const SignInView = observer(() => {
   );
 
   const mutateUserInfo = useCallback(() => {
-    fetchCurrentUser().then((user) => {
-      handleLoginRedirection(user);
-    });
+    setLoading(true);
+    fetchCurrentUser()
+      .then((user) => {
+        handleLoginRedirection(user);
+      })
+      .catch(() => {
+        setLoading(false);
+      });
   }, [fetchCurrentUser, handleLoginRedirection]);
 
   useEffect(() => {
