@@ -21,10 +21,8 @@ export const ProjectMemberList: React.FC = observer(() => {
   // router
   const router = useRouter();
   const { workspaceSlug, projectId } = router.query;
-
   // store
   const {
-    project: projectStore,
     projectMember: { projectMembers, fetchProjectMembers },
   } = useMobxStore();
 

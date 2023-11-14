@@ -20,6 +20,7 @@ import { IUser, TUserProjectRole } from "types";
 import { WORKSPACE_MEMBERS } from "constants/fetch-keys";
 // constants
 import { ROLE } from "constants/workspace";
+import { MembersAutocomplete } from "./members-autocomplete";
 
 type Props = {
   isOpen: boolean;
@@ -53,36 +54,29 @@ const workspaceService = new WorkspaceService();
 
 export const SendProjectInvitationModal: React.FC<Props> = observer((props) => {
   const { isOpen, setIsOpen, members, user, onSuccess } = props;
-
+  // router
   const router = useRouter();
   const { workspaceSlug, projectId } = router.query;
-
+  // hooks
   const { setToastAlert } = useToast();
+  // store
+  const {
+    user: { currentProjectRole },
+    projectMember: { projectMembers },
+  } = useMobxStore();
 
-  const { user: userStore } = useMobxStore();
-  const userRole = userStore.currentProjectRole;
-
-  const { data: people } = useSWR(
-    workspaceSlug ? WORKSPACE_MEMBERS(workspaceSlug as string) : null,
-    workspaceSlug ? () => workspaceService.fetchWorkspaceMembers(workspaceSlug as string) : null
-  );
+  const projectUsers = projectMembers?.map((m) => m.member) || [];
 
   const {
     formState: { errors, isSubmitting },
     reset,
     handleSubmit,
     control,
-  } = useForm<FormValues>();
+  } = useForm<FormValues>({ defaultValues });
 
   const { fields, append, remove } = useFieldArray({
     control,
     name: "members",
-  });
-
-  const uninvitedPeople = people?.filter((person) => {
-    const isInvited = members?.find((member) => member.memberId === person.member.id);
-
-    return !isInvited;
   });
 
   const onSubmit = async (formData: FormValues) => {
@@ -123,28 +117,6 @@ export const SendProjectInvitationModal: React.FC<Props> = observer((props) => {
       member_id: "",
     });
   };
-
-  useEffect(() => {
-    if (fields.length === 0) {
-      append([
-        {
-          role: 5,
-          member_id: "",
-        },
-      ]);
-    }
-  }, [fields, append]);
-
-  const options = uninvitedPeople?.map((person) => ({
-    value: person.member.id,
-    query: person.member.display_name,
-    content: (
-      <div className="flex items-center gap-2">
-        <Avatar name={person.member?.display_name} src={person.member?.avatar} />
-        {person.member.display_name} ({person.member.first_name + " " + person.member.last_name})
-      </div>
-    ),
-  }));
 
   return (
     <Transition.Root show={isOpen} as={React.Fragment}>
@@ -190,6 +162,14 @@ export const SendProjectInvitationModal: React.FC<Props> = observer((props) => {
                               control={control}
                               name={`members.${index}.member_id`}
                               rules={{ required: "Please select a member" }}
+                              render={({ field: { value, onChange } }) => (
+                                <MembersAutocomplete value={value} onChange={onChange} members={projectUsers} />
+                              )}
+                            />
+                            {/* <Controller
+                              control={control}
+                              name={`members.${index}.member_id`}
+                              rules={{ required: "Please select a member" }}
                               render={({ field: { value, onChange } }) => {
                                 const selectedMember = people?.find((p) => p.member.id === value)?.member;
 
@@ -217,7 +197,7 @@ export const SendProjectInvitationModal: React.FC<Props> = observer((props) => {
                                   />
                                 );
                               }}
-                            />
+                            /> */}
                             {errors.members && errors.members[index]?.member_id && (
                               <span className="text-sm px-1 text-red-500">
                                 {errors.members[index]?.member_id?.message}
@@ -246,7 +226,7 @@ export const SendProjectInvitationModal: React.FC<Props> = observer((props) => {
                                     width="w-full"
                                   >
                                     {Object.entries(ROLE).map(([key, label]) => {
-                                      if (parseInt(key) > (userRole ?? 5)) return null;
+                                      if (parseInt(key) > (currentProjectRole ?? 5)) return null;
 
                                       return (
                                         <CustomSelect.Option key={key} value={key}>
