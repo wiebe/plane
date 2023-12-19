@@ -30,117 +30,118 @@ export LAST_DIR=$(pwd)
 #Compile the Application
 cd $CODE_DIR
 
-# sudo cp start.sh /usr/local/bin/plane-start.sh
-# sudo chmod +x /usr/local/bin/plane-start.sh
-
-sudo yarn global add turbo
-#***********************************************************************
-#build web-app
+# sudo yarn global add turbo
+# #***********************************************************************
+# #build web-app
 
 
-sudo rm -rf $TEMP_DIR 
-TEMP_DIR=$(mktemp -d -t plane-XXXXXXXXXX)
+# sudo rm -rf $TEMP_DIR 
+# TEMP_DIR=$(mktemp -d -t plane-XXXXXXXXXX)
 
-cd $CODE_DIR
+# cd $CODE_DIR
 
-sudo rm -rf $CODE_DIR/out
-turbo prune --scope=web --docker
+# sudo rm -rf $CODE_DIR/out
+# turbo prune --scope=web --docker
 
-sudo cp -r $CODE_DIR/out/json/* $TEMP_DIR/
-sudo cp $CODE_DIR/out/yarn.lock $TEMP_DIR/yarn.lock
-cd $TEMP_DIR
-sudo yarn install
+# sudo cp -r $CODE_DIR/out/json/* $TEMP_DIR/
+# sudo cp $CODE_DIR/out/yarn.lock $TEMP_DIR/yarn.lock
+# cd $TEMP_DIR
+# sudo yarn install
 
-sudo cp -r $CODE_DIR/out/full/* $TEMP_DIR/
-sudo cp $CODE_DIR/turbo.json $TEMP_DIR/turbo.json
+# sudo cp -r $CODE_DIR/out/full/* $TEMP_DIR/
+# sudo cp $CODE_DIR/turbo.json $TEMP_DIR/turbo.json
 
-sudo yarn turbo run build --filter=web
+# sudo yarn turbo run build --filter=web
 
-sudo rm -rf $WEB_DIR
-sudo mkdir -p $WEB_DIR
+# sudo rm -rf $WEB_DIR
+# sudo mkdir -p $WEB_DIR
 
-sudo cp $TEMP_DIR/web/next.config.js $WEB_DIR/next.config.js
-sudo cp $TEMP_DIR/web/package.json $WEB_DIR/package.json
+# sudo cp $TEMP_DIR/web/next.config.js $WEB_DIR/next.config.js
+# sudo cp $TEMP_DIR/web/package.json $WEB_DIR/package.json
 
-sudo cp -rf $TEMP_DIR/web/.next/standalone/* $WEB_DIR/
-sudo mkdir -p $WEB_DIR/web/.next
-sudo cp -r $TEMP_DIR/web/.next/* $WEB_DIR/web/.next/
+# sudo cp -rf $TEMP_DIR/web/.next/standalone/* $WEB_DIR/
+# sudo mkdir -p $WEB_DIR/web/.next
+# sudo cp -r $TEMP_DIR/web/.next/* $WEB_DIR/web/.next/
 
-#create service file for web-app
-sudo tee $SERVICE_DIR/plane-web.service &>/dev/null <<EOF
-[Unit]
-Description=Plane-Web App
-After=network.target
-[Service]
-User=$USER
-Group=$USER
-Environment=PORT=$WEB_PORT
-WorkingDirectory=$WEB_DIR
-ExecStart=node web/server.js web
-Restart=on-failure
-[Install]
-WantedBy=multi-user.target
-EOF
+# #create service file for web-app
+# sudo tee $SERVICE_DIR/plane-web.service &>/dev/null <<EOF
+# [Unit]
+# Description=Plane-Web App
+# After=network.target
 
-# #enable web-app service
-sudo cp $SERVICE_DIR/plane-web.service /etc/systemd/system/plane-web.service
-sudo systemctl enable plane-web.service
+# [Service]
+# User=$USER
+# Group=$USER
+# Environment=PORT=$WEB_PORT
+# WorkingDirectory=$WEB_DIR
+# ExecStart=node web/server.js
+# Restart=on-failure
 
-sudo rm -rf $TEMP_DIR 
+# [Install]
+# WantedBy=multi-user.target
+# EOF
 
-#***********************************************************************
-#build space-app
+# # #enable web-app service
+# sudo cp $SERVICE_DIR/plane-web.service /etc/systemd/system/plane-web.service
+# sudo systemctl enable plane-web.service
 
-sudo rm -rf $TEMP_DIR
-TEMP_DIR=$(mktemp -d -t plane-XXXXXXXXXX)
+# sudo rm -rf $TEMP_DIR 
 
-cd $CODE_DIR
+# #***********************************************************************
+# #build space-app
 
-sudo rm -rf $CODE_DIR/out
-turbo prune --scope=space --docker
+# sudo rm -rf $TEMP_DIR
+# TEMP_DIR=$(mktemp -d -t plane-XXXXXXXXXX)
 
-sudo cp -r $CODE_DIR/out/json/* $TEMP_DIR/
-sudo cp $CODE_DIR/out/yarn.lock $TEMP_DIR/yarn.lock
-cd $TEMP_DIR
-sudo yarn install
+# cd $CODE_DIR
 
-sudo cp -r $CODE_DIR/out/full/* $TEMP_DIR/
-sudo cp $CODE_DIR/turbo.json $TEMP_DIR/turbo.json
+# sudo rm -rf $CODE_DIR/out
+# turbo prune --scope=space --docker
 
-sudo NEXT_PUBLIC_API_BASE_URL="" NEXT_PUBLIC_DEPLOY_WITH_NGINX=1 yarn turbo run build --filter=space
+# sudo cp -r $CODE_DIR/out/json/* $TEMP_DIR/
+# sudo cp $CODE_DIR/out/yarn.lock $TEMP_DIR/yarn.lock
+# cd $TEMP_DIR
+# sudo yarn install
 
-sudo rm -rf $SPACE_DIR
-sudo mkdir -p $SPACE_DIR
+# sudo cp -r $CODE_DIR/out/full/* $TEMP_DIR/
+# sudo cp $CODE_DIR/turbo.json $TEMP_DIR/turbo.json
 
-sudo cp $TEMP_DIR/space/next.config.js $SPACE_DIR/next.config.js
-sudo cp $TEMP_DIR/space/package.json $SPACE_DIR/package.json
+# sudo NEXT_PUBLIC_API_BASE_URL="" NEXT_PUBLIC_DEPLOY_WITH_NGINX=1 yarn turbo run build --filter=space
 
-sudo cp -rf $TEMP_DIR/space/.next/standalone/* $SPACE_DIR/
-sudo mkdir -p $SPACE_DIR/space/{.next,public}
-sudo cp -r $TEMP_DIR/space/.next/* $SPACE_DIR/space/.next/
-sudo cp -r $TEMP_DIR/space/public/* $SPACE_DIR/space/public
+# sudo rm -rf $SPACE_DIR
+# sudo mkdir -p $SPACE_DIR
 
-#create service file for space-app
-sudo tee $SERVICE_DIR/plane-space.service &>/dev/null <<EOF
-[Unit]
-Description=Plane-Space App
-After=network.target
-[Service]
-User=$USER
-Group=$USER
-Environment=PORT=$SPACE_PORT
-WorkingDirectory=$SPACE_DIR
-ExecStart=node space/server.js space
-Restart=on-failure
-[Install]
-WantedBy=multi-user.target
-EOF
+# sudo cp $TEMP_DIR/space/next.config.js $SPACE_DIR/next.config.js
+# sudo cp $TEMP_DIR/space/package.json $SPACE_DIR/package.json
 
-# #enable space-app service
-sudo cp $SERVICE_DIR/plane-space.service /etc/systemd/system/plane-space.service
-sudo systemctl enable plane-space.service
+# sudo cp -rf $TEMP_DIR/space/.next/standalone/* $SPACE_DIR/
+# sudo mkdir -p $SPACE_DIR/space/{.next,public}
+# sudo cp -r $TEMP_DIR/space/.next/* $SPACE_DIR/space/.next/
+# sudo cp -r $TEMP_DIR/space/public/* $SPACE_DIR/space/public
 
-sudo rm -rf $TEMP_DIR
+# #create service file for space-app
+# sudo tee $SERVICE_DIR/plane-space.service &>/dev/null <<EOF
+# [Unit]
+# Description=Plane-Space App
+# After=network.target
+
+# [Service]
+# User=$USER
+# Group=$USER
+# Environment=PORT=$SPACE_PORT
+# WorkingDirectory=$SPACE_DIR
+# ExecStart=node space/server.js
+# Restart=on-failure
+
+# [Install]
+# WantedBy=multi-user.target
+# EOF
+
+# # #enable space-app service
+# sudo cp $SERVICE_DIR/plane-space.service /etc/systemd/system/plane-space.service
+# sudo systemctl enable plane-space.service
+
+# sudo rm -rf $TEMP_DIR
 
 #***********************************************************************
 #build backend
@@ -163,7 +164,7 @@ export PYTHONDONTWRITEBYTECODE=1
 export PYTHONUNBUFFERED=1
 export PIP_DISABLE_PIP_VERSION_CHECK=1
 
-pip install -r requirements.txt --compile --no-cache-dir \
+sudo python3.11 -m pip install -r requirements.txt --compile --no-cache-dir
 
 sudo cp $CODE_DIR/apiserver/manage.py $BACKEND_DIR/manage.py
 sudo cp -r $CODE_DIR/apiserver/plane $BACKEND_DIR
@@ -175,6 +176,33 @@ sudo cp -r $CODE_DIR/apiserver/bin $BACKEND_DIR
 sudo chmod +x $BACKEND_DIR/bin/takeoff $BACKEND_DIR/bin/worker $BACKEND_DIR/bin/beat
 
 sudo cp $CODE_DIR/deploy/selfhost/variables.env $SERVICE_DIR/plane.env
+
+# CLEANUP VARAIABLES.ENV FILE
+sudo sed -i -e '/APP_RELEASE/d' \
+            -e '/WEB_REPLICAS/d' \
+            -e '/SPACE_REPLICAS/d' \
+            -e '/API_REPLICAS/d' \
+            -e '/NGINX_PORT/d' \
+            -e '/OPENAI_API_BASE/d' \
+            -e '/OPENAI_API_KEY/d' \
+            -e '/GPT_ENGINE/d' \
+            -e '/DOCKERIZED/d' \
+            -e '/NEXT_PUBLIC_DEPLOY_URL/d' \
+            -e '/SECRET_KEY/d' \
+            -e '/PGDATA/d' $SERVICE_DIR/plane.env
+
+echo "SECRET_KEY=\"$(tr -dc 'a-z0-9' < /dev/urandom | head -c50)\""  | sudo tee -a $SERVICE_DIR/plane.env
+
+sudo sed -i 's@http://localhost@http://plane.example.com@g' $SERVICE_DIR/plane.env
+
+sudo sed -i -e '/plane-db/d' \
+            -e '/plane-redis/d' \
+            -e '/plane-minio/d' /etc/hosts
+
+echo "127.0.0.1    plane-db
+127.0.0.1    plane-redis
+127.0.0.1    plane-minio" | sudo tee -a /etc/hosts
+
 sudo cp $SERVICE_DIR/plane.env /etc/default/plane
 
 #***********************************************************************
@@ -190,7 +218,7 @@ Group=$USER
 Environment=PORT=$BACKEND_PORT
 EnvironmentFile=/etc/default/plane
 WorkingDirectory=$BACKEND_DIR
-ExecStart=./bin/takeoff
+ExecStart=/etc/default/plane/bin/takeoff
 Restart=on-failure
 
 [Install]
@@ -213,7 +241,7 @@ User=$USER
 Group=$USER
 EnvironmentFile=/etc/default/plane
 WorkingDirectory=$BACKEND_DIR
-ExecStart=./bin/worker
+ExecStart=-/bin/worker
 Restart=on-failure
 
 [Install]
@@ -362,13 +390,27 @@ echo "
 Installation Completed
 
 Few Todos before you start the services : 
-    ‣ Setup postgres user and database
-    ‣ Review and update environment variables are set in "/etc/default/plane"
-    ‣ Review and update nginx configuration file "/etc/nginx/conf.d/plane.conf"
+    ‣ Setup postgres user and database (Default is plane:plane and plane)
+    ‣ Review and update environment variables in '/etc/default/plane' 
+        ‣ Update domain 'plane.example.com' with your domain name
+        ‣ In case you are using remote DB server, update the DATABASE_URL
+        ‣ In case you are using AWS S3 storage, update the AWS_REGION, AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_STORAGE_BUCKET_NAME, AWS_S3_ENDPOINT_URL
+    ‣ Review and update nginx configuration file '/etc/nginx/conf.d/plane.conf'
+        ‣ In case of SSL certificate, uncomment the commented lines and update the paths to SSL certificate files
+        ‣ Certbot can be used to generate SSL certificate. Here are the steps
+            ‣ sudo certbot certonly --rsa-key-size=4096 --agree-tos -m yourname@example.com --cert-name=plane-cert -d plane.example.com
 
-To Start/Stop/Restart Plane Services run the following command
+To Start/Stop/Restart all Plane Services together, run the following command
 
-plane start | stop | restart
+    plane start | stop | restart
+
+To Start/Stop/Restart individual Plane Services, run the following command
+
+    service plane-web start | stop | restart
+    service plane-space start | stop | restart
+    service plane-backend start | stop | restart
+    service plane-worker start | stop | restart
+    service plane-beat-worker start | stop | restart
 
 ***********************************************"
 

@@ -1,8 +1,8 @@
 #!/bin/bash
 
 export BASE_DIR=/opt/plane
-export REDIS_DIR=$BASE_DIR/redis
 export DB_DIR=$BASE_DIR/db
+export REDIS_DIR=$BASE_DIR/redis
 export MINIO_DIR=$BASE_DIR/minio
 export SERVICE_DIR=$BASE_DIR/services
 
@@ -25,6 +25,7 @@ sudo apt -qq install -y software-properties-common
 sudo add-apt-repository -y ppa:deadsnakes/ppa
 sudo apt -qq install -y python3.11 python3.11-dev python3.11-distutils python3.11-venv python3-pip
 
+sudo ln -s /usr/bin/python3.11 /usr/local/bin/python
 
 #***********************************************************************
 #install redis
@@ -78,17 +79,28 @@ if [ "$install_local_postgres" == 'y' ] || [ "$install_local_postgres" == 'Y' ] 
 
     sudo apt-get -qq install -y postgresql-14 postgresql-client-14 postgresql-contrib-14
 
+    sudo service postgresql stop
+
     #modify postgresql.conf to listen on all interfaces 
     sudo sed -i "s@#listen_addresses = 'localhost'@listen_addresses = '*'@" /etc/postgresql/14/main/postgresql.conf
 
     #modify data folder permissions
+    sudo rm -rf $DB_DIR
     sudo mkdir -p $DB_DIR
     sudo chown -R postgres:postgres $DB_DIR
+    sudo chmod 700 $DB_DIR
+
+    sudo rsync -av /var/lib/postgresql/14/main/ $DB_DIR
 
     #modify postgresql data folder path
     sudo sed -i "s@data_directory = '\/var\/lib\/postgresql\/14\/main'@data_directory = '$DB_DIR'@" /etc/postgresql/14/main/postgresql.conf
 
-    sudo service postgresql restart
+    sudo service postgresql start
+
+    #create postgresql database
+    sudo su - postgres -c "psql -c \"CREATE DATABASE plane;\""
+    sudo su - postgres -c "psql -c \"CREATE USER plane WITH PASSWORD 'plane';\""
+    sudo su - postgres -c "psql -c \"GRANT ALL PRIVILEGES ON DATABASE plane TO plane;\""
 fi
 
 #***********************************************************************
