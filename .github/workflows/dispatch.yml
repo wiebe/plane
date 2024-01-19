@@ -191,7 +191,7 @@ jobs:
         with:
           context: ./nginx
           file: ./nginx/Dockerfile
-          platforms: ${{ env.PLATFORMS }}}
+          platforms: ${{ env.PLATFORMS }}
           tags: ${{ env.PROXY_TAG }}
           push: true
         env:
