@@ -1,9 +1,9 @@
-name: ManualBuildTrigger
+name: Manual Build Trigger
 
 on:
-  # push:
-  #   branches:
-  #     - mg-manual-build
+  push:
+    branches:
+      - mg-manual-build
   workflow_dispatch: 
     inputs:
       branch_name:
@@ -12,7 +12,7 @@ on:
         default: "develop"
   
 env:
-  TARGET_BRANCH: ${{ github.event.inputs.branch_name }}
+  TARGET_BRANCH: ${{ github.event.inputs.branch_name || github.ref_name }}
 
 jobs:
   branch_build_setup:
@@ -22,7 +22,7 @@ jobs:
     steps:
       - name: Set the branch name
         run: |
-          BRANCH_NAME=$(echo "${{ github.event.inputs.branch_name }}" | sed -e 's/[\.\_\s\/]/-/g')
+          BRANCH_NAME=$(echo "${{ env.TARGET_BRANCH }}" | sed -e 's/[\.\_\s\/]/-/g')
           echo "TARGET_BRANCH=${BRANCH_NAME}" >> $GITHUB_ENV
     outputs:
       gh_branch_name: ${{ env.TARGET_BRANCH }}
