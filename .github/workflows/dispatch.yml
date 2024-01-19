@@ -23,10 +23,10 @@ jobs:
     steps:
       - name: Set the branch name
         run: |
-          BRANCH_NAME=$(echo "${{ env.TARGET_BRANCH }}" | sed -e 's/[\.\-\s\/\:]/_/g')
+          BRANCH_NAME=$(echo "${{ env.TARGET_BRANCH }}" | sed -e 's/[\.\-\s\/\:]+/_/g')
           echo "TARGET_BRANCH=${BRANCH_NAME}" >> $GITHUB_ENV
     outputs:
-      gh_branch_name: ${{ env.BRANCH_NAME }}
+      gh_branch_name: ${{ env.TARGET_BRANCH }}
       build_platforms: ${{ env.PLATFORMS }}
 
   # branch_build_push_frontend:
