@@ -11,23 +11,21 @@ on:
         description: "Enter the branch to be built"
         default: "develop"
   
-env:
-  TARGET_BRANCH: ${{ github.event.inputs.branch_name || github.ref_name }}
-  PLATFORMS: linux/amd64 #,linux/arm64
+# env:
+  # TARGET_BRANCH: ${{ github.event.inputs.branch_name || github.ref_name }}
+  # PLATFORMS: linux/amd64 #,linux/arm64
 
 jobs:
-  build_env_setup:
-    name: Build Environment Setup
-    runs-on: ubuntu-20.04
+  # build_env_setup:
+  #   name: Build Environment Setup
+  #   runs-on: ubuntu-20.04
 
-    steps:
-      - name: Set the branch name
-        run: |
-          BRANCH_NAME=$(echo "${{ env.TARGET_BRANCH }}" | sed -e 's/[\.\-\s\/\:]+/_/g')
-          echo "TARGET_BRANCH=${BRANCH_NAME}" >> $GITHUB_ENV
-    outputs:
-      gh_branch_name: ${{ env.TARGET_BRANCH }}
-      build_platforms: ${{ env.PLATFORMS }}
+  #   steps:
+  #     - name: Set the branch name
+  #       run: echo "TARGET_BRANCH=$(echo "${{ env.TARGET_BRANCH }}" | sed -e 's/[\.\-\s\/\:]+/_/g') >> $GITHUB_ENV
+  #   outputs:
+  #     gh_branch_name: ${{ env.TARGET_BRANCH }}
+  #     build_platforms: ${{ env.PLATFORMS }}
 
   # branch_build_push_frontend:
   #   runs-on: ubuntu-20.04
@@ -157,16 +155,18 @@ jobs:
 
   branch_build_push_proxy:
     runs-on: ubuntu-20.04
-    needs: [build_env_setup]
+    # needs: [build_env_setup]
     env:
+      TARGET_BRANCH: ${{ github.event.inputs.branch_name || github.ref_name }}
+      PLATFORMS: linux/amd64,linux/arm64
       PROXY_TAG: ${{ secrets.DOCKERHUB_USERNAME }}/plane-proxy${{ secrets.DOCKER_REPO_SUFFIX || '' }}:${{ needs.build_env_setup.outputs.gh_branch_name }}
     steps:
-      - name: Check out the repo
-        uses: actions/checkout@v3.3.0
+      - name: Set the branch name
+        run: echo "TARGET_BRANCH=$(echo "${{ env.TARGET_BRANCH }}" | sed -e 's/[\.\-\s\/\:]+/_/g') >> $GITHUB_ENV
 
       - name: Set Proxy Docker Tag 
         run: |
-          echo ${{ needs.build_env_setup.outputs.gh_branch_name }}
+          echo ${{ env.TARGET_BRANCH }}
           # if [ "${{ needs.build_env_setup.outputs.gh_branch_name }}" == "master" ] && [ "${{ github.event_name }}" == "release" ]; then
           #   TAG=${{ secrets.DOCKERHUB_USERNAME }}/plane-proxy${{ secrets.DOCKER_REPO_SUFFIX || '' }}:latest,${{ secrets.DOCKERHUB_USERNAME }}/plane-proxy${{ secrets.DOCKER_REPO_SUFFIX || '' }}:${{ github.event.release.tag_name }}
           # elif [ "${{ needs.build_env_setup.outputs.gh_branch_name }}" == "master" ]; then
@@ -175,6 +175,12 @@ jobs:
           #   TAG=${{ env.PROXY_TAG }}
           # fi
           # echo "PROXY_TAG=${TAG}" >> $GITHUB_ENV
+
+      # - name: Check out the repo
+      #   uses: actions/checkout@v3.3.0
+      #   with:
+      #     ref: ${{ env.TARGET_BRANCH }}
+
       # - name: Set up Docker Buildx
       #   uses: docker/setup-buildx-action@v2.5.0
 
