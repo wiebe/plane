@@ -1,6 +1,9 @@
 name: Manual Branch Build
 
 on:
+  push:
+    branches:
+      - mg-manual-build
   workflow_dispatch: 
     inputs:
       branch:
