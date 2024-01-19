@@ -1,4 +1,4 @@
-name: Manual Build Trigger
+name: ManualBuildTrigger
 
 on:
   # push:
