@@ -162,7 +162,7 @@ jobs:
       PROXY_TAG: ${{ secrets.DOCKERHUB_USERNAME }}/plane-proxy${{ secrets.DOCKER_REPO_SUFFIX || '' }}:${{ needs.build_env_setup.outputs.gh_branch_name }}
     steps:
       - name: Set the branch name
-        run: echo "TARGET_BRANCH=$(echo ${{ env.TARGET_BRANCH }} | sed -e 's/[\.\-\s\/\:]+/_/g')" >> $GITHUB_ENV
+        run: echo "TARGET_BRANCH=$(echo ${{ env.TARGET_BRANCH }} | sed -r 's/[-\.\ \/\:]+/_/g')" >> $GITHUB_ENV
 
       - name: Set Proxy Docker Tag 
         run: |
