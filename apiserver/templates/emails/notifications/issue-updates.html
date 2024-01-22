@@ -35,18 +35,18 @@
     text="#3b3f44"
     link="#3f76ff"
     yahoo="fix"
-    style="background-color: #f7f9ff; margin: 50px"
+    style="background-color: #f7f9ff; margin: 20px"
   >
     <table
       cellspacing="0"
       cellpadding="0"
       border="0"
       style="
-        display: flex;
         background-color: #f7f9ff;
         width: 100%;
         height: 100%;
-        justify-content: center;
+        padding-left: calc((100vw - 676px) / 2);
+        padding-right: calc((100vw - 676px) / 2);
       "
     >
       <!-- Header -->
@@ -55,24 +55,19 @@
           <table style="width: 600px">
             <tr>
               <td>
-                <div
-                  style="
-                    display: flex;
-                    align-items: center;
-                    gap: 10px;
-                    margin-bottom: 20px;
-                    margin-left: 30px;
-                  "
-                >
+                <div style="margin: 20px">
+                  <!-- TODO: Get Plane logo -->
                   <img
                     src="https://docs.plane.so/logos/logo.svg"
-                    width="25"
-                    height="25"
+                    width="28"
+                    height="28"
                     border="0"
                   />
-                  <p style="font-weight: 700; font-size: 32px; color: #3f76ff">
+                  <span
+                    style="font-weight: 700; font-size: 32px; color: #3f76ff"
+                  >
                     Plane
-                  </p>
+                  </span>
                 </div>
               </td>
             </tr>
@@ -238,6 +233,17 @@
                                     ></i>
                                   </td>
 
+                                  <td style="width: 55px">
+                                    <p
+                                      style="
+                                        font-size: 0.8rem;
+                                        font-weight: 500;
+                                        color: #525252;
+                                      "
+                                    >
+                                      Assignee
+                                    </p>
+                                  </td>
                                   <td>
                                     <p
                                       style="
@@ -246,7 +252,7 @@
                                         color: #525252;
                                       "
                                     >
-                                      Assignee :
+                                      :
                                     </p>
                                   </td>
                                   <td>
@@ -296,8 +302,10 @@
 
                           <!-- due date changed -->
                           <tr>
-                            <td style="padding-bottom: 20px">
-                              <table style="padding-left: 15px">
+                            <td
+                              style="padding-left: 15px; padding-bottom: 20px"
+                            >
+                              <table>
                                 <tr>
                                   <td>
                                     <i
@@ -310,6 +318,17 @@
                                       "
                                     ></i>
                                   </td>
+                                  <td style="width: 55px">
+                                    <p
+                                      style="
+                                        font-size: 0.8rem;
+                                        font-weight: 500;
+                                        color: #525252;
+                                      "
+                                    >
+                                      Due Date
+                                    </p>
+                                  </td>
                                   <td>
                                     <p
                                       style="
@@ -318,7 +337,7 @@
                                         color: #525252;
                                       "
                                     >
-                                      Due Date :
+                                      :
                                     </p>
                                   </td>
                                   <td>
@@ -340,8 +359,10 @@
 
                           <!-- duplicate changed -->
                           <tr>
-                            <td style="padding-bottom: 20px">
-                              <table style="padding-left: 15px">
+                            <td
+                              style="padding-left: 15px; padding-bottom: 20px"
+                            >
+                              <table>
                                 <tr>
                                   <td>
                                     <i
@@ -354,6 +375,17 @@
                                       "
                                     ></i>
                                   </td>
+                                  <td style="width: 55px">
+                                    <p
+                                      style="
+                                        font-size: 0.8rem;
+                                        font-weight: 500;
+                                        color: #525252;
+                                      "
+                                    >
+                                      Duplicate
+                                    </p>
+                                  </td>
                                   <td>
                                     <p
                                       style="
@@ -362,7 +394,7 @@
                                         color: #525252;
                                       "
                                     >
-                                      Duplicate :
+                                      :
                                     </p>
                                   </td>
                                   <td>
@@ -384,8 +416,10 @@
 
                           <!-- only assignee added -->
                           <tr>
-                            <td style="padding-bottom: 20px">
-                              <table style="padding-left: 15px">
+                            <td
+                              style="padding-left: 15px; padding-bottom: 20px"
+                            >
+                              <table>
                                 <tr>
                                   <td>
                                     <i
@@ -398,6 +432,18 @@
                                       "
                                     ></i>
                                   </td>
+
+                                  <td style="width: 55px">
+                                    <p
+                                      style="
+                                        font-size: 0.8rem;
+                                        font-weight: 500;
+                                        color: #525252;
+                                      "
+                                    >
+                                      Assignee
+                                    </p>
+                                  </td>
                                   <td>
                                     <p
                                       style="
@@ -406,7 +452,7 @@
                                         color: #525252;
                                       "
                                     >
-                                      Assignee :
+                                      :
                                     </p>
                                   </td>
                                   <td>
@@ -443,11 +489,7 @@
                           <!-- assignee changed and more assignee added -->
                           <tr>
                             <td
-                              style="
-                                padding-left: 15px;
-                                padding-right: 15px;
-                                padding-bottom: 20px;
-                              "
+                              style="padding-left: 15px; padding-bottom: 20px"
                             >
                               <table>
                                 <tr>
@@ -463,6 +505,17 @@
                                     ></i>
                                   </td>
 
+                                  <td style="width: 55px">
+                                    <p
+                                      style="
+                                        font-size: 0.8rem;
+                                        font-weight: 500;
+                                        color: #525252;
+                                      "
+                                    >
+                                      Assignee
+                                    </p>
+                                  </td>
                                   <td>
                                     <p
                                       style="
@@ -471,7 +524,7 @@
                                         color: #525252;
                                       "
                                     >
-                                      Assignee :
+                                      :
                                     </p>
                                   </td>
                                   <td>
@@ -534,18 +587,12 @@
 
                           <!-- Labels -->
                           <tr>
-                            <td>
-                              <table
-                                cellspacing="0px"
-                                style="padding-left: 15px; padding-bottom: 20px"
-                              >
+                            <td
+                              style="padding-left: 15px; padding-bottom: 20px"
+                            >
+                              <table>
                                 <tr>
-                                  <td
-                                    style="
-                                      vertical-align: top;
-                                      padding-top: 4px;
-                                    "
-                                  >
+                                  <td>
                                     <i
                                       data-lucide="layout-panel-top"
                                       style="
@@ -555,14 +602,29 @@
                                         margin-right: 5px;
                                       "
                                     ></i>
-                                    <span
+                                  </td>
+
+                                  <td style="width: 55px">
+                                    <p
                                       style="
                                         font-size: 0.8rem;
                                         font-weight: 500;
                                         color: #525252;
                                       "
-                                      >Labels :</span
                                     >
+                                      Labels
+                                    </p>
+                                  </td>
+                                  <td>
+                                    <p
+                                      style="
+                                        font-size: 0.8rem;
+                                        font-weight: 500;
+                                        color: #525252;
+                                      "
+                                    >
+                                      :
+                                    </p>
                                   </td>
                                   <td valign="top">
                                     <table>
@@ -737,20 +799,22 @@
                     <!-- Comments End -->
                   </table>
                 </div>
-                <div
+                <button
                   onclick="window.location.href='https://docs.plane.so/PLW-1'"
                   href="https://docs.plane.so/PLW-1"
                   style="
                     background-color: #3e63dd;
-                    width: fit-content;
-                    padding: 10px;
+                    padding: 10px 15px;
+                    border: 1px solid #2f4ba8;
                     border-radius: 4px;
                     margin-top: 15px;
                     cursor: pointer;
+                    font-size: 0.8rem;
+                    color: white;
                   "
                 >
-                  <p style="font-size: 0.8rem; color: white">View issue</p>
-                </div>
+                  View issue
+                </button>
               </td>
             </tr>
           </table>
@@ -759,7 +823,7 @@
       <!-- Footer -->
       <tr>
         <td>
-          <table style="width: 600px; padding: 30px">
+          <table style="width: 600px; padding: 20px">
             <tr>
               <td>
                 <div style="font-size: 0.8rem; color: #1c2024">
@@ -783,53 +847,46 @@
                   >.
 
                   <!-- Github | LinkedIn | Twitter -->
-                  <div
-                    style="
-                      display: flex;
-                      margin-top: 50px;
-                      gap: 20px;
-                      justify-content: end;
-                    "
-                  >
+                  <div style="margin-top: 40px; float: right">
                     <a
                       href="https://github.com/makeplane"
                       target="_blank"
-                      style="color: #3f76ff; text-decoration: underline"
+                      style="margin-left: 10px; text-decoration: none"
                     >
                       <img
                         src="https://creative-assets.mailinblue.com/editor/social-icons/rounded_colored/github_32px.png"
                         width="25"
                         height="25"
                         border="0"
-                        style="display: block; width: 100%"
+                        style="display: inline-block"
                       />
                     </a>
 
                     <a
                       href="https://www.linkedin.com/company/planepowers/"
                       target="_blank"
-                      style="color: #3f76ff; text-decoration: underline"
+                      style="margin-left: 10px; text-decoration: none"
                     >
                       <img
                         src="https://creative-assets.mailinblue.com/editor/social-icons/rounded_colored/linkedin_32px.png"
                         width="25"
                         height="25"
                         border="0"
-                        style="display: block; width: 100%"
+                        style="display: inline-block"
                       />
                     </a>
 
                     <a
                       href="https://twitter.com/planepowers"
                       target="_blank"
-                      style="color: #3f76ff; text-decoration: underline"
+                      style="margin-left: 10px; text-decoration: none"
                     >
                       <img
                         src="https://creative-assets.mailinblue.com/editor/social-icons/rounded_colored/twitter_32px.png"
                         width="25"
                         height="25"
                         border="0"
-                        style="display: block; width: 100%"
+                        style="display: inline-block"
                       />
                     </a>
                   </div>
