@@ -41,15 +41,12 @@ export type TActivityOperations = {
   createComment: (data: Partial<TIssueComment>) => Promise<void>;
   updateComment: (commentId: string, data: Partial<TIssueComment>) => Promise<void>;
   removeComment: (commentId: string) => Promise<void>;
-  createCommentReaction: (commentId: string, reaction: string) => Promise<void>;
-  removeCommentReaction: (commentId: string, reaction: string) => Promise<void>;
 };
 
 export const IssueActivity: FC<TIssueActivity> = observer((props) => {
   const { workspaceSlug, projectId, issueId, disabled, showAccessSpecifier } = props;
   // hooks
-  const { createComment, updateComment, removeComment, createCommentReaction, removeCommentReaction } =
-    useIssueDetail();
+  const { createComment, updateComment, removeComment } = useIssueDetail();
   const { setToastAlert } = useToast();
   // state
   const [activityTab, setActivityTab] = useState<TActivityTabs>("all");
@@ -107,52 +104,8 @@ export const IssueActivity: FC<TIssueActivity> = observer((props) => {
           });
         }
       },
-      createCommentReaction: async (commentId: string, reaction: string) => {
-        try {
-          if (!workspaceSlug || !projectId) throw new Error("Missing fields");
-          await createCommentReaction(workspaceSlug, projectId, commentId, reaction);
-          setToastAlert({
-            title: "Comment reaction added successfully.",
-            type: "success",
-            message: "Comment reaction added successfully.",
-          });
-        } catch (error) {
-          setToastAlert({
-            title: "Comment reaction addition failed.",
-            type: "error",
-            message: "Comment reaction addition failed. Please try again later.",
-          });
-        }
-      },
-      removeCommentReaction: async (commentId: string, reaction: string) => {
-        try {
-          if (!workspaceSlug || !projectId) throw new Error("Missing fields");
-          await removeCommentReaction(workspaceSlug, projectId, commentId, reaction);
-          setToastAlert({
-            title: "Comment reaction removed successfully.",
-            type: "success",
-            message: "Comment reaction removed successfully.",
-          });
-        } catch (error) {
-          setToastAlert({
-            title: "Comment reaction removal failed.",
-            type: "error",
-            message: "Comment reaction removal failed. Please try again later.",
-          });
-        }
-      },
     }),
-    [
-      workspaceSlug,
-      projectId,
-      issueId,
-      createComment,
-      updateComment,
-      removeComment,
-      createCommentReaction,
-      removeCommentReaction,
-      setToastAlert,
-    ]
+    [workspaceSlug, projectId, issueId, createComment, updateComment, removeComment, setToastAlert]
   );
 
   return (
@@ -161,7 +114,7 @@ export const IssueActivity: FC<TIssueActivity> = observer((props) => {
       <div className="text-lg text-custom-text-100">Comments/Activity</div>
 
       {/* rendering activity */}
-      <div className="space-y-2">
+      <div className="space-y-3">
         <div className="relative flex items-center gap-1">
           {activityTabs.map((tab) => (
             <div
@@ -184,11 +137,11 @@ export const IssueActivity: FC<TIssueActivity> = observer((props) => {
 
         <div className="min-h-[200px]">
           {activityTab === "all" ? (
-            <>
+            <div className="space-y-3">
               <IssueActivityCommentRoot
+                workspaceSlug={workspaceSlug}
                 issueId={issueId}
                 activityOperations={activityOperations}
-                showAccessSpecifier={showAccessSpecifier}
               />
               <IssueCommentCreate
                 workspaceSlug={workspaceSlug}
@@ -196,15 +149,15 @@ export const IssueActivity: FC<TIssueActivity> = observer((props) => {
                 disabled={disabled}
                 showAccessSpecifier={showAccessSpecifier}
               />
-            </>
+            </div>
           ) : activityTab === "activity" ? (
             <IssueActivityRoot issueId={issueId} />
           ) : (
-            <>
+            <div className="space-y-3">
               <IssueCommentRoot
+                workspaceSlug={workspaceSlug}
                 issueId={issueId}
                 activityOperations={activityOperations}
-                showAccessSpecifier={showAccessSpecifier}
               />
               <IssueCommentCreate
                 workspaceSlug={workspaceSlug}
@@ -212,7 +165,7 @@ export const IssueActivity: FC<TIssueActivity> = observer((props) => {
                 disabled={disabled}
                 showAccessSpecifier={showAccessSpecifier}
               />
-            </>
+            </div>
           )}
         </div>
       </div>

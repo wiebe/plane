@@ -458,19 +458,6 @@ class IssueReactionSerializer(BaseSerializer):
         ]
 
 
-class CommentReactionLiteSerializer(BaseSerializer):
-    actor_detail = UserLiteSerializer(read_only=True, source="actor")
-
-    class Meta:
-        model = CommentReaction
-        fields = [
-            "id",
-            "reaction",
-            "comment",
-            "actor_detail",
-        ]
-
-
 class CommentReactionSerializer(BaseSerializer):
     class Meta:
         model = CommentReaction
@@ -501,7 +488,7 @@ class IssueCommentSerializer(BaseSerializer):
     workspace_detail = WorkspaceLiteSerializer(
         read_only=True, source="workspace"
     )
-    comment_reactions = CommentReactionLiteSerializer(
+    comment_reactions = CommentReactionSerializer(
         read_only=True, many=True
     )
     is_member = serializers.BooleanField(read_only=True)
