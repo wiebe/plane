@@ -84,13 +84,13 @@ type Props = {
   control?: Control<IWorkspace, any>;
   setValue?: UseFormSetValue<IWorkspace>;
   watch?: UseFormWatch<IWorkspace>;
-  userFullName?: string;
+  userDisplayName?: string;
 };
 var timer: number = 0;
 var lastWorkspaceName: string = "";
 
 export const OnboardingSidebar: React.FC<Props> = (props) => {
-  const { workspaceName, showProject, control, setValue, watch, userFullName } = props;
+  const { workspaceName, showProject, control, setValue, watch, userDisplayName } = props;
   // store hooks
   const { currentUser } = useUser();
   const { workspaces } = useWorkspace();
@@ -211,7 +211,7 @@ export const OnboardingSidebar: React.FC<Props> = (props) => {
             </div>
             <div className="flex flex-shrink-0">
               <Avatar
-                name={userFullName ?? currentUser?.email}
+                name={userDisplayName ?? currentUser?.email}
                 src={currentUser?.avatar}
                 size={24}
                 shape="square"

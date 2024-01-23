@@ -17,7 +17,7 @@ import { FileService } from "services/file.service";
 import IssuesSvg from "public/onboarding/onboarding-issues.webp";
 
 const defaultValues: Partial<IUser> = {
-  first_name: "",
+  display_name: "",
   avatar: "",
   use_case: undefined,
 };
@@ -67,8 +67,7 @@ export const UserDetails: React.FC<Props> = observer((props) => {
 
     const payload: Partial<IUser> = {
       ...formData,
-      first_name: formData.first_name.split(" ")[0],
-      last_name: formData.first_name.split(" ")[1],
+      display_name: formData.display_name,
       use_case: formData.use_case,
       onboarding_step: {
         ...user.onboarding_step,
@@ -93,13 +92,9 @@ export const UserDetails: React.FC<Props> = observer((props) => {
       <div className="fixed hidden h-full w-1/5 max-w-[320px] lg:block">
         <Controller
           control={control}
-          name="first_name"
+          name="display_name"
           render={({ field: { value } }) => (
-            <OnboardingSidebar
-              userFullName={value.length === 0 ? undefined : value}
-              showProject
-              workspaceName={workspaceName}
-            />
+            <OnboardingSidebar userDisplayName={value} showProject workspaceName={workspaceName} />
           )}
         />
       </div>
@@ -127,7 +122,7 @@ export const UserDetails: React.FC<Props> = observer((props) => {
               <p className="text-xl font-semibold sm:text-2xl">What do we call you? </p>
               <OnboardingStepIndicator step={2} />
             </div>
-            <div className="mt-6 flex w-full ">
+            <div className="mt-6 flex w-full">
               <button type="button" onClick={() => setIsImageUploadModalOpen(true)}>
                 {!watch("avatar") || watch("avatar") === "" ? (
                   <div className="relative mr-3 flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-full bg-onboarding-background-300 hover:cursor-pointer">
@@ -151,18 +146,16 @@ export const UserDetails: React.FC<Props> = observer((props) => {
               <div className="my-2 mr-10 flex w-full rounded-md bg-onboarding-background-200 text-sm">
                 <Controller
                   control={control}
-                  name="first_name"
+                  name="display_name"
                   rules={{
-                    required: "First name is required",
+                    required: "Display name is required",
                     maxLength: {
                       value: 24,
-                      message: "First name cannot exceed the limit of 24 characters",
+                      message: "Display name cannot exceed the limit of 24 characters",
                     },
                   }}
                   render={({ field: { value, onChange, ref } }) => (
                     <Input
-                      id="first_name"
-                      name="first_name"
                       type="text"
                       value={value}
                       autoFocus={true}
@@ -171,8 +164,8 @@ export const UserDetails: React.FC<Props> = observer((props) => {
                         onChange(event);
                       }}
                       ref={ref}
-                      hasError={Boolean(errors.first_name)}
-                      placeholder="Enter your full name..."
+                      hasError={Boolean(errors.display_name)}
+                      placeholder="Enter your display name..."
                       className="w-full border-onboarding-border-100 focus:border-custom-primary-100"
                     />
                   )}
@@ -182,7 +175,7 @@ export const UserDetails: React.FC<Props> = observer((props) => {
             <div className="mb-10 mt-14">
               <Controller
                 control={control}
-                name="first_name"
+                name="display_name"
                 render={({ field: { value } }) => (
                   <p className="p-0 text-xl font-medium text-onboarding-text-200 sm:text-2xl">
                     And how will you use Plane{value.length > 0 ? ", " : ""}
