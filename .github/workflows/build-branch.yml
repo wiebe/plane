@@ -23,9 +23,9 @@ jobs:
     name: Build-Push Web/Space/API/Proxy Docker Image
     runs-on: ubuntu-20.04
     env:
-      BUILDX_PLATFORMS: linux/amd64
-      BUILDX_DRIVER: docker-container
-      BUILDX_VERSION: latest
+      BUILDX_DRIVER: ""
+      BUILDX_VERSION: ""
+      BUILDX_PLATFORMS: ""
       BUILDX_ENDPOINT: ""
     steps:
       # - name: Check out the repo
@@ -38,6 +38,11 @@ jobs:
             echo "BUILDX_VERSION=lab:latest" >> $GITHUB_ENV
             echo "BUILDX_PLATFORMS=linux/amd64,linux/arm64" >> $GITHUB_ENV
             echo "BUILDX_ENDPOINT=makeplane/plane-dev" >> $GITHUB_ENV
+          else
+            echo "BUILDX_DRIVER=docker-container" >> $GITHUB_ENV
+            echo "BUILDX_VERSION=latest" >> $GITHUB_ENV
+            echo "BUILDX_PLATFORMS=linux/amd64" >> $GITHUB_ENV
+            echo "BUILDX_ENDPOINT=local" >> $GITHUB_ENV
           fi
           
     outputs:
