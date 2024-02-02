@@ -2,11 +2,11 @@ name: Branch Build
 
 on:
   workflow_dispatch:
-    # inputs:
-    #   branch_name:
-    #     description: "Branch Name"
-    #     required: true
-    #     default: "preview"
+    inputs:
+      branch_name:
+        description: "Branch Name"
+        required: true
+        default: "preview"
   push:
     branches:
       - mg-multiple-arch-build
