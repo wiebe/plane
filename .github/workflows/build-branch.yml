@@ -22,6 +22,13 @@ jobs:
   branch_build_setup:
     name: Build-Push Web/Space/API/Proxy Docker Image
     runs-on: ubuntu-20.04
+    outputs:
+      gh_branch_name: ${{ steps.set_env_variables.outputs.TARGET_BRANCH }} 
+      gh_buildx_driver: ${{ steps.set_env_variables.outputs.BUILDX_DRIVER }}
+      gh_buildx_version: ${{ steps.set_env_variables.outputs.BUILDX_VERSION }}
+      gh_buildx_platforms: ${{ steps.set_env_variables.outputs.BUILDX_PLATFORMS }}
+      gh_buildx_endpoint: ${{ steps.set_env_variables.outputs.BUILDX_ENDPOINT }}
+
     steps:
       # - name: Check out the repo
       #   uses: actions/checkout@v3.3.0
@@ -40,12 +47,6 @@ jobs:
             echo "BUILDX_ENDPOINT=local" >> $GITHUB_OUTPUT
           fi
           echo "TARGET_BRANCH=${{ env.TARGET_BRANCH }}" >> $GITHUB_OUTPUT
-    outputs:
-      gh_branch_name: ${{ steps.set_env_variables.outputs.TARGET_BRANCH }} 
-      gh_buildx_driver: ${{ steps.set_env_variables.outputs.BUILDX_DRIVER }}
-      gh_buildx_version: ${{ steps.set_env_variables.outputs.BUILDX_VERSION }}
-      gh_buildx_platforms: ${{ steps.set_env_variables.outputs.BUILDX_PLATFORMS }}
-      gh_buildx_endpoint: ${{ steps.set_env_variables.outputs.BUILDX_ENDPOINT }}
       # BUILDX_DRIVER: ${{ steps.set_env_variables.outputs.BUILDX_DRIVER }}
       # BUILDX_VERSION: ${{ steps.set_env_variables.outputs.BUILDX_VERSION }}
       # BUILDX_PLATFORMS: ${{ steps.set_env_variables.outputs.BUILDX_PLATFORMS }}
