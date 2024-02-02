@@ -30,22 +30,27 @@ jobs:
       # - name: Check out the repo
       #   uses: actions/checkout@v3.3.0
 
-      - name: set-buildx-variables
+      - name: set_env_variables
         run: |
-          echo "gh_branch_name=${{ env.TARGET_BRANCH }}" >> "$GITHUB_OUTPUT"
           if [ "${{ env.TARGET_BRANCH }}" == "mg-multiple-arch-build" ]; then
-            echo "BUILDX_DRIVER=cloud" >> "$GITHUB_OUTPUT"
-            echo "BUILDX_VERSION=lab:latest" >> "$GITHUB_OUTPUT"
-            echo "BUILDX_PLATFORMS=linux/amd64,linux/arm64" >> "$GITHUB_OUTPUT"
-            echo "BUILDX_ENDPOINT=makeplane/plane-dev" >> "$GITHUB_OUTPUT"
+            echo "BUILDX_DRIVER=cloud" >> $GITHUB_OUTPUT
+            echo "BUILDX_VERSION=lab:latest" >> $GITHUB_OUTPUT
+            echo "BUILDX_PLATFORMS=linux/amd64,linux/arm64" >> $GITHUB_OUTPUT
+            echo "BUILDX_ENDPOINT=makeplane/plane-dev" >> $GITHUB_OUTPUT
           else
-            echo "BUILDX_DRIVER=docker-container" >> "$GITHUB_OUTPUT"
-            echo "BUILDX_VERSION=latest" >> "$GITHUB_OUTPUT"
-            echo "BUILDX_PLATFORMS=linux/amd64" >> "$GITHUB_OUTPUT"
-            echo "BUILDX_ENDPOINT=local" >> "$GITHUB_OUTPUT"
+            echo "BUILDX_DRIVER=docker-container" >> $GITHUB_OUTPUT
+            echo "BUILDX_VERSION=latest" >> $GITHUB_OUTPUT
+            echo "BUILDX_PLATFORMS=linux/amd64" >> $GITHUB_OUTPUT
+            echo "BUILDX_ENDPOINT=local" >> $GITHUB_OUTPUT
           fi
-    # outputs:
-    #   gh_branch_name: ${{ env.TARGET_BRANCH }}
+          echo "TARGET_BRANCH=${{ env.TARGET_BRANCH }}" >> $GITHUB_OUTPUT
+    outputs:
+      gh_branch_name: ${{ steps.set_env_variables.outputs.TARGET_BRANCH }} 
+      BUILDX_DRIVER: ${{ steps.set_env_variables.outputs.BUILDX_DRIVER }}
+      BUILDX_VERSION: ${{ steps.set_env_variables.outputs.BUILDX_VERSION }}
+      BUILDX_PLATFORMS: ${{ steps.set_env_variables.outputs.BUILDX_PLATFORMS }}
+      BUILDX_ENDPOINT: ${{ steps.set_env_variables.outputs.BUILDX_ENDPOINT }}
+
       # gh_branch_name: ${{ env.TARGET_BRANCH }}
       # gh_branch_buildx_driver: ${{ env.BUILDX_DRIVER }}
       # gh_branch_buildx_version: ${{ env.BUILDX_VERSION }}
