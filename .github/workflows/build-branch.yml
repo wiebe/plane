@@ -17,10 +17,6 @@ on:
 
 env:
   TARGET_BRANCH: ${{ github.ref_name || github.event.release.target_commitish }}
-  BUILDX_DRIVER: ""
-  BUILDX_VERSION: ""
-  BUILDX_PLATFORMS: ""
-  BUILDX_ENDPOINT: ""
 
 jobs:
   branch_build_setup:
