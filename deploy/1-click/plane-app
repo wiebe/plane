@@ -679,6 +679,10 @@ export APP_RELEASE=$BRANCH
 export DOCKERHUB_USER=makeplane
 export PULL_POLICY=always
 
+if [ "$BRANCH" == "master" ]; then
+    export APP_RELEASE=latest
+fi
+
 PLANE_INSTALL_DIR=/opt/plane
 DATA_DIR=$PLANE_INSTALL_DIR/data
 LOG_DIR=$PLANE_INSTALL_DIR/log
