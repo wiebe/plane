@@ -26,35 +26,34 @@ jobs:
   branch_build_setup:
     name: Build-Push Web/Space/API/Proxy Docker Image
     runs-on: ubuntu-20.04
-    env:
-      BUILDX_DRIVER: ""
-      BUILDX_VERSION: ""
-      BUILDX_PLATFORMS: ""
-      BUILDX_ENDPOINT: ""
     steps:
       # - name: Check out the repo
       #   uses: actions/checkout@v3.3.0
 
-      - name: Set Buildx Settings
+      - name: set-buildx-variables
         run: |
           if [ "${{ env.TARGET_BRANCH }}" == "mg-multiple-arch-build" ]; then
-            echo "BUILDX_DRIVER=cloud" >> $GITHUB_ENV
-            echo "BUILDX_VERSION=lab:latest" >> $GITHUB_ENV
-            echo "BUILDX_PLATFORMS=linux/amd64,linux/arm64" >> $GITHUB_ENV
-            echo "BUILDX_ENDPOINT=makeplane/plane-dev" >> $GITHUB_ENV
+            echo "BUILDX_DRIVER=cloud" >> $GITHUB_OUTPUT
+            echo "BUILDX_VERSION=lab:latest" >> $GITHUB_OUTPUT
+            echo "BUILDX_PLATFORMS=linux/amd64,linux/arm64" >> $GITHUB_OUTPUT
+            echo "BUILDX_ENDPOINT=makeplane/plane-dev" >> $GITHUB_OUTPUT
           else
-            echo "BUILDX_DRIVER=docker-container" >> $GITHUB_ENV
-            echo "BUILDX_VERSION=latest" >> $GITHUB_ENV
-            echo "BUILDX_PLATFORMS=linux/amd64" >> $GITHUB_ENV
-            echo "BUILDX_ENDPOINT=local" >> $GITHUB_ENV
+            echo "BUILDX_DRIVER=docker-container" >> $GITHUB_OUTPUT
+            echo "BUILDX_VERSION=latest" >> $GITHUB_OUTPUT
+            echo "BUILDX_PLATFORMS=linux/amd64" >> $GITHUB_OUTPUT
+            echo "BUILDX_ENDPOINT=local" >> $GITHUB_OUTPUT
           fi
-          
     outputs:
       gh_branch_name: ${{ env.TARGET_BRANCH }}
-      gh_branch_buildx_driver: ${{ env.BUILDX_DRIVER }}
-      gh_branch_buildx_version: ${{ env.BUILDX_VERSION }}
-      gh_branch_buildx_platforms: ${{ env.BUILDX_PLATFORMS }}
-      gh_branch_buildx_endpoint: ${{ env.BUILDX_ENDPOINT }}
+      gh_branch_buildx_driver: ${{ steps.set-buildx-variables.outputs.BUILDX_DRIVER }}
+      gh_branch_buildx_version: ${{ steps.set-buildx-variables.outputs.BUILDX_VERSION }}
+      gh_branch_buildx_platforms: ${{ steps.set-buildx-variables.outputs.BUILDX_PLATFORMS }}
+      gh_branch_buildx_endpoint: ${{ steps.set-buildx-variables.outputs.BUILDX_ENDPOINT }}
+      # gh_branch_name: ${{ env.TARGET_BRANCH }}
+      # gh_branch_buildx_driver: ${{ env.BUILDX_DRIVER }}
+      # gh_branch_buildx_version: ${{ env.BUILDX_VERSION }}
+      # gh_branch_buildx_platforms: ${{ env.BUILDX_PLATFORMS }}
+      # gh_branch_buildx_endpoint: ${{ env.BUILDX_ENDPOINT }}
 
   # branch_build_push_frontend:
   #   runs-on: ubuntu-20.04
@@ -263,7 +262,7 @@ jobs:
           context: ./nginx
           file: ./nginx/Dockerfile
           # platforms: linux/amd64
-          platforms: ${{ needs.branch_build_setup.outputs.gh_branch_buildx_platforms }}
+          platforms: ${{ needs.branch_build_setup.outputs. }}
           tags: ${{ env.PROXY_TAG }}
           push: true
         env:
