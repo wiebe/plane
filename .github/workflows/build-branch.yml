@@ -26,8 +26,7 @@ jobs:
       # - name: Check out the repo
       #   uses: actions/checkout@v3.3.0
 
-      - name: set-env-variables
-        id: set_env_variables
+      - id: set_env_variables
         run: |
           if [ "${{ env.TARGET_BRANCH }}" == "mg-multiple-arch-build" ]; then
             echo "BUILDX_DRIVER=cloud" >> $GITHUB_OUTPUT
@@ -43,10 +42,14 @@ jobs:
           echo "TARGET_BRANCH=${{ env.TARGET_BRANCH }}" >> $GITHUB_OUTPUT
     outputs:
       gh_branch_name: ${{ steps.set_env_variables.outputs.TARGET_BRANCH }} 
-      BUILDX_DRIVER: ${{ steps.set_env_variables.outputs.BUILDX_DRIVER }}
-      BUILDX_VERSION: ${{ steps.set_env_variables.outputs.BUILDX_VERSION }}
-      BUILDX_PLATFORMS: ${{ steps.set_env_variables.outputs.BUILDX_PLATFORMS }}
-      BUILDX_ENDPOINT: ${{ steps.set_env_variables.outputs.BUILDX_ENDPOINT }}
+      gh_buildx_driver: ${{ steps.set_env_variables.outputs.BUILDX_DRIVER }}
+      gh_buildx_version: ${{ steps.set_env_variables.outputs.BUILDX_VERSION }}
+      gh_buildx_platforms: ${{ steps.set_env_variables.outputs.BUILDX_PLATFORMS }}
+      gh_buildx_endpoint: ${{ steps.set_env_variables.outputs.BUILDX_ENDPOINT }}
+      # BUILDX_DRIVER: ${{ steps.set_env_variables.outputs.BUILDX_DRIVER }}
+      # BUILDX_VERSION: ${{ steps.set_env_variables.outputs.BUILDX_VERSION }}
+      # BUILDX_PLATFORMS: ${{ steps.set_env_variables.outputs.BUILDX_PLATFORMS }}
+      # BUILDX_ENDPOINT: ${{ steps.set_env_variables.outputs.BUILDX_ENDPOINT }}
 
       # gh_branch_name: ${{ env.TARGET_BRANCH }}
       # gh_branch_buildx_driver: ${{ env.BUILDX_DRIVER }}
@@ -238,10 +241,10 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
         with:
-          driver: ${{ needs.branch_build_setup.outputs.BUILDX_DRIVER }}
-          version: ${{ needs.branch_build_setup.outputs.BUILDX_VERSION }}
-          endpoint: ${{ needs.branch_build_setup.outputs.BUILDX_ENDPOINT }}
-          platforms: ${{ needs.branch_build_setup.outputs.BUILDX_PLATFORMS }}
+          driver: ${{ needs.branch_build_setup.outputs.gh_buildx_driver }}
+          version: ${{ needs.branch_build_setup.outputs.gh_buildx_version }}
+          endpoint: ${{ needs.branch_build_setup.outputs.gh_buildx_endpoint }}
+          platforms: ${{ needs.branch_build_setup.outputs.gh_buildx_platforms }}
         # with:
         #   platforms: linux/amd64,linux/arm64
         #   buildkitd-flags: "--allow-insecure-entitlement security.insecure"
@@ -261,7 +264,7 @@ jobs:
           context: ./nginx
           file: ./nginx/Dockerfile
           # platforms: linux/amd64
-          platforms: ${{ needs.branch_build_setup.outputs.gh_branch_buildx_platforms }}
+          platforms: ${{ needs.branch_build_setup.outputs.gh_buildx_platforms }}
           tags: ${{ env.PROXY_TAG }}
           push: true
         env:
