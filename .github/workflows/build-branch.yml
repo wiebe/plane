@@ -2,13 +2,14 @@ name: Branch Build
 
 on:
   workflow_dispatch:
-    inputs:
-      branch_name:
-        description: "Branch Name"
-        required: true
-        default: "preview"
+    # inputs:
+    #   branch_name:
+    #     description: "Branch Name"
+    #     required: true
+    #     default: "preview"
   push:
     branches:
+      - mg-multiple-arch-build
       - master
       - preview
       - develop
@@ -16,7 +17,7 @@ on:
     types: [released, prereleased]
 
 env:
-  TARGET_BRANCH: ${{ inputs.branch_name || github.ref_name || github.event.release.target_commitish }}
+  TARGET_BRANCH: ${{ github.ref_name || github.event.release.target_commitish }}
   BUILDX_PLATFORMS: linux/amd64
   BUILDX_DRIVER: docker-container
   BUILDX_VERSION: latest
