@@ -26,7 +26,8 @@ jobs:
       # - name: Check out the repo
       #   uses: actions/checkout@v3.3.0
 
-      - name: set_env_variables
+      - name: set-env-variables
+        id: set_env_variables
         run: |
           if [ "${{ env.TARGET_BRANCH }}" == "mg-multiple-arch-build" ]; then
             echo "BUILDX_DRIVER=cloud" >> $GITHUB_OUTPUT
