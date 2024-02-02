@@ -86,7 +86,7 @@ jobs:
         with:
           context: ./nginx
           file: ./nginx/Dockerfile
-          platforms: ${{ needs.branch_build_setup.outputs.gh_buildx_platforms }}
+          # platforms: ${{ needs.branch_build_setup.outputs.gh_buildx_platforms }}
           tags: ${{ env.PROXY_TAG }}
           push: true
         env:
