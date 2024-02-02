@@ -21,7 +21,7 @@ env:
 jobs:
   branch_build_setup:
     name: Build-Push Web/Space/API/Proxy Docker Image
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     outputs:
       gh_branch_name: ${{ steps.set_env_variables.outputs.TARGET_BRANCH }} 
       gh_buildx_driver: ${{ steps.set_env_variables.outputs.BUILDX_DRIVER }}
