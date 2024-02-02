@@ -17,18 +17,20 @@ on:
 
 env:
   TARGET_BRANCH: ${{ github.ref_name || github.event.release.target_commitish }}
-  BUILDX_PLATFORMS: linux/amd64
-  BUILDX_DRIVER: docker-container
-  BUILDX_VERSION: latest
-  BUILDX_ENDPOINT: ""
 
 jobs:
   branch_build_setup:
     name: Build-Push Web/Space/API/Proxy Docker Image
     runs-on: ubuntu-20.04
+    env:
+      BUILDX_PLATFORMS: linux/amd64
+      BUILDX_DRIVER: docker-container
+      BUILDX_VERSION: latest
+      BUILDX_ENDPOINT: ""
     steps:
-      - name: Check out the repo
-        uses: actions/checkout@v3.3.0
+      # - name: Check out the repo
+      #   uses: actions/checkout@v3.3.0
+
       - name: Set Buildx Settings
         run: |
           if [ "${{ env.TARGET_BRANCH }}" == "mg-multiple-arch-build" ]; then
