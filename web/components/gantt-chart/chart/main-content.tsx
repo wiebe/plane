@@ -3,7 +3,6 @@ import {
   BiWeekChartView,
   DayChartView,
   GanttChartBlocksList,
-  GanttChartSidebar,
   HourChartView,
   IBlockUpdateData,
   IGanttBlock,
@@ -16,6 +15,7 @@ import {
 } from "components/gantt-chart";
 // helpers
 import { cn } from "helpers/common.helper";
+import { ScrollSyncPane } from "react-scroll-sync";
 
 type Props = {
   blocks: IGanttBlock[] | null;
@@ -86,25 +86,23 @@ export const GanttChartMainContent: React.FC<Props> = (props) => {
     <div
       // DO NOT REMOVE THE ID
       id="gantt-container"
-      className={cn("relative h-full w-full flex flex-1 overflow-hidden border-t border-custom-border-200", {
+      className={cn("relative z-[1] h-full w-full overflow-hidden border-t border-custom-border-200", {
         "mb-8": bottomSpacing,
       })}
     >
-      <GanttChartSidebar
-        blocks={blocks}
-        blockUpdateHandler={blockUpdateHandler}
-        enableReorder={enableReorder}
-        sidebarToRender={sidebarToRender}
-        title={title}
-      />
-      <div
-        // DO NOT REMOVE THE ID
-        id="scroll-container"
-        className="relative h-full w-full flex flex-col flex-1 overflow-hidden overflow-x-auto horizontal-scroll-enable"
-        onScroll={onScroll}
-      >
-        <ActiveChartView />
+      <div className="h-full w-full flex">
+        <ScrollSyncPane>
+          <div
+            // DO NOT REMOVE THE ID
+            id="scroll-container"
+            className="relative h-full w-full flex flex-1 overflow-hidden overflow-x-auto z-[1]"
+            // onScroll={onScroll}
+          >
+            <ActiveChartView />
+          </div>
+        </ScrollSyncPane>
         {currentViewData && (
+          // <ScrollSyncPane>
           <GanttChartBlocksList
             itemsContainerWidth={itemsContainerWidth}
             blocks={chartBlocks}
@@ -115,6 +113,7 @@ export const GanttChartMainContent: React.FC<Props> = (props) => {
             enableBlockMove={enableBlockMove}
             showAllBlocks={showAllBlocks}
           />
+          // </ScrollSyncPane>
         )}
       </div>
     </div>

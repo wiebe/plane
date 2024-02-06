@@ -21,6 +21,7 @@ import { cn } from "helpers/common.helper";
 import { ChartDataType, IBlockUpdateData, IGanttBlock, TGanttViews } from "../types";
 // data
 import { currentViewDataWithView } from "../data";
+import { ScrollSync } from "react-scroll-sync";
 
 type ChartViewRootProps = {
   border: boolean;
@@ -180,37 +181,39 @@ export const ChartViewRoot: FC<ChartViewRootProps> = (props) => {
   };
 
   return (
-    <div
-      className={cn("relative flex flex-col h-full select-none rounded-sm bg-custom-background-100 shadow", {
-        "fixed inset-0 z-[999999] bg-custom-background-100": fullScreenMode,
-        "border border-custom-border-200": border,
-      })}
-    >
-      <GanttChartHeader
-        blocks={blocks}
-        fullScreenMode={fullScreenMode}
-        toggleFullScreenMode={() => setFullScreenMode((prevData) => !prevData)}
-        handleChartView={(key) => updateCurrentViewRenderPayload(null, key)}
-        handleToday={handleToday}
-        loaderTitle={loaderTitle}
-        title={title}
-      />
-      <GanttChartMainContent
-        blocks={blocks}
-        blockToRender={blockToRender}
-        blockUpdateHandler={blockUpdateHandler}
-        bottomSpacing={bottomSpacing}
-        chartBlocks={chartBlocks}
-        enableBlockLeftResize={enableBlockLeftResize}
-        enableBlockMove={enableBlockMove}
-        enableBlockRightResize={enableBlockRightResize}
-        enableReorder={enableReorder}
-        itemsContainerWidth={itemsContainerWidth}
-        showAllBlocks={showAllBlocks}
-        sidebarToRender={sidebarToRender}
-        title={title}
-        updateCurrentViewRenderPayload={updateCurrentViewRenderPayload}
-      />
-    </div>
+    <ScrollSync>
+      <div
+        className={cn("relative flex flex-col h-full select-none rounded-sm bg-custom-background-100 shadow", {
+          "fixed inset-0 z-[999999] bg-custom-background-100": fullScreenMode,
+          "border border-custom-border-200": border,
+        })}
+      >
+        <GanttChartHeader
+          blocks={blocks}
+          fullScreenMode={fullScreenMode}
+          toggleFullScreenMode={() => setFullScreenMode((prevData) => !prevData)}
+          handleChartView={(key) => updateCurrentViewRenderPayload(null, key)}
+          handleToday={handleToday}
+          loaderTitle={loaderTitle}
+          title={title}
+        />
+        <GanttChartMainContent
+          blocks={blocks}
+          blockToRender={blockToRender}
+          blockUpdateHandler={blockUpdateHandler}
+          bottomSpacing={bottomSpacing}
+          chartBlocks={chartBlocks}
+          enableBlockLeftResize={enableBlockLeftResize}
+          enableBlockMove={enableBlockMove}
+          enableBlockRightResize={enableBlockRightResize}
+          enableReorder={enableReorder}
+          itemsContainerWidth={itemsContainerWidth}
+          showAllBlocks={showAllBlocks}
+          sidebarToRender={sidebarToRender}
+          title={title}
+          updateCurrentViewRenderPayload={updateCurrentViewRenderPayload}
+        />
+      </div>
+    </ScrollSync>
   );
 };

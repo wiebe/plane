@@ -240,17 +240,17 @@ export const ChartDraggable: React.FC<Props> = (props) => {
         </div>
       )}
       {/* move to right side hidden block button */}
-      {/* {isBlockHiddenOnRight && ( */}
-      <div
-        className="fixed z-0 right-1 grid h-8 w-8 cursor-pointer place-items-center rounded border border-custom-border-300 bg-custom-background-80 text-custom-text-200 hover:text-custom-text-100"
-        onClick={handleScrollToBlock}
-        style={{
-          top: `${(resizableRef.current?.getBoundingClientRect().top ?? 0) + 6}px`,
-        }}
-      >
-        <ArrowRight className="h-3.5 w-3.5" />
-      </div>
-      {/* )} */}
+      {isBlockHiddenOnRight && (
+        <div
+          className="fixed z-0 right-1 grid h-8 w-8 cursor-pointer place-items-center rounded border border-custom-border-300 bg-custom-background-80 text-custom-text-200 hover:text-custom-text-100"
+          onClick={handleScrollToBlock}
+          style={{
+            top: `${(resizableRef.current?.getBoundingClientRect().top ?? 0) + 6}px`,
+          }}
+        >
+          <ArrowRight className="h-3.5 w-3.5" />
+        </div>
+      )}
       <div
         id={`block-${block.id}`}
         ref={resizableRef}

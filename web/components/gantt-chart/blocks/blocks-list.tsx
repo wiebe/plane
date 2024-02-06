@@ -35,7 +35,7 @@ export const GanttChartBlocksList: FC<GanttChartBlocksProps> = observer((props) 
   // store hooks
   const { peekIssue } = useIssueDetail();
   // chart hook
-  const { activeBlock, dispatch, updateScrollTop } = useChart();
+  const { activeBlock, dispatch } = useChart();
 
   // update the active block on hover
   const updateActiveBlock = (block: IGanttBlock | null) => {
@@ -77,22 +77,12 @@ export const GanttChartBlocksList: FC<GanttChartBlocksProps> = observer((props) 
     });
   };
 
-  const handleBlocksScroll = (e: React.UIEvent<HTMLDivElement, UIEvent>) => {
-    updateScrollTop(e.currentTarget.scrollTop);
-
-    const sidebarScrollContainer = document.getElementById("gantt-sidebar-scroll-container") as HTMLDivElement;
-    if (!sidebarScrollContainer) return;
-
-    sidebarScrollContainer.scrollTop = e.currentTarget.scrollTop;
-  };
-
   return (
     <div
-      className="relative z-[5] mt-[72px] h-full overflow-hidden overflow-y-auto"
-      style={{ width: `${itemsContainerWidth}px` }}
-      onScroll={handleBlocksScroll}
+      className="absolute h-full w-full overflow-x-auto overflow-y-auto z-[1]"
+      // style={{ width: `${itemsContainerWidth}px` }}
     >
-      {blocks?.map((block) => {
+      {blocks?.map((block, index) => {
         // hide the block if it doesn't have start and target dates and showAllBlocks is false
         if (!showAllBlocks && !(block.start_date && block.target_date)) return;
 
@@ -101,26 +91,34 @@ export const GanttChartBlocksList: FC<GanttChartBlocksProps> = observer((props) 
         return (
           <div
             key={`block-${block.id}`}
-            className={cn("relative h-11", {
-              "rounded bg-custom-background-80": activeBlock?.id === block.id,
-              "rounded-l border border-r-0 border-custom-primary-70 hover:border-custom-primary-70":
-                peekIssue?.issueId === block.data.id,
-            })}
+            className="absolute w-full"
+            style={{
+              height: "44px",
+              top: `${index * 44}px`,
+            }}
             onMouseEnter={() => updateActiveBlock(block)}
             onMouseLeave={() => updateActiveBlock(null)}
           >
-            {isBlockVisibleOnChart ? (
-              <ChartDraggable
-                block={block}
-                blockToRender={blockToRender}
-                handleBlock={(...args) => handleChartBlockPosition(block, ...args)}
-                enableBlockLeftResize={enableBlockLeftResize}
-                enableBlockRightResize={enableBlockRightResize}
-                enableBlockMove={enableBlockMove}
-              />
-            ) : (
-              <ChartAddBlock block={block} blockUpdateHandler={blockUpdateHandler} />
-            )}
+            <div
+              className={cn("relative h-full w-full", {
+                "rounded bg-custom-background-80": activeBlock?.id === block.id,
+                "rounded-l border border-r-0 border-custom-primary-70 hover:border-custom-primary-70":
+                  peekIssue?.issueId === block.data.id,
+              })}
+            >
+              {isBlockVisibleOnChart ? (
+                <ChartDraggable
+                  block={block}
+                  blockToRender={blockToRender}
+                  handleBlock={(...args) => handleChartBlockPosition(block, ...args)}
+                  enableBlockLeftResize={enableBlockLeftResize}
+                  enableBlockRightResize={enableBlockRightResize}
+                  enableBlockMove={enableBlockMove}
+                />
+              ) : (
+                <ChartAddBlock block={block} blockUpdateHandler={blockUpdateHandler} />
+              )}
+            </div>
           </div>
         );
       })}
