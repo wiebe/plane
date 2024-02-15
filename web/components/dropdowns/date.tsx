@@ -1,7 +1,8 @@
 import React, { useRef, useState } from "react";
 import { Combobox } from "@headlessui/react";
-import DatePicker from "react-datepicker";
 import { usePopper } from "react-popper";
+import { Calendar } from "react-date-range";
+import { enIN } from "date-fns/locale";
 import { CalendarDays, X } from "lucide-react";
 // hooks
 import { useDropdownKeyDown } from "hooks/use-dropdown-key-down";
@@ -15,8 +16,6 @@ import { cn } from "helpers/common.helper";
 import { TDropdownProps } from "./types";
 // constants
 import { BUTTON_VARIANTS_WITH_TEXT } from "./constants";
-import { Calendar } from "react-date-range";
-import { enIN } from "date-fns/locale";
 
 type Props = TDropdownProps & {
   clearIconClassName?: string;
@@ -154,21 +153,13 @@ export const DateDropdown: React.FC<Props> = (props) => {
       {isOpen && (
         <Combobox.Options className="fixed z-10" static>
           <div className="my-1 w-72" ref={setPopperElement} style={styles.popper} {...attributes.popper}>
-            {/* <DatePicker
-              selected={value ? new Date(value) : null}
-              onChange={dropdownOnChange}
-              dateFormat="dd-MM-yyyy"
-              minDate={minDate}
-              maxDate={maxDate}
-              calendarClassName="shadow-custom-shadow-rg rounded"
-              inline
-            /> */}
             <Calendar
               date={value ? new Date(value) : undefined}
               onChange={dropdownOnChange}
               minDate={minDate}
               maxDate={maxDate}
               locale={enIN}
+              color="rgba(var(--color-text-100))"
             />
           </div>
         </Combobox.Options>
