@@ -43,14 +43,14 @@
   -webkit-appearance: none;
   border: 1px solid rgba(var(--color-border-200));
   background: transparent;
-  padding: 0.35rem 0.5rem;
+  padding: 0.25rem 0.35rem;
   font-size: 0.7875rem;
   border-radius: 4px;
   outline: 0;
   color: rgba(var(--color-text-200));
   cursor: pointer;
   text-align: center;
-  font-weight: 600;
+  font-weight: 500;
 }
 
 .rdrMonthAndYearPickers select:hover {
@@ -76,6 +76,9 @@
   border-radius: 5px;
   background-color: rgba(var(--color-background-90));
   outline: none;
+  background-repeat: no-repeat;
+  background-size: 0.8rem 0.8rem;
+  background-position: center;
 }
 
 .rdrNextPrevButton:hover {
@@ -86,28 +89,12 @@
   border-color: rgba(var(--color-border-400)) !important;
 }
 
-.rdrNextPrevButton i {
-  display: block;
-  width: 0;
-  height: 0;
-  padding: 0;
-  text-align: center;
-  border-style: solid;
-  margin: auto;
-  transform: translate(-3px, 0);
+.rdrPprevButton {
+  background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLWNoZXZyb24tbGVmdCI+PHBhdGggZD0ibTE1IDE4LTYtNiA2LTYiLz48L3N2Zz4=");
 }
 
-.rdrPprevButton i {
-  border-width: 4px 6px 4px 4px;
-  border-color: transparent rgba(var(--color-text-300)) transparent transparent;
-  transform: translate(-3px, 0);
-}
-
-.rdrNextButton i {
-  margin: 0 0 0 7px;
-  border-width: 4px 4px 4px 6px;
-  border-color: transparent transparent transparent rgba(var(--color-text-300));
-  transform: translate(3px, 0);
+.rdrNextButton {
+  background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLWNoZXZyb24tcmlnaHQiPjxwYXRoIGQ9Im05IDE4IDYtNi02LTYiLz48L3N2Zz4=");
 }
 
 .rdrWeekDays {
