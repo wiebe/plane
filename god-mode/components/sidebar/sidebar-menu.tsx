@@ -42,9 +42,15 @@ const INSTANCE_ADMIN_LINKS = [
 
 export const SidebarMenu = observer(() => {
   // store hooks
-  const { sidebarCollapsed } = useAppTheme();
+  const { sidebarCollapsed, toggleSidebar } = useAppTheme();
   // router
   const pathName = usePathname();
+
+  const handleItemClick = () => {
+    if (window.innerWidth < 768) {
+      toggleSidebar();
+    }
+  };
 
   return (
     <div className="flex h-full w-full flex-col gap-2.5 overflow-y-auto px-4 py-6">
@@ -55,7 +61,7 @@ export const SidebarMenu = observer(() => {
             : pathName === item.href;
 
         return (
-          <Link key={index} href={item.href}>
+          <Link key={index} href={item.href} onClick={handleItemClick}>
             <div>
               <Tooltip
                 tooltipContent={item.name}
