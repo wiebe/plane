@@ -3,13 +3,13 @@ import { FC, useCallback } from "react";
 import { observer } from "mobx-react-lite";
 // types
 import { TIssue } from "@plane/types";
-import { IProjectIssues, IProjectIssuesFilter } from "oldStore/issue/project";
-import { ICycleIssues, ICycleIssuesFilter } from "oldStore/issue/cycle";
-import { IModuleIssues, IModuleIssuesFilter } from "oldStore/issue/module";
-import { IProfileIssues, IProfileIssuesFilter } from "oldStore/issue/profile";
-import { IProjectViewIssues, IProjectViewIssuesFilter } from "oldStore/issue/project-views";
-import { IDraftIssuesFilter, IDraftIssues } from "oldStore/issue/draft";
-import { IArchivedIssuesFilter, IArchivedIssues } from "oldStore/issue/archived";
+import { IProjectIssues, IProjectIssuesFilter } from "store_legacy/issue/project";
+import { ICycleIssues, ICycleIssuesFilter } from "store_legacy/issue/cycle";
+import { IModuleIssues, IModuleIssuesFilter } from "store_legacy/issue/module";
+import { IProfileIssues, IProfileIssuesFilter } from "store_legacy/issue/profile";
+import { IProjectViewIssues, IProjectViewIssuesFilter } from "store_legacy/issue/project-views";
+import { IDraftIssuesFilter, IDraftIssues } from "store_legacy/issue/draft";
+import { IArchivedIssuesFilter, IArchivedIssues } from "store_legacy/issue/archived";
 import { EIssueActions } from "../types";
 // components
 import { IQuickActionProps } from "./list-view-types";

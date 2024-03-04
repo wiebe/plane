@@ -6,7 +6,7 @@ import sortBy from "lodash/sortBy";
 // types
 import { ICycle, CycleDateCheckData } from "@plane/types";
 // mobx
-import { RootStore } from "oldStore/root.store";
+import { RootStore } from "store_legacy/root.store";
 // services
 import { ProjectService } from "services/project";
 import { IssueService } from "services/issue";

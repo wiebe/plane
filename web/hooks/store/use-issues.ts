@@ -3,14 +3,14 @@ import merge from "lodash/merge";
 // mobx store
 import { StoreContext } from "contexts/store-context";
 // types
-import { IWorkspaceIssues, IWorkspaceIssuesFilter } from "oldStore/issue/workspace";
-import { IProfileIssues, IProfileIssuesFilter } from "oldStore/issue/profile";
-import { IProjectIssues, IProjectIssuesFilter } from "oldStore/issue/project";
-import { ICycleIssues, ICycleIssuesFilter } from "oldStore/issue/cycle";
-import { IModuleIssues, IModuleIssuesFilter } from "oldStore/issue/module";
-import { IProjectViewIssues, IProjectViewIssuesFilter } from "oldStore/issue/project-views";
-import { IArchivedIssues, IArchivedIssuesFilter } from "oldStore/issue/archived";
-import { IDraftIssues, IDraftIssuesFilter } from "oldStore/issue/draft";
+import { IWorkspaceIssues, IWorkspaceIssuesFilter } from "store_legacy/issue/workspace";
+import { IProfileIssues, IProfileIssuesFilter } from "store_legacy/issue/profile";
+import { IProjectIssues, IProjectIssuesFilter } from "store_legacy/issue/project";
+import { ICycleIssues, ICycleIssuesFilter } from "store_legacy/issue/cycle";
+import { IModuleIssues, IModuleIssuesFilter } from "store_legacy/issue/module";
+import { IProjectViewIssues, IProjectViewIssuesFilter } from "store_legacy/issue/project-views";
+import { IArchivedIssues, IArchivedIssuesFilter } from "store_legacy/issue/archived";
+import { IDraftIssues, IDraftIssuesFilter } from "store_legacy/issue/draft";
 import { TIssueMap } from "@plane/types";
 // constants
 import { EIssuesStoreType } from "constants/issue";

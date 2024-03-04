@@ -2,7 +2,7 @@ import { useContext } from "react";
 // mobx store
 import { StoreContext } from "contexts/store-context";
 // types
-import { IProjectStore } from "oldStore/project/project.store";
+import { IProjectStore } from "store_legacy/project/project.store";
 
 export const useProject = (): IProjectStore => {
   const context = useContext(StoreContext);

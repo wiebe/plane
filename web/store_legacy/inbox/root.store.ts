@@ -1,5 +1,5 @@
 // types
-import { RootStore } from "oldStore/root.store";
+import { RootStore } from "store_legacy/root.store";
 import { IInbox, Inbox } from "./inbox.store";
 import { IInboxIssue, InboxIssue } from "./inbox_issue.store";
 import { IInboxFilter, InboxFilter } from "./inbox_filter.store";

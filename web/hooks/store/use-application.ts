@@ -2,7 +2,7 @@ import { useContext } from "react";
 // mobx store
 import { StoreContext } from "contexts/store-context";
 // types
-import { IAppRootStore } from "oldStore/application";
+import { IAppRootStore } from "store_legacy/application";
 
 export const useApplication = (): IAppRootStore => {
   const context = useContext(StoreContext);

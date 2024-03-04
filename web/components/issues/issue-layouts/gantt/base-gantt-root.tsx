@@ -10,10 +10,10 @@ import { GanttChartRoot, IBlockUpdateData, IssueGanttSidebar } from "components/
 import { renderIssueBlocksStructure } from "helpers/issue.helper";
 // types
 import { TIssue, TUnGroupedIssues } from "@plane/types";
-import { ICycleIssues, ICycleIssuesFilter } from "oldStore/issue/cycle";
-import { IModuleIssues, IModuleIssuesFilter } from "oldStore/issue/module";
-import { IProjectIssues, IProjectIssuesFilter } from "oldStore/issue/project";
-import { IProjectViewIssues, IProjectViewIssuesFilter } from "oldStore/issue/project-views";
+import { ICycleIssues, ICycleIssuesFilter } from "store_legacy/issue/cycle";
+import { IModuleIssues, IModuleIssuesFilter } from "store_legacy/issue/module";
+import { IProjectIssues, IProjectIssuesFilter } from "store_legacy/issue/project";
+import { IProjectViewIssues, IProjectViewIssuesFilter } from "store_legacy/issue/project-views";
 // constants
 import { EUserProjectRoles } from "constants/project";
 import { EIssueActions } from "../types";

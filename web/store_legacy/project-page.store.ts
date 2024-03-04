@@ -3,7 +3,7 @@ import { set } from "lodash";
 // services
 import { PageService } from "services/page.service";
 // store
-import { PageStore, IPageStore } from "oldStore/page.store";
+import { PageStore, IPageStore } from "store_legacy/page.store";
 // types
 import { IPage, IRecentPages } from "@plane/types";
 import { RootStore } from "./root.store";

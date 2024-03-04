@@ -2,7 +2,7 @@ import { useContext } from "react";
 // mobx store
 import { StoreContext } from "contexts/store-context";
 // types
-import { IWorkspaceRootStore } from "oldStore/workspace";
+import { IWorkspaceRootStore } from "store_legacy/workspace";
 
 export const useWorkspace = (): IWorkspaceRootStore => {
   const context = useContext(StoreContext);

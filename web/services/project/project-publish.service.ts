@@ -2,7 +2,7 @@ import { API_BASE_URL } from "helpers/common.helper";
 // services
 import { APIService } from "services/api.service";
 // types
-import { IProjectPublishSettings } from "oldStore/project/project-publish.store";
+import { IProjectPublishSettings } from "store_legacy/project/project-publish.store";
 
 export class ProjectPublishService extends APIService {
   constructor() {

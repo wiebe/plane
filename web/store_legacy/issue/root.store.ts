@@ -22,7 +22,7 @@ import { IArchivedIssuesFilter, ArchivedIssuesFilter, IArchivedIssues, ArchivedI
 import { IDraftIssuesFilter, DraftIssuesFilter, IDraftIssues, DraftIssues } from "./draft";
 import { IIssueKanBanViewStore, IssueKanBanViewStore } from "./issue_kanban_view.store";
 import { ICalendarStore, CalendarStore } from "./issue_calendar_view.store";
-import { IWorkspaceMembership } from "oldStore/member/workspace-member.store";
+import { IWorkspaceMembership } from "store_legacy/member/workspace-member.store";
 
 export interface IIssueRootStore {
   currentUserId: string | undefined;

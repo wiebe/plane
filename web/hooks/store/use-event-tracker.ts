@@ -2,7 +2,7 @@ import { useContext } from "react";
 // mobx store
 import { StoreContext } from "contexts/store-context";
 // types
-import { IEventTrackerStore } from "oldStore/event-tracker.store";
+import { IEventTrackerStore } from "store_legacy/event-tracker.store";
 
 export const useEventTracker = (): IEventTrackerStore => {
   const context = useContext(StoreContext);

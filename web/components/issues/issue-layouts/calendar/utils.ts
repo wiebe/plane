@@ -1,8 +1,8 @@
 import { DraggableLocation } from "@hello-pangea/dnd";
-import { ICycleIssues } from "oldStore/issue/cycle";
-import { IModuleIssues } from "oldStore/issue/module";
-import { IProjectIssues } from "oldStore/issue/project";
-import { IProjectViewIssues } from "oldStore/issue/project-views";
+import { ICycleIssues } from "store_legacy/issue/cycle";
+import { IModuleIssues } from "store_legacy/issue/module";
+import { IProjectIssues } from "store_legacy/issue/project";
+import { IProjectViewIssues } from "store_legacy/issue/project-views";
 import { TGroupedIssues, IIssueMap } from "@plane/types";
 
 export const handleDragDrop = async (

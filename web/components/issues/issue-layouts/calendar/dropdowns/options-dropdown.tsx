@@ -14,10 +14,10 @@ import { TCalendarLayouts } from "@plane/types";
 // constants
 import { CALENDAR_LAYOUTS } from "constants/calendar";
 import { EIssueFilterType } from "constants/issue";
-import { ICycleIssuesFilter } from "oldStore/issue/cycle";
-import { IModuleIssuesFilter } from "oldStore/issue/module";
-import { IProjectIssuesFilter } from "oldStore/issue/project";
-import { IProjectViewIssuesFilter } from "oldStore/issue/project-views";
+import { ICycleIssuesFilter } from "store_legacy/issue/cycle";
+import { IModuleIssuesFilter } from "store_legacy/issue/module";
+import { IProjectIssuesFilter } from "store_legacy/issue/project";
+import { IProjectViewIssuesFilter } from "store_legacy/issue/project-views";
 
 interface ICalendarHeader {
   issuesFilterStore: IProjectIssuesFilter | IModuleIssuesFilter | ICycleIssuesFilter | IProjectViewIssuesFilter;

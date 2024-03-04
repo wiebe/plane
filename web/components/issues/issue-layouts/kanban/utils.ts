@@ -1,11 +1,11 @@
 import { DraggableLocation } from "@hello-pangea/dnd";
-import { ICycleIssues } from "oldStore/issue/cycle";
-import { IDraftIssues } from "oldStore/issue/draft";
-import { IModuleIssues } from "oldStore/issue/module";
-import { IProfileIssues } from "oldStore/issue/profile";
-import { IProjectIssues } from "oldStore/issue/project";
-import { IProjectViewIssues } from "oldStore/issue/project-views";
-import { IWorkspaceIssues } from "oldStore/issue/workspace";
+import { ICycleIssues } from "store_legacy/issue/cycle";
+import { IDraftIssues } from "store_legacy/issue/draft";
+import { IModuleIssues } from "store_legacy/issue/module";
+import { IProfileIssues } from "store_legacy/issue/profile";
+import { IProjectIssues } from "store_legacy/issue/project";
+import { IProjectViewIssues } from "store_legacy/issue/project-views";
+import { IWorkspaceIssues } from "store_legacy/issue/workspace";
 import { TGroupedIssues, IIssueMap, TSubGroupedIssues, TUnGroupedIssues } from "@plane/types";
 
 const handleSortOrder = (destinationIssues: string[], destinationIndex: number, issueMap: IIssueMap) => {

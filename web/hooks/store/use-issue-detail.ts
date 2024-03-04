@@ -2,7 +2,7 @@ import { useContext } from "react";
 // mobx store
 import { StoreContext } from "contexts/store-context";
 // types
-import { IIssueDetail } from "oldStore/issue/issue-details/root.store";
+import { IIssueDetail } from "store_legacy/issue/issue-details/root.store";
 
 export const useIssueDetail = (): IIssueDetail => {
   const context = useContext(StoreContext);

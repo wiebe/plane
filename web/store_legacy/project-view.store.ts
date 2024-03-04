@@ -3,7 +3,7 @@ import { observable, action, makeObservable, runInAction, computed } from "mobx"
 import { computedFn } from "mobx-utils";
 // services
 import { ViewService } from "services/view.service";
-import { RootStore } from "oldStore/root.store";
+import { RootStore } from "store_legacy/root.store";
 // types
 import { IProjectView } from "@plane/types";
 

@@ -1,4 +1,4 @@
-import { RootStore } from "oldStore/root.store";
+import { RootStore } from "store_legacy/root.store";
 import { AppConfigStore, IAppConfigStore } from "./app-config.store";
 import { CommandPaletteStore, ICommandPaletteStore } from "./command-palette.store";
 import { EventTrackerStore, IEventTrackerStore } from "../event-tracker.store";

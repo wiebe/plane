@@ -2,8 +2,8 @@ import { useContext } from "react";
 // mobx store
 import { StoreContext } from "contexts/store-context";
 // types
-import { IInboxIssue } from "oldStore/inbox/inbox_issue.store";
-import { IInboxFilter } from "oldStore/inbox/inbox_filter.store";
+import { IInboxIssue } from "store_legacy/inbox/inbox_issue.store";
+import { IInboxFilter } from "store_legacy/inbox/inbox_filter.store";
 
 export const useInboxIssues = (): {
   issues: IInboxIssue;

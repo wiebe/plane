@@ -12,7 +12,7 @@ import { Button, Loader, ToggleSwitch } from "@plane/ui";
 import { CustomPopover } from "./popover";
 // types
 import { IProject } from "@plane/types";
-import { IProjectPublishSettings, TProjectPublishViews } from "oldStore/project/project-publish.store";
+import { IProjectPublishSettings, TProjectPublishViews } from "store_legacy/project/project-publish.store";
 
 type Props = {
   isOpen: boolean;

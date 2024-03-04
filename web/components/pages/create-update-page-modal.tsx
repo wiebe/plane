@@ -8,7 +8,7 @@ import { useEventTracker } from "hooks/store";
 // types
 import { IPage } from "@plane/types";
 import { useProjectPages } from "hooks/store/use-project-page";
-import { IPageStore } from "oldStore/page.store";
+import { IPageStore } from "store_legacy/page.store";
 // constants
 import { PAGE_CREATED, PAGE_UPDATED } from "constants/event-tracker";
 

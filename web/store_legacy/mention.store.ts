@@ -2,7 +2,7 @@ import { computed, makeObservable } from "mobx";
 // editor
 import { IMentionHighlight, IMentionSuggestion } from "@plane/lite-text-editor";
 // types
-import { RootStore } from "oldStore/root.store";
+import { RootStore } from "store_legacy/root.store";
 
 export interface IMentionStore {
   // computed

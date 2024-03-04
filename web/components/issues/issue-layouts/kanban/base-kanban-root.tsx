@@ -11,7 +11,7 @@ import { Spinner } from "@plane/ui";
 import { TIssue } from "@plane/types";
 import { EIssueActions } from "../types";
 import { IQuickActionProps } from "../list/list-view-types";
-import { IProjectIssues, IProjectIssuesFilter } from "oldStore/issue/project";
+import { IProjectIssues, IProjectIssuesFilter } from "store_legacy/issue/project";
 //components
 import { KanBan } from "./default";
 import { KanBanSwimLanes } from "./swimlanes";
@@ -19,11 +19,11 @@ import { DeleteIssueModal } from "components/issues";
 import { EUserProjectRoles } from "constants/project";
 import { useIssues } from "hooks/store/use-issues";
 import { handleDragDrop } from "./utils";
-import { ICycleIssues, ICycleIssuesFilter } from "oldStore/issue/cycle";
-import { IDraftIssues, IDraftIssuesFilter } from "oldStore/issue/draft";
-import { IProfileIssues, IProfileIssuesFilter } from "oldStore/issue/profile";
-import { IModuleIssues, IModuleIssuesFilter } from "oldStore/issue/module";
-import { IProjectViewIssues, IProjectViewIssuesFilter } from "oldStore/issue/project-views";
+import { ICycleIssues, ICycleIssuesFilter } from "store_legacy/issue/cycle";
+import { IDraftIssues, IDraftIssuesFilter } from "store_legacy/issue/draft";
+import { IProfileIssues, IProfileIssuesFilter } from "store_legacy/issue/profile";
+import { IModuleIssues, IModuleIssuesFilter } from "store_legacy/issue/module";
+import { IProjectViewIssues, IProjectViewIssuesFilter } from "store_legacy/issue/project-views";
 import { EIssueFilterType, TCreateModalStoreTypes } from "constants/issue";
 import { ISSUE_DELETED } from "constants/event-tracker";
 

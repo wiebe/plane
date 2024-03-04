@@ -2,7 +2,7 @@ import { useContext } from "react";
 // mobx store
 import { GanttStoreContext } from "components/gantt-chart/contexts";
 // types
-import { IGanttStore } from "oldStore/issue/issue_gantt_view.store";
+import { IGanttStore } from "store_legacy/issue/issue_gantt_view.store";
 
 export const useGanttChart = (): IGanttStore => {
   const context = useContext(GanttStoreContext);
