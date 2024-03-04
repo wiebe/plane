@@ -1,5 +1,5 @@
 import { makeObservable, observable } from "mobx";
-import { WorkspaceModel } from "store/workspace.model";
+import { WorkspaceModel } from "store/workspace.store";
 import { DataStore } from ".";
 import { IWorkspace } from "@plane/types";
 import { set } from "lodash";

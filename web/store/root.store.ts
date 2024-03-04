@@ -1,5 +1,5 @@
 import { DataStore } from "./dataMaps";
-import { IUserModel, UserModel } from "./user.model";
+import { IUserModel, UserModel } from "./user.store";
 
 export class RootStore {
   data: DataStore;

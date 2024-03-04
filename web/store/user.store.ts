@@ -3,7 +3,7 @@ import { WorkspaceService } from "services/workspace.service";
 import set from "lodash/set";
 import { IWorkspace } from "@plane/types";
 import { DataStore } from "./dataMaps";
-import { IWorkspaceModel } from "./workspace.model";
+import { IWorkspaceModel } from "./workspace.store";
 
 export interface IUserModel {
   workspaces: Record<string, IWorkspaceModel>;
@@ -13,15 +13,15 @@ export class UserModel implements IUserModel {
   workspaces: Record<string, IWorkspaceModel> = {};
 
   // data store
-  dataStore;
+  data;
   // services
   workspaceService;
 
-  constructor(_dataStore: DataStore) {
+  constructor(_data: DataStore) {
     makeObservable(this, {
       workspaces: observable,
     });
-    this.dataStore = _dataStore;
+    this.data = _data;
     this.workspaceService = new WorkspaceService();
   }
 
@@ -38,10 +38,10 @@ export class UserModel implements IUserModel {
   fetchWorkspaces = async () => {
     const workspaceResponse = await this.workspaceService.userWorkspaces();
 
-    this.dataStore.workspaceData.addWorkspaces(workspaceResponse);
+    this.data.workspace.addWorkspaces(workspaceResponse);
     runInAction(() => {
       workspaceResponse.forEach((workspace) => {
-        set(this.workspaces, [workspace.id], this.dataStore.workspaceData.workspaceMap[workspace.id]);
+        set(this.workspaces, [workspace.id], this.data.workspace.workspaceMap[workspace.id]);
       });
     });
     return workspaceResponse;
@@ -53,9 +53,9 @@ export class UserModel implements IUserModel {
    */
   createWorkspace = async (data: Partial<IWorkspace>) =>
     await this.workspaceService.createWorkspace(data).then((response) => {
-      this.dataStore.workspaceData.addWorkspaces([response]);
+      this.data.workspace.addWorkspaces([response]);
       runInAction(() => {
-        set(this.workspaces, [response.id], this.dataStore.workspaceData.workspaceMap[response.id]);
+        set(this.workspaces, [response.id], this.data.workspace.workspaceMap[response.id]);
       });
       return response;
     });
@@ -68,7 +68,7 @@ export class UserModel implements IUserModel {
     await this.workspaceService.deleteWorkspace(workspaceSlug).then(() => {
       const updatedWorkspacesList = this.workspaces;
       const workspaceId = this.getWorkspaceBySlug(workspaceSlug)?.id;
-      this.dataStore.workspaceData.deleteWorkspace(`${workspaceId}`);
+      this.data.workspace.deleteWorkspace(`${workspaceId}`);
       runInAction(() => {
         delete updatedWorkspacesList[`${workspaceId}`];
       });

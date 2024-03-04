@@ -1,10 +1,10 @@
 import { IWorkspaceData, WorkspaceData } from "./workspace.data.store";
 
 export class DataStore {
-  workspaceData: IWorkspaceData;
+  workspace: IWorkspaceData;
 
   constructor() {
-    this.workspaceData = new WorkspaceData(this);
+    this.workspace = new WorkspaceData(this);
   }
 
   resetOnSignout() {}
