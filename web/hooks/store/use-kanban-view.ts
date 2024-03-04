@@ -2,7 +2,7 @@ import { useContext } from "react";
 // mobx store
 import { StoreContext } from "contexts/store-context";
 // types
-import { IIssueKanBanViewStore } from "store/issue/issue_kanban_view.store";
+import { IIssueKanBanViewStore } from "oldStore/issue/issue_kanban_view.store";
 
 export const useKanbanView = (): IIssueKanBanViewStore => {
   const context = useContext(StoreContext);

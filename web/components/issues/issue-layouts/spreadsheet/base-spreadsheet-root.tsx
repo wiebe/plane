@@ -11,10 +11,10 @@ import { EIssueActions } from "../types";
 import { IQuickActionProps } from "../list/list-view-types";
 // constants
 import { EUserProjectRoles } from "constants/project";
-import { ICycleIssuesFilter, ICycleIssues } from "store/issue/cycle";
-import { IModuleIssuesFilter, IModuleIssues } from "store/issue/module";
-import { IProjectIssuesFilter, IProjectIssues } from "store/issue/project";
-import { IProjectViewIssuesFilter, IProjectViewIssues } from "store/issue/project-views";
+import { ICycleIssuesFilter, ICycleIssues } from "oldStore/issue/cycle";
+import { IModuleIssuesFilter, IModuleIssues } from "oldStore/issue/module";
+import { IProjectIssuesFilter, IProjectIssues } from "oldStore/issue/project";
+import { IProjectViewIssuesFilter, IProjectViewIssues } from "oldStore/issue/project-views";
 import { EIssueFilterType } from "constants/issue";
 
 interface IBaseSpreadsheetRoot {

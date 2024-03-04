@@ -5,10 +5,10 @@ import { CalendarMonthsDropdown, CalendarOptionsDropdown } from "components/issu
 // icons
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useCalendarView } from "hooks/store/use-calendar-view";
-import { ICycleIssuesFilter } from "store/issue/cycle";
-import { IModuleIssuesFilter } from "store/issue/module";
-import { IProjectIssuesFilter } from "store/issue/project";
-import { IProjectViewIssuesFilter } from "store/issue/project-views";
+import { ICycleIssuesFilter } from "oldStore/issue/cycle";
+import { IModuleIssuesFilter } from "oldStore/issue/module";
+import { IProjectIssuesFilter } from "oldStore/issue/project";
+import { IProjectViewIssuesFilter } from "oldStore/issue/project-views";
 
 interface ICalendarHeader {
   issuesFilterStore: IProjectIssuesFilter | IModuleIssuesFilter | ICycleIssuesFilter | IProjectViewIssuesFilter;

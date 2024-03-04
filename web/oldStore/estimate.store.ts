@@ -3,7 +3,7 @@ import set from "lodash/set";
 // services
 import { ProjectEstimateService } from "services/project";
 // types
-import { RootStore } from "store/root.store";
+import { RootStore } from "oldStore/root.store";
 import { IEstimate, IEstimateFormData } from "@plane/types";
 import { computedFn } from "mobx-utils";
 

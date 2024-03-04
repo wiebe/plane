@@ -8,10 +8,10 @@ import { renderFormattedPayloadDate } from "helpers/date-time.helper";
 // constants
 import { MONTHS_LIST } from "constants/calendar";
 import { TGroupedIssues, TIssue, TIssueMap } from "@plane/types";
-import { ICycleIssuesFilter } from "store/issue/cycle";
-import { IModuleIssuesFilter } from "store/issue/module";
-import { IProjectIssuesFilter } from "store/issue/project";
-import { IProjectViewIssuesFilter } from "store/issue/project-views";
+import { ICycleIssuesFilter } from "oldStore/issue/cycle";
+import { IModuleIssuesFilter } from "oldStore/issue/module";
+import { IProjectIssuesFilter } from "oldStore/issue/project";
+import { IProjectViewIssuesFilter } from "oldStore/issue/project-views";
 
 type Props = {
   issuesFilterStore: IProjectIssuesFilter | IModuleIssuesFilter | ICycleIssuesFilter | IProjectViewIssuesFilter;

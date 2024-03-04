@@ -12,10 +12,10 @@ import { IQuickActionProps } from "../list/list-view-types";
 import { EIssueActions } from "../types";
 import { handleDragDrop } from "./utils";
 import { useIssues, useUser } from "hooks/store";
-import { ICycleIssues, ICycleIssuesFilter } from "store/issue/cycle";
-import { IModuleIssues, IModuleIssuesFilter } from "store/issue/module";
-import { IProjectIssues, IProjectIssuesFilter } from "store/issue/project";
-import { IProjectViewIssues, IProjectViewIssuesFilter } from "store/issue/project-views";
+import { ICycleIssues, ICycleIssuesFilter } from "oldStore/issue/cycle";
+import { IModuleIssues, IModuleIssuesFilter } from "oldStore/issue/module";
+import { IProjectIssues, IProjectIssuesFilter } from "oldStore/issue/project";
+import { IProjectViewIssues, IProjectViewIssuesFilter } from "oldStore/issue/project-views";
 import { EUserProjectRoles } from "constants/project";
 
 interface IBaseCalendarRoot {

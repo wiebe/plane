@@ -5,13 +5,13 @@ import sortBy from "lodash/sortBy";
 // services
 import { ProjectMemberService } from "services/project";
 // types
-import { RootStore } from "store/root.store";
+import { RootStore } from "oldStore/root.store";
 import { IProjectBulkAddFormData, IProjectMember, IProjectMembership, IUserLite } from "@plane/types";
 // constants
 import { EUserProjectRoles } from "constants/project";
 import { IMemberRootStore } from ".";
-import { IRouterStore } from "store/application/router.store";
-import { IUserRootStore } from "store/user";
+import { IRouterStore } from "oldStore/application/router.store";
+import { IUserRootStore } from "oldStore/user";
 
 interface IProjectMemberDetails {
   id: string;

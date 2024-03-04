@@ -4,7 +4,7 @@ import set from "lodash/set";
 // services
 import { DashboardService } from "services/dashboard.service";
 // types
-import { RootStore } from "store/root.store";
+import { RootStore } from "oldStore/root.store";
 import {
   THomeDashboardResponse,
   TWidget,

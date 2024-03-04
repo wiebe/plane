@@ -2,7 +2,7 @@ import { useContext } from "react";
 // mobx store
 import { StoreContext } from "contexts/store-context";
 // types
-import { IMentionStore } from "store/mention.store";
+import { IMentionStore } from "oldStore/mention.store";
 
 export const useMention = (): IMentionStore => {
   const context = useContext(StoreContext);

@@ -4,7 +4,7 @@ import isEmpty from "lodash/isEmpty";
 // services
 import { InboxService } from "services/inbox.service";
 // types
-import { RootStore } from "store/root.store";
+import { RootStore } from "oldStore/root.store";
 import { TInboxIssueFilterOptions, TInboxIssueFilters, TInboxIssueQueryParams, TInbox } from "@plane/types";
 
 export interface IInboxFilter {

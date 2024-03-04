@@ -7,7 +7,7 @@ import { ProjectService } from "services/project";
 import { ModuleService } from "services/module.service";
 // types
 import { IModule, ILinkDetails } from "@plane/types";
-import { RootStore } from "store/root.store";
+import { RootStore } from "oldStore/root.store";
 
 export interface IModuleStore {
   //Loaders

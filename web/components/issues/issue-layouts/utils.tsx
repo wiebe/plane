@@ -1,11 +1,11 @@
 import { Avatar, CycleGroupIcon, DiceIcon, PriorityIcon, StateGroupIcon } from "@plane/ui";
 // stores
-import { IMemberRootStore } from "store/member";
-import { IProjectStore } from "store/project/project.store";
-import { IStateStore } from "store/state.store";
-import { ILabelStore } from "store/label.store";
-import { ICycleStore } from "store/cycle.store";
-import { IModuleStore } from "store/module.store";
+import { IMemberRootStore } from "oldStore/member";
+import { IProjectStore } from "oldStore/project/project.store";
+import { IStateStore } from "oldStore/state.store";
+import { ILabelStore } from "oldStore/label.store";
+import { ICycleStore } from "oldStore/cycle.store";
+import { IModuleStore } from "oldStore/module.store";
 // helpers
 import { renderEmoji } from "helpers/emoji.helper";
 // constants

@@ -5,13 +5,13 @@ import sortBy from "lodash/sortBy";
 // services
 import { WorkspaceService } from "services/workspace.service";
 // types
-import { RootStore } from "store/root.store";
+import { RootStore } from "oldStore/root.store";
 import { IWorkspaceBulkInviteFormData, IWorkspaceMember, IWorkspaceMemberInvitation } from "@plane/types";
 // constants
 import { EUserWorkspaceRoles } from "constants/workspace";
-import { IRouterStore } from "store/application/router.store";
+import { IRouterStore } from "oldStore/application/router.store";
 import { IMemberRootStore } from ".";
-import { IUserRootStore } from "store/user";
+import { IUserRootStore } from "oldStore/user";
 
 export interface IWorkspaceMembership {
   id: string;

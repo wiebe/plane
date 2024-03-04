@@ -8,7 +8,7 @@ import pull from "lodash/pull";
 // services
 import { InboxIssueService } from "services/inbox/inbox-issue.service";
 // types
-import { RootStore } from "store/root.store";
+import { RootStore } from "oldStore/root.store";
 import type {
   TInboxIssueDetailIdMap,
   TInboxIssueDetailMap,

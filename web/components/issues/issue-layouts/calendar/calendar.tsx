@@ -12,10 +12,10 @@ import { TGroupedIssues, TIssue, TIssueMap } from "@plane/types";
 import { EUserProjectRoles } from "constants/project";
 import { useCalendarView } from "hooks/store/use-calendar-view";
 import { EIssuesStoreType } from "constants/issue";
-import { ICycleIssuesFilter } from "store/issue/cycle";
-import { IModuleIssuesFilter } from "store/issue/module";
-import { IProjectIssuesFilter } from "store/issue/project";
-import { IProjectViewIssuesFilter } from "store/issue/project-views";
+import { ICycleIssuesFilter } from "oldStore/issue/cycle";
+import { IModuleIssuesFilter } from "oldStore/issue/module";
+import { IProjectIssuesFilter } from "oldStore/issue/project";
+import { IProjectViewIssuesFilter } from "oldStore/issue/project-views";
 
 type Props = {
   issuesFilterStore: IProjectIssuesFilter | IModuleIssuesFilter | ICycleIssuesFilter | IProjectViewIssuesFilter;

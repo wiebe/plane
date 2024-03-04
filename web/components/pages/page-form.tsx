@@ -5,7 +5,7 @@ import { Button, Input, Tooltip } from "@plane/ui";
 import { IPage } from "@plane/types";
 // constants
 import { PAGE_ACCESS_SPECIFIERS } from "constants/page";
-import { IPageStore } from "store/page.store";
+import { IPageStore } from "oldStore/page.store";
 
 type Props = {
   handleFormSubmit: (values: IPage) => Promise<void>;

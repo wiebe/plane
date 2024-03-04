@@ -2,7 +2,7 @@ import { useContext } from "react";
 // mobx store
 import { StoreContext } from "contexts/store-context";
 // types
-import { IWebhookStore } from "store/workspace/webhook.store";
+import { IWebhookStore } from "oldStore/workspace/webhook.store";
 
 export const useWebhook = (): IWebhookStore => {
   const context = useContext(StoreContext);

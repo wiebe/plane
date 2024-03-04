@@ -7,7 +7,7 @@ import uniq from "lodash/uniq";
 // services
 import { InboxService } from "services/inbox/inbox.service";
 // types
-import { RootStore } from "store/root.store";
+import { RootStore } from "oldStore/root.store";
 import { TInboxDetailMap, TInboxDetailIdMap, TInbox } from "@plane/types";
 
 export interface IInbox {
