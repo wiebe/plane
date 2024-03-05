@@ -97,11 +97,11 @@ export class WebhookModel implements IWebhookModel {
 
   /**
    * @description update a webhook using the data
-   * @param workspaceSlug
-   * @param data
+   * @param {string} workspaceSlug
+   * @param {Partial<IWebhook>} data
    */
   updateWebhook = async (workspaceSlug: string, data: Partial<IWebhook>) => {
-    const originalData = { ...this };
+    const originalData = this.asJSON;
     // optimistically update the store
     runInAction(() => {
       Object.entries(data).forEach(([key, value]) => {

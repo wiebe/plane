@@ -3,8 +3,10 @@ import set from "lodash/set";
 import { DataStore } from "./dataMaps";
 // services
 import { WorkspaceService } from "services/workspace.service";
+import { WebhookService } from "services/webhook.service";
 // types
-import { IUser, IWorkspace } from "@plane/types";
+import { IUser, IWebhook, IWorkspace } from "@plane/types";
+import { IWebhookModel } from "./webhook.store";
 
 export interface IWorkspaceModel {
   // model observables
@@ -21,13 +23,20 @@ export interface IWorkspaceModel {
   url: string;
   updated_at: Date;
   updated_by: string;
+  // data maps
+  webhooks: Record<string, IWebhookModel>;
   // computed
-  toJSON: IWorkspace;
-  // actions
+  asJSON: IWorkspace;
+  // workspace actions
   updateWorkspace: (data: Partial<IWorkspace>) => Promise<IWorkspace>;
+  // webhook actions
+  fetchWebhooks: () => Promise<IWebhook[]>;
+  createWebhook: (data: Partial<IWebhook>) => Promise<IWebhook>;
+  deleteWebhook: (webhookId: string) => Promise<void>;
 }
 
 export class WorkspaceModel implements IWorkspaceModel {
+  // model observables
   created_at: Date;
   created_by: string;
   id: string;
@@ -41,10 +50,13 @@ export class WorkspaceModel implements IWorkspaceModel {
   updated_at: Date;
   updated_by: string;
   url: string;
+  // data maps
+  webhooks: Record<string, IWebhookModel> = {};
   // root store
   dataStore;
   // services
   workspaceService;
+  webhookService;
 
   constructor(workspace: IWorkspace, _dataStore: DataStore) {
     makeObservable(this, {
@@ -62,14 +74,21 @@ export class WorkspaceModel implements IWorkspaceModel {
       updated_at: observable.ref,
       updated_by: observable.ref,
       url: observable.ref,
+      // data maps
+      webhooks: observable,
       // computed
-      toJSON: computed,
-      // actions
+      asJSON: computed,
+      // workspace actions
       updateWorkspace: action,
+      // webhook actions
+      fetchWebhooks: action,
+      createWebhook: action,
+      deleteWebhook: action,
     });
     this.dataStore = _dataStore;
     // services
     this.workspaceService = new WorkspaceService();
+    this.webhookService = new WebhookService();
 
     this.created_at = workspace.created_at;
     this.created_by = workspace.created_by;
@@ -89,7 +108,7 @@ export class WorkspaceModel implements IWorkspaceModel {
   /**
    * @description returns the workspace data in JSON format
    */
-  get toJSON() {
+  get asJSON() {
     return {
       created_at: this.created_at,
       created_by: this.created_by,
@@ -109,10 +128,10 @@ export class WorkspaceModel implements IWorkspaceModel {
 
   /**
    * @description update workspace using the new workspace data
-   * @param data
+   * @param {Partial<IWorkspace>} data
    */
   updateWorkspace = async (data: Partial<IWorkspace>) => {
-    const originalData = { ...this };
+    const originalData = this.asJSON;
     // optimistically update the store
     runInAction(() => {
       Object.entries(data).forEach(([key, value]) => {
@@ -133,4 +152,47 @@ export class WorkspaceModel implements IWorkspaceModel {
       throw error;
     }
   };
+
+  // webhook actions
+
+  /**
+   * @description fetch all the webhooks of the workspace
+   */
+  fetchWebhooks = async () => {
+    const webhooksResponse = await this.webhookService.fetchWebhooksList(this.slug);
+
+    runInAction(() => {
+      webhooksResponse.forEach((webhook) => {
+        this.dataStore.webhook.addWebhook(webhook);
+        set(this.webhooks, [webhook.id], this.dataStore.webhook.webhookMap[webhook.id]);
+      });
+    });
+
+    return webhooksResponse;
+  };
+
+  /**
+   * @description create webhook using the webhook data
+   * @param {Partial<IWebhook>} data
+   */
+  createWebhook = async (data: Partial<IWebhook>) =>
+    await this.webhookService.createWebhook(this.slug, data).then((response) => {
+      runInAction(() => {
+        this.dataStore.webhook.addWebhook(response);
+        set(this.webhooks, [response.id], this.dataStore.webhook.webhookMap[response.id]);
+      });
+      return response;
+    });
+
+  /**
+   * @description delete a webhook using webhook id
+   * @param {string} webhookId
+   */
+  deleteWebhook = async (webhookId: string) =>
+    await this.webhookService.deleteWebhook(this.slug, webhookId).then(() => {
+      this.dataStore.webhook.deleteWebhook(webhookId);
+      runInAction(() => {
+        delete this.webhooks[webhookId];
+      });
+    });
 }

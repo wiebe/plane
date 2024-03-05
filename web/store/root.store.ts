@@ -12,5 +12,5 @@ export class RootStore {
     this.user = new UserModel(this.data);
   }
 
-  resetOnSignout() {}
+  resetOnSignOut() {}
 }
