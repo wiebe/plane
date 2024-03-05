@@ -3,8 +3,12 @@ import set from "lodash/set";
 import { DataStore } from "./dataMaps";
 // services
 import { WorkspaceService } from "services/workspace.service";
+import { WebhookService } from "services/webhook.service";
+import { APITokenService } from "services/api_token.service";
 // types
-import { IUser, IWorkspace } from "@plane/types";
+import { IApiToken, IUser, IWebhook, IWorkspace } from "@plane/types";
+import { IWebhookModel } from "./webhook.store";
+import { IAPITokenModel } from "./api-token.store";
 
 export interface IWorkspaceModel {
   // model observables
@@ -21,13 +25,25 @@ export interface IWorkspaceModel {
   url: string;
   updated_at: Date;
   updated_by: string;
+  // data maps
+  webhooks: Record<string, IWebhookModel>;
+  apiTokens: Record<string, IAPITokenModel>;
   // computed
-  toJSON: IWorkspace;
-  // actions
+  asJSON: IWorkspace;
+  // workspace actions
   updateWorkspace: (data: Partial<IWorkspace>) => Promise<IWorkspace>;
+  // webhook actions
+  fetchWebhooks: () => Promise<IWebhook[]>;
+  createWebhook: (data: Partial<IWebhook>) => Promise<IWebhook>;
+  deleteWebhook: (webhookId: string) => Promise<void>;
+  // API token actions
+  fetchApiTokens: () => Promise<IApiToken[]>;
+  createApiToken: (data: Partial<IApiToken>) => Promise<IApiToken>;
+  deleteApiToken: (tokenId: string) => Promise<void>;
 }
 
 export class WorkspaceModel implements IWorkspaceModel {
+  // model observables
   created_at: Date;
   created_by: string;
   id: string;
@@ -41,10 +57,15 @@ export class WorkspaceModel implements IWorkspaceModel {
   updated_at: Date;
   updated_by: string;
   url: string;
+  // data maps
+  webhooks: Record<string, IWebhookModel> = {};
+  apiTokens: Record<string, IAPITokenModel> = {};
   // root store
   dataStore;
   // services
   workspaceService;
+  webhookService;
+  apiTokenService;
 
   constructor(workspace: IWorkspace, _dataStore: DataStore) {
     makeObservable(this, {
@@ -62,14 +83,27 @@ export class WorkspaceModel implements IWorkspaceModel {
       updated_at: observable.ref,
       updated_by: observable.ref,
       url: observable.ref,
+      // data maps
+      webhooks: observable,
+      apiTokens: observable,
       // computed
-      toJSON: computed,
-      // actions
+      asJSON: computed,
+      // workspace actions
       updateWorkspace: action,
+      // webhook actions
+      fetchWebhooks: action,
+      createWebhook: action,
+      deleteWebhook: action,
+      // API token actions
+      fetchApiTokens: action,
+      createApiToken: action,
+      deleteApiToken: action,
     });
     this.dataStore = _dataStore;
     // services
     this.workspaceService = new WorkspaceService();
+    this.webhookService = new WebhookService();
+    this.apiTokenService = new APITokenService();
 
     this.created_at = workspace.created_at;
     this.created_by = workspace.created_by;
@@ -89,7 +123,7 @@ export class WorkspaceModel implements IWorkspaceModel {
   /**
    * @description returns the workspace data in JSON format
    */
-  get toJSON() {
+  get asJSON() {
     return {
       created_at: this.created_at,
       created_by: this.created_by,
@@ -109,10 +143,10 @@ export class WorkspaceModel implements IWorkspaceModel {
 
   /**
    * @description update workspace using the new workspace data
-   * @param data
+   * @param {Partial<IWorkspace>} data
    */
   updateWorkspace = async (data: Partial<IWorkspace>) => {
-    const originalData = { ...this };
+    const originalData = this.asJSON;
     // optimistically update the store
     runInAction(() => {
       Object.entries(data).forEach(([key, value]) => {
@@ -133,4 +167,88 @@ export class WorkspaceModel implements IWorkspaceModel {
       throw error;
     }
   };
+
+  // webhook actions
+
+  /**
+   * @description fetch all the webhooks of the workspace
+   */
+  fetchWebhooks = async () => {
+    const webhooksResponse = await this.webhookService.fetchWebhooksList(this.slug);
+
+    runInAction(() => {
+      webhooksResponse.forEach((webhook) => {
+        this.dataStore.webhook.addWebhook(webhook);
+        set(this.webhooks, [webhook.id], this.dataStore.webhook.webhookMap[webhook.id]);
+      });
+    });
+    return webhooksResponse;
+  };
+
+  /**
+   * @description create webhook using the webhook data
+   * @param {Partial<IWebhook>} data
+   */
+  createWebhook = async (data: Partial<IWebhook>) =>
+    await this.webhookService.createWebhook(this.slug, data).then((response) => {
+      runInAction(() => {
+        this.dataStore.webhook.addWebhook(response);
+        set(this.webhooks, [response.id], this.dataStore.webhook.webhookMap[response.id]);
+      });
+      return response;
+    });
+
+  /**
+   * @description delete a webhook using webhook id
+   * @param {string} webhookId
+   */
+  deleteWebhook = async (webhookId: string) =>
+    await this.webhookService.deleteWebhook(this.slug, webhookId).then(() => {
+      this.dataStore.webhook.deleteWebhook(webhookId);
+      runInAction(() => {
+        delete this.webhooks[webhookId];
+      });
+    });
+
+  // API token actions
+
+  /**
+   * @description fetch all the API tokens of the workspace
+   */
+  fetchApiTokens = async () => {
+    const apiTokensResponse = await this.apiTokenService.getApiTokens(this.slug);
+
+    runInAction(() => {
+      apiTokensResponse.forEach((apiToken) => {
+        this.dataStore.apiToken.addAPIToken(apiToken);
+        set(this.apiTokens, [apiToken.id], this.dataStore.apiToken.apiTokenMap[apiToken.id]);
+      });
+    });
+    return apiTokensResponse;
+  };
+
+  /**
+   * @description create API token using data
+   * @param {Partial<IApiToken>} data
+   */
+  createApiToken = async (data: Partial<IApiToken>) =>
+    await this.apiTokenService.createApiToken(this.slug, data).then((response) => {
+      runInAction(() => {
+        this.dataStore.apiToken.addAPIToken(response);
+        set(this.apiTokens, [response.id], this.dataStore.apiToken.apiTokenMap[response.id]);
+      });
+      return response;
+    });
+
+  /**
+   * @description delete API token using token id
+   * @param {string} tokenId
+   */
+  deleteApiToken = async (tokenId: string) =>
+    await this.apiTokenService.deleteApiToken(this.slug, tokenId).then(() => {
+      this.dataStore.apiToken.deleteAPIToken(tokenId);
+      runInAction(() => {
+        delete this.apiTokens[tokenId];
+      });
+    });
 }

@@ -26,7 +26,7 @@ export class WebhookService extends APIService {
       });
   }
 
-  async createWebhook(workspaceSlug: string, data: {}): Promise<IWebhook> {
+  async createWebhook(workspaceSlug: string, data: Partial<IWebhook>): Promise<IWebhook> {
     return this.post(`/api/workspaces/${workspaceSlug}/webhooks/`, data)
       .then((response) => response?.data)
       .catch((error) => {
@@ -34,7 +34,7 @@ export class WebhookService extends APIService {
       });
   }
 
-  async updateWebhook(workspaceSlug: string, webhookId: string, data: {}): Promise<IWebhook> {
+  async updateWebhook(workspaceSlug: string, webhookId: string, data: Partial<IWebhook>): Promise<IWebhook> {
     return this.patch(`/api/workspaces/${workspaceSlug}/webhooks/${webhookId}/`, data)
       .then((response) => response?.data)
       .catch((error) => {

@@ -26,14 +26,14 @@ export class UserModel implements IUserModel {
   }
 
   /**
-   * get workspace info from the array of workspaces in the store using workspace slug
-   * @param workspaceSlug
+   * @description get workspace info from the array of workspaces in the store using workspace slug
+   * @param {string} workspaceSlug
    */
   getWorkspaceBySlug = (workspaceSlug: string) =>
     Object.values(this.workspaces ?? {})?.find((w) => w.slug == workspaceSlug) || null;
 
   /**
-   * fetch user workspaces from API
+   * @description fetch user workspaces from API
    */
   fetchWorkspaces = async () => {
     const workspaceResponse = await this.workspaceService.userWorkspaces();
@@ -48,8 +48,8 @@ export class UserModel implements IUserModel {
   };
 
   /**
-   * create workspace using the workspace data
-   * @param data
+   * @description create workspace using the workspace data
+   * @param {Partial<IWorkspace>} data
    */
   createWorkspace = async (data: Partial<IWorkspace>) =>
     await this.workspaceService.createWorkspace(data).then((response) => {
@@ -61,8 +61,8 @@ export class UserModel implements IUserModel {
     });
 
   /**
-   * delete workspace using the workspace slug
-   * @param workspaceSlug
+   * @description delete workspace using the workspace slug
+   * @param {string} workspaceSlug
    */
   deleteWorkspace = async (workspaceSlug: string) =>
     await this.workspaceService.deleteWorkspace(workspaceSlug).then(() => {
