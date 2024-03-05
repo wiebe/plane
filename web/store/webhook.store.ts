@@ -46,12 +46,16 @@ export class WebhookModel implements IWebhookModel {
   constructor(webhook: IWebhook, _dataStore: DataStore) {
     makeObservable(this, {
       // model observables
+      created_at: observable.ref,
       cycle: observable.ref,
+      id: observable.ref,
       is_active: observable.ref,
       issue: observable.ref,
       issue_comment: observable.ref,
       module: observable.ref,
       project: observable.ref,
+      secret_key: observable.ref,
+      updated_at: observable.ref,
       url: observable.ref,
       // computed
       asJSON: computed,
