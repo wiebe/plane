@@ -7,7 +7,7 @@ import { set } from "lodash";
 export interface IWorkspaceData {
   workspaceMap: Record<string, WorkspaceModel>;
 
-  addWorkspaces: (workspaces: IWorkspace[]) => void;
+  addWorkspace: (workspaces: IWorkspace) => void;
   deleteWorkspace: (workspaceId: string) => void;
   getWorkspacebyId: (workspaceId: string) => WorkspaceModel | undefined;
 }
@@ -25,10 +25,8 @@ export class WorkspaceData implements IWorkspaceData {
     this.dataStore = _dataStore;
   }
 
-  addWorkspaces = (workspaces: IWorkspace[]) => {
-    workspaces.forEach((workspace) => {
-      set(this.workspaceMap, [workspace.id], new WorkspaceModel(workspace, this.dataStore));
-    });
+  addWorkspace = (workspace: IWorkspace) => {
+    set(this.workspaceMap, [workspace.id], new WorkspaceModel(workspace, this.dataStore));
   };
 
   deleteWorkspace = (workspaceId: string) => {

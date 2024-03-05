@@ -58,4 +58,22 @@ export class WorkspaceModel implements IWorkspaceModel {
     this.organization_size = workspace.organization_size;
     this.total_issues = workspace.total_issues;
   }
+
+  get toJSON() {
+    return {
+      id: this.id,
+      owner: this.owner,
+      created_at: this.created_at,
+      updated_at: this.updated_at,
+      name: this.name,
+      url: this.url,
+      logo: this.logo,
+      total_members: this.total_members,
+      slug: this.slug,
+      created_by: this.created_by,
+      updated_by: this.updated_by,
+      organization_size: this.organization_size,
+      total_issues: this.total_issues,
+    };
+  }
 }

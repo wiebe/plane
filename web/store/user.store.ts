@@ -38,9 +38,9 @@ export class UserModel implements IUserModel {
   fetchWorkspaces = async () => {
     const workspaceResponse = await this.workspaceService.userWorkspaces();
 
-    this.data.workspace.addWorkspaces(workspaceResponse);
     runInAction(() => {
       workspaceResponse.forEach((workspace) => {
+        this.data.workspace.addWorkspace(workspace);
         set(this.workspaces, [workspace.id], this.data.workspace.workspaceMap[workspace.id]);
       });
     });
@@ -53,8 +53,8 @@ export class UserModel implements IUserModel {
    */
   createWorkspace = async (data: Partial<IWorkspace>) =>
     await this.workspaceService.createWorkspace(data).then((response) => {
-      this.data.workspace.addWorkspaces([response]);
       runInAction(() => {
+        this.data.workspace.addWorkspace(response);
         set(this.workspaces, [response.id], this.data.workspace.workspaceMap[response.id]);
       });
       return response;
