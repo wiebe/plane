@@ -6,6 +6,7 @@ import useSWR from "swr";
 import { PageHead } from "components/core";
 import { ProjectSettingHeader } from "components/headers";
 import {
+  ArchiveProjectSection,
   DeleteProjectModal,
   DeleteProjectSection,
   ProjectDetailsForm,
@@ -61,6 +62,8 @@ const GeneralSettingsPage: NextPageWithLayout = observer(() => {
         ) : (
           <ProjectDetailsFormLoader />
         )}
+
+        {isAdmin && <ArchiveProjectSection projectDetails={currentProjectDetails} />}
 
         {isAdmin && (
           <DeleteProjectSection

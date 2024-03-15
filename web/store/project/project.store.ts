@@ -29,6 +29,9 @@ export interface IProjectStore {
   // favorites actions
   addProjectToFavorites: (workspaceSlug: string, projectId: string) => Promise<any>;
   removeProjectFromFavorites: (workspaceSlug: string, projectId: string) => Promise<any>;
+  // archive actions
+  archiveProject: (workspaceSlug: string, projectId: string) => Promise<any>;
+  restoreProject: (workspaceSlug: string, projectId: string) => Promise<any>;
   // project-view action
   updateProjectView: (workspaceSlug: string, projectId: string, viewProps: any) => Promise<any>;
   // CRUD actions
@@ -66,6 +69,9 @@ export class ProjectStore implements IProjectStore {
       // favorites actions
       addProjectToFavorites: action,
       removeProjectFromFavorites: action,
+      // archive actions
+      archiveProject: action,
+      restoreProject: action,
       // project-view action
       updateProjectView: action,
       // CRUD actions
@@ -262,6 +268,32 @@ export class ProjectStore implements IProjectStore {
       throw error;
     }
   };
+
+  /**
+   * @description archive project
+   * @param {string} workspaceSlug
+   * @param {string} projectId
+   */
+  archiveProject = async (workspaceSlug: string, projectId: string) =>
+    await this.projectService.archiveProject(workspaceSlug, projectId).then((res) => {
+      runInAction(() => {
+        set(this.projectMap, [projectId, "archived_at"], res.archived_at);
+      });
+      return res;
+    });
+
+  /**
+   * @description restore project
+   * @param {string} workspaceSlug
+   * @param {string} projectId
+   */
+  restoreProject = async (workspaceSlug: string, projectId: string) =>
+    await this.projectService.restoreProject(workspaceSlug, projectId).then((res) => {
+      runInAction(() => {
+        set(this.projectMap, [projectId, "archived_at"], null);
+      });
+      return res;
+    });
 
   /**
    * Updates the project view

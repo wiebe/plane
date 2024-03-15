@@ -2,6 +2,7 @@ export * from "./applied-filters";
 export * from "./dropdowns";
 export * from "./publish-project";
 export * from "./settings";
+export * from "./archive-project-modal";
 export * from "./card-list";
 export * from "./card";
 export * from "./create-project-modal";

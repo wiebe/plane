@@ -6,8 +6,6 @@ import type {
   GithubRepositoriesResponse,
   IProject,
   ISearchIssueResponse,
-  ProjectPreferences,
-  IProjectViewProps,
   TProjectIssuesSearchParams,
 } from "@plane/types";
 
@@ -142,6 +140,27 @@ export class ProjectService extends APIService {
   }
 
   async removeProjectFromFavorites(workspaceSlug: string, projectId: string): Promise<any> {
+    return this.delete(`/api/workspaces/${workspaceSlug}/user-favorite-projects/${projectId}/`)
+      .then((response) => response?.data)
+      .catch((error) => {
+        throw error?.response?.data;
+      });
+  }
+
+  async archiveProject(
+    workspaceSlug: string,
+    project: string
+  ): Promise<{
+    archived_at: string;
+  }> {
+    return this.post(`/api/workspaces/${workspaceSlug}/user-favorite-projects/`, { project })
+      .then((response) => response?.data)
+      .catch((error) => {
+        throw error?.response?.data;
+      });
+  }
+
+  async restoreProject(workspaceSlug: string, projectId: string): Promise<any> {
     return this.delete(`/api/workspaces/${workspaceSlug}/user-favorite-projects/${projectId}/`)
       .then((response) => response?.data)
       .catch((error) => {

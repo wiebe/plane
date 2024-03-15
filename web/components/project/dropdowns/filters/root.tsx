@@ -51,6 +51,15 @@ export const ProjectFiltersSelection: React.FC<Props> = observer((props) => {
             }
             title="My projects"
           />
+          <FilterOption
+            isChecked={!!displayFilters.archived}
+            onClick={() =>
+              handleDisplayFiltersUpdate({
+                archived: !displayFilters.archived,
+              })
+            }
+            title="Archived"
+          />
         </div>
 
         {/* access */}
